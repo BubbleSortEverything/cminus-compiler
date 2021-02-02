@@ -4,4 +4,4 @@
 *.tab.c
 *.tab.o
 *.tab.h
-*c-
+*./c-
