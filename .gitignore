@@ -1,5 +1,7 @@
-lex.yy.c
-parser.output
-parser.tab.c
-parser.tab.h
-c-
+*.yy.c
+*.yy.o
+*.output
+*.tab.c
+*.tab.o
+*.tab.h
+*c-
