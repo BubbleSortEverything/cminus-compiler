@@ -9,7 +9,7 @@ OBJS = lex.yy.o $(BIN).tab.o
 LIBS = -lm 
 
 $(BIN): $(OBJS)
-	$(CC) -w $(CFLAGS) $(OBJS) $(LIBS) -o $(BIN2)
+	$(CC) -w $(CFLAGS) $(OBJS) $(LIBS) -o bin/$(BIN2)
 
 $(BIN).tab.h $(BIN).tab.c: $(BIN).y
 	bison -v -t -d $(BIN).y  

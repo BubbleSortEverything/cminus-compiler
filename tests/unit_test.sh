@@ -4,7 +4,7 @@
 
 for FILE in test_files/*.c-; do 
   echo -e '\n'
-  ./c- $FILE > test_files/output.out
+  ./bin/c- $FILE > test_files/output.out
   file_name=$(basename -- "$FILE")
   echo "***** Testing: $file_name *******************"
   output_file=${file_name%.*}

@@ -4,4 +4,6 @@
 *.tab.c
 *.tab.o
 *.tab.h
-*./c-
+
+# ignoring dir
+/bin
