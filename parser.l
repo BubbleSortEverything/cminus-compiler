@@ -11,7 +11,6 @@ static int line=1;
 
 static int setValue(int linenum, int tokenClass, char *svalue)
 {
-    //printf("got to funct %d\n", tokenClass);
     // create and handle default data storage
     yylval.tokenData = new TokenData;
     yylval.tokenData->tokenclass = tokenClass;
@@ -22,7 +21,6 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     switch (tokenClass) {
 
     case BOOLCONST:
-        //printf("%c", svalue[0]);
         if (svalue[0] == 't'){
             yylval.tokenData->numValue = 1;
         }
@@ -57,11 +55,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         break;
 
      case STRINGCONST:
-        ;//printf("got str\n");
         int input_length = strlen(svalue);
-        ; yylval.tokenData->stringLen = input_length;
-        //printf("str length: %d\n", input_length);
-
         char *temp = new char;
         int temp_len = 0;
 
@@ -93,7 +87,6 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         yylval.tokenData->stringLen = temp_len;
         break;
     }
-    // return token class
     return tokenClass;
 }
 
@@ -160,6 +153,8 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 "++"                    { return setValue(line, INC, yytext); }                 
 '\\.'                   { return setValue(line, CHARCONST, yytext); }
 '[^\n\']'               { return setValue(line, CHARCONST, yytext); }
+'[^\n\']*'              { return setValue(line, CHARCONST, yytext); }
+'[^\n\']*'              { return setValue(line, WARNING, yytext); }
 "\""(\\.|[^\\"\n])*"\""  { return setValue(line, STRINGCONST, yytext); }
 [ \t]                   ;  // white space
 "//".*                  ;  //comments

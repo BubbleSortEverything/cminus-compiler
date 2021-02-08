@@ -21,7 +21,7 @@ void yyerror(const char *msg)
 }
 
 // token specifies the token classes from the scanner
-%token <tokenData> INT ID BOOL BY BOOLCONST NUMCONST MIN MAX ADDASS SUBASS DIVASS MULASS EQ LEQ GEQ NEQ AND OR NOT IF THEN TO ELSIF ELSE WHILE FOR DO BREAK LOOP RANGE FOREVER STATIC RETURN CHAR DEC INC CHARCONST STRINGCONST UNDEFINED ';' ',' '[' ']' '(' ')' '{' '}' '=' '<' '>' '+' '-' '*' '/' '%' '?' ':'
+%token <tokenData> INT ID BOOL BY BOOLCONST NUMCONST MIN MAX ADDASS SUBASS DIVASS MULASS EQ LEQ GEQ NEQ AND OR NOT IF THEN TO ELSIF ELSE WHILE FOR DO BREAK LOOP RANGE FOREVER STATIC RETURN CHAR DEC INC CHARCONST STRINGCONST UNDEFINED WARNING ';' ',' '[' ']' '(' ')' '{' '}' '=' '<' '>' '+' '-' '*' '/' '%' '?' ':'
 
 // type specifies the token classes used only in the parser
 %type <value> statementlist statement
@@ -70,7 +70,8 @@ statement : INT         { printf("Line %d Token: INT\n", $1->linenum);  }
           | INC         { printf("Line %d Token: INC\n", $1->linenum);  }
           | CHARCONST   { printf("Line %d Token: CHARCONST Value: \'%s\'  Input: %s\n", $1->linenum, $1->strValue, $1->tokenstr); }
           | STRINGCONST { printf("Line %d Token: STRINGCONST Value: \"%s\"  Len: %d  Input: %s\n", $1->linenum, $1->strValue, $1->stringLen, $1->tokenstr); }
-          | UNDEFINED   { printf("ERROR(%d): Invalid or misplaced input character: \'%s\'. Character Ignored.\n", $1->linenum, $1->tokenstr);  }
+          | UNDEFINED   { printf("ERROR(%d): Invalid or misplaced input character: \'%s\'. Character Ignored.\n", $1->linenum, $1->tokenstr); }
+          | WARNING     { printf("WARNING(%d): character is characters long and not a single character: \'%s\'.  The first char will be used.", $1->linenum, $1->strValue); }
 
           | ';'         { printf("Line %d Token: ;\n", $1->linenum);  }
 

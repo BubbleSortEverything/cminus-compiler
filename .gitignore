@@ -5,5 +5,7 @@
 *.tab.o
 *.tab.h
 
+
 # ignoring dir
 /bin
+/test_files/output.out
