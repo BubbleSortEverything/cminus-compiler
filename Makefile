@@ -1,15 +1,15 @@
-BIN  = parser
-BIN2 = c-
-CC   = g++ -std=c++11
-CFLAGS = -DCPLUSPLUS -g -O3 -Wall     # for use with C++ if file ext is .c
+BIN  = c-
+CC   = g++
+CFLAGS = -DCPLUSPLUS -g -std=c++11    # for use with C++ if file ext is .c
 
-SRCS = $(BIN).y $(BIN).l
-HDRS = scanType.h
-OBJS = lex.yy.o $(BIN).tab.o
+SRCS = $(BIN).y $(BIN).l util.c ourgetopt.c
+HDRS = scanType.h globals.h util.h ourgetopt.h
+OBJS = lex.yy.o $(BIN).tab.o util.o ourgetopt.o
 LIBS = -lm 
+EXEC = bin
 
 $(BIN): $(OBJS)
-	$(CC) -w $(CFLAGS) $(OBJS) $(LIBS) -o bin/$(BIN2)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(EXEC)/$(BIN)
 
 $(BIN).tab.h $(BIN).tab.c: $(BIN).y
 	bison -v -t -d $(BIN).y  
