@@ -94,12 +94,12 @@ void printTree(TreeNode *node, int indent, int nSibling){
 
 	switch(node->nodekind) {
 		case DeclK:
-			if(nSibling > 0) cout << "Sibling: " << nSibling << " ";
+			// if(nSibling > 0) cout << "Sibling: " << nSibling << " ";
 			cout << declString(node) << endl;
-			nSibling++;
+			// nSibling++;
 			break;
 		case StmtK:
-			nSibling++;
+			// nSibling++;
 			cout << declString(node) << endl;
 			break;
 	}
@@ -112,7 +112,7 @@ void printTree(TreeNode *node, int indent, int nSibling){
     }
 
 	if (node->sibling != NULL) {
-		// if (nSibling > 0) cout << "Sibling: " << nSibling << " ";
+		cout << "Sibling: " << ++nSibling << " ";
 		printTree(node->sibling, indent, nSibling);
 	}
 

@@ -60,8 +60,9 @@ decl:
 
 varDeclaration: 
     typeSpecifier varDeclList ';' {
-        $$ = addSibling($1, $2);
-        setType($1, $1->expType, false);
+        // $$ = addSibling($1, $2);
+        setType($2, $1->expType, false);
+        $$ = $2;
     }
     ;
 
