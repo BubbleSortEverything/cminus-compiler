@@ -53,29 +53,22 @@ declList:
     decl { $$ = $1; }
     ;
 
-//decl:
-//    INT ID ';' {
-//        $$ = newDeclNode(VarK, Integer, $2);
-//        //setType($$, Integer, false);
-//    }
-//    ;
-
 decl: 
     varDeclaration { $$ = $1; }
-    //| funDeclaration { $$ = $1; }
+    //funDeclaration { $$ = $1; }
     ;
 
 varDeclaration: 
-    typeSpecifier varDeclList ';' { 
-        $$ = addSibling($1, $2); 
+    typeSpecifier varDeclList ';' {
+        $$ = addSibling($1, $2);
         setType($1, $1->expType, false);
     }
     ;
 
 typeSpecifier:
-    INT  { $$ = newDeclNode(TypeK, VarK, Integer, $1) } // |
-    //BOOL { setType($$, Boolean, false); } |
-    //CHAR { setType($$, Char, false); }
+    INT  { $$ = newExpNode(InitK, Integer, $1); } |
+    BOOL { $$ = newExpNode(InitK, Boolean, $1)} |
+    CHAR { $$ = newExpNode(InitK, Char, $1) }
     ;
 
 varDeclList: 
@@ -85,7 +78,7 @@ varDeclList:
 
 varDeclInitialize: 
     varDeclId { $$ = $1; }
-    //| varDeclId ':' simpleExpression
+    //varDeclId ':' simpleExpression
     //{ 
     //    $$ = newDeclNode(VarK, Void, $1, $3);
     //  // $1->child[0] = $3;
@@ -93,14 +86,13 @@ varDeclInitialize:
     //}
     ;
 
-varDeclId: 
-    ID { $$ = newDeclNode(DeclK, VarK, Void, $1); }
-    //| ID '[' NUMCONST ']'
-    //{
-    //    $$ = newDeclNode(VarK, Void, $1);
-    //    $$->isArray = true;
-    //    //$$->arraySize = $3->numValue;
-    //}
+varDeclId:
+    ID { $$ = newDeclNode(VarK, UndefinedType, $1); } |
+    ID '[' NUMCONST ']' {
+        /***** prolly need to save NUMCONST in the node for future reference *****/
+        $$ = newDeclNode(VarK, UndefinedType, $1);
+        $$->isArray = true;
+    }
     ;
 
 ////scopedVarDeclaration    : scopedTypeSpecifier varDeclList ';'
@@ -633,12 +625,12 @@ int main(int argc, char* argv[]) {
                //      tmp = tmp->sibling;
                // }
                // cout << savedTree->sibling->subkind.decl << endl;
-               if (printFlag) printTree(savedTree, 0, -1, false, false, "");
+               if (printFlag) printTree(savedTree, 0, 0); //printTree(savedTree, 0, -1, false, false, "");
         }
         else {
                yyin = stdin;
                yyparse();
-               if (printFlag) printTree(savedTree, 0, -1, false, false, "");
+               if (printFlag) printTree(savedTree, 0, 0); //printTree(savedTree, 0, -1, false, false, "");
         }
      }
 

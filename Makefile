@@ -11,7 +11,7 @@ LIBS = -lm
 EXEC = bin
 
 $(BIN): $(OBJS) $(HDRS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(EXEC)/$(BIN)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(BIN)
 # 	$(CC) $(CFLAGS) $(OBJS2) $(LIBS) -o $(EXEC)/$(BIN2)
 
 # gcc -c part1.c -o part1.o

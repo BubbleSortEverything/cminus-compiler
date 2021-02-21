@@ -2,13 +2,13 @@
 
 /*	Declarations
  */
-TreeNode *newDeclNode(NodeKind nodekind, DeclKind kind, ExpType type,
+TreeNode *newDeclNode(DeclKind kind, ExpType type,
                       TokenData *token,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
 	TreeNode *node = new TreeNode;
-    node->nodekind = nodekind;
+	node->nodekind = DeclK;
 	node->subkind.decl = kind;
 	node->expType = type;
 	node->lineno = token->linenum;
@@ -23,13 +23,13 @@ TreeNode *newDeclNode(NodeKind nodekind, DeclKind kind, ExpType type,
 
 /*	Statements
  */
-TreeNode *newStmtNode(NodeKind nodekind, StmtKind kind,
+TreeNode *newStmtNode(StmtKind kind,
                       TokenData *token,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
 	TreeNode *node = (TreeNode*) malloc(sizeof(TreeNode));
-    node->nodekind = nodekind;
+	node->nodekind = StmtK;
 	node->subkind.stmt = kind;
 	node->lineno = token->linenum;
 	node->child[0] = c0;
@@ -43,14 +43,15 @@ TreeNode *newStmtNode(NodeKind nodekind, StmtKind kind,
 
 /*	Expressions
  */
-TreeNode *newExpNode(NodeKind nodekind, ExpKind kind,
+TreeNode *newExpNode(ExpKind kind, ExpType type,
                       TokenData *token,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
 	TreeNode *node = (TreeNode*) malloc(sizeof(TreeNode));
-    node->nodekind = nodekind;
+	node->nodekind = ExpK;
 	node->subkind.exp = kind;
+	node->expType = type;
 	node->lineno = token->linenum;
 	node->child[0] = c0;
 	node->child[1] = c1;
@@ -70,7 +71,6 @@ TreeNode *addSibling(TreeNode *t, TreeNode *s) {
     }
     if (t!=NULL) { 
         TreeNode *tmp;
-
         tmp = t;
         while (tmp->sibling!=NULL) tmp = tmp->sibling;
         tmp->sibling = s;
@@ -89,62 +89,55 @@ void setType(TreeNode *t, ExpType type, bool isStatic) {
     }
 }
 
-// void printTree(TreeNode *node, int childNum, int siblingNum) {
-//     if (!node) return;
+void printTree(TreeNode *node, int indent, int nSibling){
+	if(!node) return;
 
-//     if (siblingNum > 0) cout << "Sibling: " << siblingNum;
+	switch(node->nodekind) {
+		case DeclK:
+			if(nSibling > 0) cout << "Sibling: " << nSibling << " ";
+			cout << declString(node) << endl;
+			nSibling++;
+			break;
+		case StmtK:
+			nSibling++;
+			cout << declString(node) << endl;
+			break;
+	}
 
-//     switch(node->subkind.decl) {
-//         case VarK:
-//             // cout << "before print" << endl;
-//             // printVal += ("Var: [line: " + to_string(tree->lineno) + " ]");
-//             // cout << printVal << endl;
-//             cout << "Var: " << node->token->tokenstr << endl;
-//             break;
-//     }
-
-//     for(int i = 0; i < MAXCHILDREN; i++){
-//         printTree(node->child[i], childNum++, siblingNum);
-//     }
-//     printTree(node->sibling, 0, siblingNum++);
-// }
-
-void printTree(TreeNode *node, int nChild, int nSibling, bool isChild, bool isSibling, string formatStr) {
-	if (!node) return;
-	string printVal = "";
-	if(isChild) {
-        formatStr += ".   "; 
-        printVal += (formatStr + "Child: " + to_string(nChild) + " ");
+	for (int i = 0; i < MAXCHILDREN; i++){
+		if (node->child[i] != NULL){
+			printf("%*s Child: %d\n", indent*2, ". ", i);
+			printTree(node->child[i], indent++, nSibling);
+		}
     }
-	if(isSibling) {
-        formatStr += ".   "; 
-        printVal += (formatStr + "Sibling: " + to_string(nChild) + " ");
-    }
+
+	if (node->sibling != NULL) {
+		// if (nSibling > 0) cout << "Sibling: " << nSibling << " ";
+		printTree(node->sibling, indent, nSibling);
+	}
+
+}
+
+string declString(TreeNode *node) {
+	string str = "";
+	string arr = node->isArray ? " is array" : "";
 	switch(node->subkind.decl) {
 		case VarK:
-			printVal += ("Var: " + string(node->token->tokenstr)  + " [line: " + to_string(node->lineno) + " ]");
-			cout << printVal << endl;
+			str = "Var: " + string(node->token->tokenstr) + arr + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
             break;
 	}
-	
-    for (int i = 0; i < MAXCHILDREN; i++){
-     printTree(node->child[i], 0, -1, true, false, formatStr);
-    }
-
-     nSibling++;
-     printTree(node->sibling, 0, nSibling, false, true, formatStr);
+	return str;
 }
 
-/*
-TreeNode * newNode( NodeKind general_kind, Kind specific_kind, Type t, int line, TokenData * token ) {
-	TreeNode * treeItem = (TreeNode *) malloc(sizeof(TreeNode));;
-	treeItem->nodetype = t;
-	treeItem->lineno = line;
-	treeItem->nodekind = general_kind;
-	treeItem->kind = specific_kind;
-
-	if(token != NULL) treeItem->token = token;
-
-	return treeItem;
+string typeString(ExpType type) {
+	string str = "";
+	switch(type) {
+		case Integer:
+			str = " of type Integer";
+			break;
+		case Void:
+			str = "Void";
+			break;
+	}
+	return str;
 }
-*/

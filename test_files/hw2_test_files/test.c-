@@ -1,2 +1,2 @@
-int num;
-int num2;
+int num, num3[3];
+int num2, num123;

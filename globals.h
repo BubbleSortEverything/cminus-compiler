@@ -54,7 +54,7 @@ typedef int OpKind;
 
 // Kinds of Statements
 //typedef enum {DeclK, StmtK, ExpK} NodeKind;
-enum NodeKind {DeclK, StmtK, ExpK, TypeK};
+enum NodeKind {DeclK, StmtK, ExpK};
 
 // Subkinds of Declarations
 enum DeclKind {VarK, FuncK, ParamK};
