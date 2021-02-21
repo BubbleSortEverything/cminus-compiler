@@ -54,7 +54,7 @@ typedef int OpKind;
 
 // Kinds of Statements
 //typedef enum {DeclK, StmtK, ExpK} NodeKind;
-enum NodeKind {DeclK, StmtK, ExpK};
+enum NodeKind {DeclK, StmtK, ExpK, TypeK};
 
 // Subkinds of Declarations
 enum DeclKind {VarK, FuncK, ParamK};
@@ -85,7 +85,7 @@ typedef struct treeNode {
     union {                                  // subtype of type
         DeclKind decl;                     // used when DeclK
         StmtKind stmt;                     // used when StmtK
-        ExpKind exp;                       // used when ExpK
+        ExpKind exp;                      // used when ExpK
     } subkind;
     
     // extra properties about the node depending on type of the node

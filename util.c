@@ -2,12 +2,13 @@
 
 /*	Declarations
  */
-TreeNode *newDeclNode(DeclKind kind, ExpType type,
+TreeNode *newDeclNode(NodeKind nodekind, DeclKind kind, ExpType type,
                       TokenData *token,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
 	TreeNode *node = new TreeNode;
+    node->nodekind = nodekind;
 	node->subkind.decl = kind;
 	node->expType = type;
 	node->lineno = token->linenum;
@@ -22,12 +23,13 @@ TreeNode *newDeclNode(DeclKind kind, ExpType type,
 
 /*	Statements
  */
-TreeNode *newStmtNode(StmtKind kind,
+TreeNode *newStmtNode(NodeKind nodekind, StmtKind kind,
                       TokenData *token,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
 	TreeNode *node = (TreeNode*) malloc(sizeof(TreeNode));
+    node->nodekind = nodekind;
 	node->subkind.stmt = kind;
 	node->lineno = token->linenum;
 	node->child[0] = c0;
@@ -41,12 +43,13 @@ TreeNode *newStmtNode(StmtKind kind,
 
 /*	Expressions
  */
-TreeNode *newExpNode(ExpKind kind,
+TreeNode *newExpNode(NodeKind nodekind, ExpKind kind,
                       TokenData *token,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
 	TreeNode *node = (TreeNode*) malloc(sizeof(TreeNode));
+    node->nodekind = nodekind;
 	node->subkind.exp = kind;
 	node->lineno = token->linenum;
 	node->child[0] = c0;
@@ -86,100 +89,50 @@ void setType(TreeNode *t, ExpType type, bool isStatic) {
     }
 }
 
+// void printTree(TreeNode *node, int childNum, int siblingNum) {
+//     if (!node) return;
 
-void printTree(TreeNode *tree, int nChild, int nSibling, bool isChild, bool isSibling, string formatStr) {
-	if (!tree) return;
-    // cout << "Here" << endl;
+//     if (siblingNum > 0) cout << "Sibling: " << siblingNum;
+
+//     switch(node->subkind.decl) {
+//         case VarK:
+//             // cout << "before print" << endl;
+//             // printVal += ("Var: [line: " + to_string(tree->lineno) + " ]");
+//             // cout << printVal << endl;
+//             cout << "Var: " << node->token->tokenstr << endl;
+//             break;
+//     }
+
+//     for(int i = 0; i < MAXCHILDREN; i++){
+//         printTree(node->child[i], childNum++, siblingNum);
+//     }
+//     printTree(node->sibling, 0, siblingNum++);
+// }
+
+void printTree(TreeNode *node, int nChild, int nSibling, bool isChild, bool isSibling, string formatStr) {
+	if (!node) return;
 	string printVal = "";
-	if(isChild) formatStr += ".   "; printVal += (formatStr + "Child: " + to_string(nChild) + " ");
-	if(isSibling) formatStr += ".   "; printVal += (formatStr + "Sibling: " + to_string(nChild) + " ");
-
-	switch(tree->subkind.decl) {
+	if(isChild) {
+        formatStr += ".   "; 
+        printVal += (formatStr + "Child: " + to_string(nChild) + " ");
+    }
+	if(isSibling) {
+        formatStr += ".   "; 
+        printVal += (formatStr + "Sibling: " + to_string(nChild) + " ");
+    }
+	switch(node->subkind.decl) {
 		case VarK:
-            // cout << "before print" << endl;
-			printVal += ("VarK: [line: " + to_string(tree->lineno) + " ]");
+			printVal += ("Var: " + string(node->token->tokenstr)  + " [line: " + to_string(node->lineno) + " ]");
 			cout << printVal << endl;
             break;
 	}
-	// switch (tree->subkind) {
-	// 	case DeclK:
-	// 		switch(DeclK)
-	// }
-     //           printVal += ("Break [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case ReturnK:
-
-     //           printVal += ("Return [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case ElsifK:
-     //           printVal += ("Elsif [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case LoopK:
-     //           printVal += ("Loop [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case LoopForeverK:
-     //           printVal += ("LoopForever [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case WhileK:
-     //           printVal += ("While [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case RangeK:
-     //           printVal += ("Range [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case IfK:
-     //           printVal += ("If [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-          
-     //      case CompoundK:
-     //           printVal += ("Compound [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case AssignK:
-     //           printVal += ("Assign: " + string(tree->token->tokenstr) + " [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-
-     //      case OpK:
-     //           printVal += ("Op: " + string(tree->token->tokenstr) + " [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-
-     //      case CallK:
-     //           printVal += ("Call: " + string(tree->token->tokenstr) + " [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-
-     //      case IdK:
-     //           printVal += ("Id: " + string(tree->token->tokenstr) + " [line: " + to_string(tree->token->linenum) + "]");
-     //           cout << printVal << endl;
-     //           break;
-     // }
-     printTree(tree->child[1], 0, -1, true, false, formatStr);
-     // printTree(tree->child[1], 1, -1, true, false, formatStr);
-     // cout << "after 2 child" << endl;
-     // printTree(tree->child[2], 2, -1, true, false, formatStr);
-     // cout << "after 3 child" << endl;
+	
+    for (int i = 0; i < MAXCHILDREN; i++){
+     printTree(node->child[i], 0, -1, true, false, formatStr);
+    }
 
      nSibling++;
-     printTree(tree->sibling, 0, nSibling, false, true, formatStr);
+     printTree(node->sibling, 0, nSibling, false, true, formatStr);
 }
 
 /*

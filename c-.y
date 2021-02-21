@@ -48,59 +48,40 @@ program:
     declList  { savedTree = $1; }
     ;
 
-
 declList: 
-    declList decl { $$ = addSibling($1, $2); }
-    | decl { $$ = $1; }
+    declList decl { $$ = addSibling($1, $2); } |
+    decl { $$ = $1; }
     ;
+
+//decl:
+//    INT ID ';' {
+//        $$ = newDeclNode(VarK, Integer, $2);
+//        //setType($$, Integer, false);
+//    }
+//    ;
 
 decl: 
     varDeclaration { $$ = $1; }
     //| funDeclaration { $$ = $1; }
     ;
 
-varDeclaration    : typeSpecifier varDeclList ';'
-              {
-                $$ = addSibling($1, $2);
-               //TreeNode *t = $2;
-               
-               //while( t != NULL) {
-               //     t->nodetype = $1->nodetype;
-               //     t = t->sibling;
-               //}
-               //$$ = $2;
+varDeclaration: 
+    typeSpecifier varDeclList ';' { 
+        $$ = addSibling($1, $2); 
+        setType($1, $1->expType, false);
+    }
+    ;
 
-              }
-            ;
+typeSpecifier:
+    INT  { $$ = newDeclNode(TypeK, VarK, Integer, $1) } // |
+    //BOOL { setType($$, Boolean, false); } |
+    //CHAR { setType($$, Char, false); }
+    ;
 
-
-//scopedVarDeclaration    : scopedTypeSpecifier varDeclList ';'
-//                    {
-//                  $$ = $2;
-//                  if ($1->isStatic) $$->isStatic = true;
-//                  TreeNode *t = $2;
-//                  while( t != NULL) {
-//                    t->nodetype = $1->nodetype;
-//                    t->isStatic = true;
-//                    t = t->sibling;
-//                  }
-//                    }
-//                  ;
-
-
-
-varDeclList    : varDeclList ',' varDeclInitialize
-               { //TreeNode *t = $1;
-               //      if (t != NULL) {
-               //                while (t->sibling != NULL){ t = t->sibling; }
-               //                t->sibling = $3;
-               //                $$ = $1;
-               //            }
-               //            else { $$ = $3;}
-                $$ = addSibling($1,$3);
-                   }
-            | varDeclInitialize { $$ = $1; }
-            ;
+varDeclList: 
+    varDeclList ',' varDeclInitialize { $$ = addSibling($1,$3); } |
+    varDeclInitialize { $$ = $1; }
+    ;
 
 varDeclInitialize: 
     varDeclId { $$ = $1; }
@@ -112,30 +93,32 @@ varDeclInitialize:
     //}
     ;
 
-
 varDeclId: 
-    ID 
-    {
-        $$ = newDeclNode(VarK, Void, $1); 
-    }
-    | ID '[' NUMCONST ']'
-    {
-        $$ = newDeclNode(VarK, Void, $1);
-        $$->isArray = true;
-        //$$->arraySize = $3->numValue;
-    }
+    ID { $$ = newDeclNode(DeclK, VarK, Void, $1); }
+    //| ID '[' NUMCONST ']'
+    //{
+    //    $$ = newDeclNode(VarK, Void, $1);
+    //    $$->isArray = true;
+    //    //$$->arraySize = $3->numValue;
+    //}
     ;
 
+////scopedVarDeclaration    : scopedTypeSpecifier varDeclList ';'
+////                    {
+////                  $$ = $2;
+////                  if ($1->isStatic) $$->isStatic = true;
+////                  TreeNode *t = $2;
+////                  while( t != NULL) {
+////                    t->nodetype = $1->nodetype;
+////                    t->isStatic = true;
+////                    t = t->sibling;
+////                  }
+////                    }
+////                  ;
 
-//scopedTypeSpecifier    : STATIC typeSpecifier { $2->isStatic = true; $$ = $2; }
-//                 | typeSpecifier { $$ = $1; }
-//                 ;
-
-
-typeSpecifier    : INT {  setType($$, Integer, false); }
-           | BOOL { setType($$, Boolean, false); }
-           | CHAR { setType($$, Char, false); }
-           ;
+////scopedTypeSpecifier    : STATIC typeSpecifier { $2->isStatic = true; $$ = $2; }
+////                 | typeSpecifier { $$ = $1; }
+////                 ;
 
 //funDeclaration    : typeSpecifier ID '(' params ')' statement
 //              { $$ = newNode(DeclK, FunK, $1->nodetype, $2->linenum, $2);
