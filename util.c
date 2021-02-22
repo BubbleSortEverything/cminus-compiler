@@ -135,7 +135,7 @@ void printTree(TreeNode *node, string childIndent, int nSibling){
 
 string declString(TreeNode *node) {
 	string str = "";
-	string arr = node->isArray ? " is array" : "";;
+	string arr = node->isArray ? " is array" : "";
 	switch(node->subkind.decl) {
 		case VarK:
 			str = "Var: " + string(node->token->tokenstr) + arr + " of type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
@@ -151,10 +151,13 @@ string declString(TreeNode *node) {
 }
 
 string expString(TreeNode *node) {
-	string str = "";
+	string str = "", type = "", tStr = "";
+	string arr = node->isArray ? " is array" : "";
 	switch(node->subkind.exp) {
 		case ConstantK:
-			str = "Const of type " + typeString(node->expType) + ": " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+			type = typeString(node->expType);
+			tStr = constValue(node->expType, node);
+			str = "Const" + arr + " of type " + type + ": " + tStr + " [line: " + to_string(node->lineno) + "]";
             break;
         case OpK:
         	str = "Op: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
@@ -168,6 +171,22 @@ string expString(TreeNode *node) {
         case AssignK:
         	str = "Assign: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
         	break;
+	}
+	return str;
+}
+
+string constValue(ExpType type, TreeNode* node) {
+	string str = "";
+	switch(type) {
+		case Integer:
+			str = to_string(node->token->numValue);
+			break;
+		case Char:
+			if (node->isArray) str = string(node->token->tokenstr);
+			else str = "'" + string(node->token->strValue) + "'";
+			break;
+		default:
+			str = string(node->token->tokenstr);
 	}
 	return str;
 }

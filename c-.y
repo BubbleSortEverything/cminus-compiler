@@ -45,44 +45,37 @@ void yyerror(const char *msg) {
 %%
 
 program: 
-    declList  { savedTree = $1; }
-    ;
+    declList  { savedTree = $1; };
 
 declList: 
     declList decl { $$ = addSibling($1, $2); } |
-    decl { $$ = $1; }
-    ;
+    decl { $$ = $1; };
 
 decl: 
     varDeclaration { $$ = $1; } |
-    funDeclaration { $$ = $1; }
-    ;
+    funDeclaration { $$ = $1; };
 
 varDeclaration: 
     typeSpecifier varDeclList ';' {
         setType($2, $1->expType, false);
         $$ = $2;
-    }
-    ;
+    };
 
 typeSpecifier:
     INT  { $$ = newExpNode(InitK, Integer, $1); } |
     BOOL { $$ = newExpNode(InitK, Boolean, $1); } |
-    CHAR { $$ = newExpNode(InitK, Char, $1); }
-    ;
+    CHAR { $$ = newExpNode(InitK, Char, $1); };
 
 varDeclList: 
     varDeclList ',' varDeclInitialize { $$ = addSibling($1,$3); } |
-    varDeclInitialize { $$ = $1; }
-    ;
+    varDeclInitialize { $$ = $1; };
 
 varDeclInitialize: 
     varDeclId { $$ = $1; } |
     varDeclId ':' simpleExpression {
         $1 = addChild($1, $3);
         $$ = $1;
-    }
-    ;
+    };
 
 varDeclId:
     ID { $$ = newDeclNode(VarK, UndefinedType, $1); } |
@@ -90,15 +83,13 @@ varDeclId:
         /***** prolly need to save NUMCONST in the node for future reference *****/
         $$ = newDeclNode(VarK, UndefinedType, $1);
         $$->isArray = true;
-    }
-    ;
+    };
 
 scopedVarDeclaration: 
     scopedTypeSpecifier varDeclList {
         setType($2, $1->expType, $1->isStatic);
         $$ = $2;
-    }
-    ;
+    };
 
 scopedTypeSpecifier: 
     STATIC typeSpecifier { $2->isStatic = true; $$ = $2; } |
@@ -111,8 +102,7 @@ funDeclaration:
     ID '(' params ')' statement
     { 
          $$ = newDeclNode(FuncK, Void, $1, $3, $5);
-    }
-    ;
+    };
 
 params: 
     paramList {
@@ -144,9 +134,7 @@ paramId:
     ID '[' ']' { 
         $$ = newDeclNode(ParamK, UndefinedType, $1); 
         $$->isArray = true;
-    }
-    ;
-
+    };
 
 statement: 
     expressionStmt { $$ = $1; } |
@@ -154,8 +142,7 @@ statement:
     selectStmt { $$ = $1; } |
     iterStmt { $$ = $1; } |
     returnStmt {$$ = $1; } |
-    breakStmt { $$ = $1; }
-    ;
+    breakStmt { $$ = $1; };
 
 compoundStmt: 
     '{' localDeclarations statementList '}' {
@@ -168,8 +155,7 @@ selectStmt:
     } | 
     IF simpleExpression THEN statement ELSE statement {
         $$ = newStmtNode(IfK, $1, $2, $4, $6);
-    }
-    ;
+    };
 
 iterStmt:
     WHILE simpleExpression DO statement {
@@ -178,7 +164,7 @@ iterStmt:
     FOR ID '=' iterRange DO statement {
         TreeNode *var = newDeclNode(VarK, Integer, $2);
         $$ = newStmtNode(ForK, $1, var, $4, $6);
-    }
+    };
 
 iterRange:
     simpleExpression TO simpleExpression {
@@ -186,7 +172,7 @@ iterRange:
     } |
     simpleExpression TO simpleExpression BY simpleExpression {
         $$ = newStmtNode(RangeK, $2, $1, $3, $5);
-    }
+    };
 
 returnStmt:
     RETURN ';' {
@@ -199,156 +185,13 @@ returnStmt:
 breakStmt:
     BREAK ';' {
         $$ = newStmtNode(BreakK, $1);
-    }
-
-//matchedElsif    : ELSIF simpleExpression THEN matched matchedElsif
-//               {
-//                $$ = newNode(StmtK, ElsifK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//                $$->child[2] = $5;
-//               }              
-               
-//           | ELSE matched { $$ = $2; }
-//           ;
-
-//unmatchedSelStmt    : IF simpleExpression THEN unmatched
-//               { 
-//                $$ = newNode(StmtK, IfK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//               }
-//              | IF simpleExpression THEN matched
-//               { 
-//                $$ = newNode(StmtK, IfK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//               }
-
-//              | IF simpleExpression THEN matched unmatchedElsif
-//               {
-//                $$ = newNode(StmtK, IfK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//                $$->child[2] = $5;
-//               }
-//               ;
-
-//unmatchedElsif    : ELSIF simpleExpression THEN matched unmatchedElsif
-//               {
-//                $$ = newNode(StmtK, ElsifK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//                $$->child[2] = $5;
-//               } 
-//            | ELSIF simpleExpression THEN matched
-//               {
-//                $$ = newNode(StmtK, ElsifK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//               } 
-//            | ELSIF simpleExpression THEN unmatched
-//               {
-//                $$ = newNode(StmtK, ElsifK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//               } 
-//            | ELSE unmatched { $$ = $2; }
-//            ;  
-                
-
-//matchedWhileStmt    : WHILE simpleExpression DO matched
-//               {
-//                $$ = newNode(StmtK, WhileK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//               }
-//              ;
-
-//unmatchedWhileStmt    : WHILE simpleExpression DO unmatched
-//               {
-//                $$ = newNode(StmtK, WhileK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//               }
-//                ;
-
-//matchedLoopStmt    : LOOP ID '=' iterationRange DO matched
-//               {
-//                $$ = newNode(StmtK, LoopK, Void, $1->linenum, $1);
-//                TreeNode *idNode = newNode(ExpK, IdK, Void, $2->linenum, $2);
-//                $$->child[0] = idNode;
-//                $$->child[1] = $4;
-//                $$->child[2] = $6;
-//               }
-//             | LOOP FOREVER matched
-//               {
-//                $$ = newNode(StmtK, LoopForeverK, Void, $1->linenum, $1);
-//                $$->child[1] = $3;
-//               }
-//                ;
-
-//unmatchedLoopStmt    : LOOP ID '=' iterationRange DO unmatched
-//               {
-//                $$ = newNode(StmtK, LoopK, Void, $1->linenum, $1);
-//                TreeNode *idNode = newNode(ExpK, IdK, Void, $2->linenum, $2);
-//                $$->child[0] = idNode;
-//                $$->child[1] = $4;
-//                $$->child[2] = $6;
-//               }
-//             | LOOP FOREVER unmatched
-//               {
-//                $$ = newNode(StmtK, LoopForeverK, Void, $1->linenum, $1);
-//                $$->child[1] = $3;
-//               }
-//                ;
-
-//returnStmt    : RETURN ';' 
-//          {
-//           $$ = newNode(StmtK, ReturnK, Void, $1->linenum, $1);
-//          }
-//           | RETURN expression ';'
-//          {
-//           $$ = newNode(StmtK, ReturnK, Void, $1->linenum, $1);
-//           $$->child[0] = $2;
-//          }
-//           ;
-
-//breakStmt    : BREAK ';' { $$ = newNode(StmtK, BreakK, Void, $1->linenum, $1); }
-//           ;
+    };
 
 localDeclarations: 
     localDeclarations scopedVarDeclaration ';' { 
         $$ = addSibling($1, $2);
     } |
     {  $$ = NULL; };
-
-
-
-//iterationRange    : simpleExpression RANGE simpleExpression
-//              {
-//               $$ = newNode(ExpK, RangeK, Void, $2->linenum, $2);
-//               $$->child[0] = $1;
-//               $$->child[1] = $3;
-
-//               TokenData *newToken = new TokenData;
-//               newToken->tokenstr = new char('1');
-//               newToken->numValue = 1;
-//               newToken->linenum = $2->linenum;
-
-//               $$->child[2] = newNode(ExpK, ConstK, Int, $2->linenum, newToken);
-
-               
-//              }
-//             | simpleExpression RANGE simpleExpression ':' simpleExpression
-//              { 
-//               $$ = newNode(ExpK, RangeK, Void, $2->linenum, $2);
-//               $$->child[0] = $1;
-//               $$->child[1] = $3;
-//               $$->child[2] = $5;
-//              }
-
-//             ;
 
 statementList:
     statementList statement { $$ = addSibling($1, $2); } |
@@ -380,8 +223,7 @@ expression:
     mutable DIVASS expression { 
         $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); 
     } |
-    simpleExpression { $$ = $1; }
-;
+    simpleExpression { $$ = $1; };
 
 simpleExpression: 
     simpleExpression OR andExpression {

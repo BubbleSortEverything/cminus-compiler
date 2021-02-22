@@ -40,5 +40,7 @@ void printTree(TreeNode *node, string childIndent, int nSibling);
 string declString(TreeNode *node);
 string expString(TreeNode *node);
 string stmtString(TreeNode *node);
+
+string constValue(ExpType type, TreeNode* node);
 string typeString(ExpType type);
 #endif
