@@ -374,12 +374,12 @@ int main(int argc, char* argv[]) {
 
      while ((c = ourGetopt(argc, argv, (char *)"pd:")) != EOF){
           switch (c) {
-             case   'p':
-                 printFlag = true;
-                 break;
-             // case   'd':
-             //      yydebug=1;
-             //        break;
+             case 'p':
+                printFlag = true;
+                break;
+             case 'd':
+                yydebug=1;
+                break;
               }
           optCount++;
      }
