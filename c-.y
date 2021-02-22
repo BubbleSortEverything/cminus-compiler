@@ -36,11 +36,11 @@ void yyerror(const char *msg) {
 %token <tokenData> CHAR DEC INC CHARCONST STRINGCONST UNDEFINED ';' ',' '[' ']' '(' ')' '{' '}' '=' '<' '>' '+' '-' '*' '/' '%' '?' ':'
 
 //type specifies the token classes used only in the parser
-%type <treeNode> program declList decl varDeclaration varDeclList varDeclInitialize varDeclId typeSpecifier//simpleExpression
-//%type <treeNode> andExpression unaryRelExpression relExpression sumExpression mulExpression unaryExpression factor immutable 
-//%type <treeNode> constant typeSpecifier scopedTypeSpecifier scopedVarDeclaration paramId paramIdList paramTypeList paramList 
-//%type <treeNode> params funDeclaration argList args call expression relop mulop unaryop mutable sumop statement matched expressionStmt 
-//%type <treeNode> compoundStmt localDeclarations statementList matchedSelStmt unmatched unmatchedSelStmt iterationRange matchedWhileStmt 
+%type <treeNode> program declList decl varDeclaration varDeclList varDeclInitialize varDeclId typeSpecifier simpleExpression
+%type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression factor mutable immutable 
+%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedTypeSpecifier scopedVarDeclaration funDeclaration params//typeSpecifier scopedTypeSpecifier scopedVarDeclaration paramId paramIdList paramTypeList paramList 
+%type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList//funDeclaration argList  call expression relop mulop unaryop mutable sumop statement matched expressionStmt 
+%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop//compoundStmt localDeclarations statementList matchedSelStmt unmatched unmatchedSelStmt iterationRange matchedWhileStmt 
 //%type <treeNode> unmatchedWhileStmt matchedLoopStmt unmatchedLoopStmt matchedElsif unmatchedElsif returnStmt breakStmt
 %%
 
@@ -54,13 +54,12 @@ declList:
     ;
 
 decl: 
-    varDeclaration { $$ = $1; }
-    //funDeclaration { $$ = $1; }
+    varDeclaration { $$ = $1; } |
+    funDeclaration { $$ = $1; }
     ;
 
 varDeclaration: 
     typeSpecifier varDeclList ';' {
-        // $$ = addSibling($1, $2);
         setType($2, $1->expType, false);
         $$ = $2;
     }
@@ -68,8 +67,8 @@ varDeclaration:
 
 typeSpecifier:
     INT  { $$ = newExpNode(InitK, Integer, $1); } |
-    BOOL { $$ = newExpNode(InitK, Boolean, $1)} |
-    CHAR { $$ = newExpNode(InitK, Char, $1) }
+    BOOL { $$ = newExpNode(InitK, Boolean, $1); } |
+    CHAR { $$ = newExpNode(InitK, Char, $1); }
     ;
 
 varDeclList: 
@@ -78,13 +77,11 @@ varDeclList:
     ;
 
 varDeclInitialize: 
-    varDeclId { $$ = $1; }
-    //varDeclId ':' simpleExpression
-    //{ 
-    //    $$ = newDeclNode(VarK, Void, $1, $3);
-    //  // $1->child[0] = $3;
-    //  // $$ = $1;
-    //}
+    varDeclId { $$ = $1; } |
+    varDeclId ':' simpleExpression {
+        $1 = addChild($1, $3);
+        $$ = $1;
+    }
     ;
 
 varDeclId:
@@ -96,113 +93,113 @@ varDeclId:
     }
     ;
 
-////scopedVarDeclaration    : scopedTypeSpecifier varDeclList ';'
-////                    {
-////                  $$ = $2;
-////                  if ($1->isStatic) $$->isStatic = true;
-////                  TreeNode *t = $2;
-////                  while( t != NULL) {
-////                    t->nodetype = $1->nodetype;
-////                    t->isStatic = true;
-////                    t = t->sibling;
-////                  }
-////                    }
-////                  ;
+scopedVarDeclaration: 
+    scopedTypeSpecifier varDeclList {
+        setType($2, $1->expType, $1->isStatic);
+        $$ = $2;
+    }
+    ;
 
-////scopedTypeSpecifier    : STATIC typeSpecifier { $2->isStatic = true; $$ = $2; }
-////                 | typeSpecifier { $$ = $1; }
-////                 ;
+scopedTypeSpecifier: 
+    STATIC typeSpecifier { $2->isStatic = true; $$ = $2; } |
+    typeSpecifier { $$ = $1; };
 
-//funDeclaration    : typeSpecifier ID '(' params ')' statement
-//              { $$ = newNode(DeclK, FunK, $1->nodetype, $2->linenum, $2);
-//                $$->child[0] = $4;
-//                $$->child[1] = $6;
-//              }
-//            | ID '(' params ')' statement
-//              { $$ = newNode(DeclK, FunK, Void, $1->linenum, $1);
-//                $$->child[0] = $3;
-//                $$->child[1] = $5;
-//              }
-//            ;
+funDeclaration: 
+    typeSpecifier ID '(' params ')' statement { 
+        $$ = newDeclNode(FuncK, $1->expType, $2, $4, $6);
+    } | 
+    ID '(' params ')' statement
+    { 
+         $$ = newDeclNode(FuncK, Void, $1, $3, $5);
+    }
+    ;
 
-//params    : paramList 
-//       | { $$ = NULL; }
-//       ;
+params: 
+    paramList {
+        $$ = $1;
+    } | 
+    { $$ = NULL; };
 
-//paramList    : paramList ';' paramTypeList
-//               { TreeNode *t = $1;
-//                     if (t != NULL) {
-//                               while (t->sibling != NULL){ t = t->sibling; }
-//                               t->sibling = $3;
-//                               $$ = $1;
-//                           }
-//                           else { $$ = $3;}
-//                   }
-//          | paramTypeList { $$ = $1; }
-//          ;
+paramList: 
+    paramList ';' paramTypeList {
+        $$ = addSibling($1, $3);
+    } |
+    paramTypeList { $$ = $1; };
 
-//paramTypeList    : typeSpecifier paramIdList 
-//              {
-//               TreeNode *t = $2;
-               
-//               while( t != NULL) {
-//                    t->nodetype = $1->nodetype;
-//                    t = t->sibling;
-//               }
-//               $$ = $2;
-//              }
-//            ;
+paramTypeList: 
+    typeSpecifier paramIdList {
+        setType($2, $1->expType, false);
+        $$ = $2;
+    };
 
-//paramIdList    : paramIdList ',' paramId
-//               { TreeNode *t = $1;
-//                     if (t != NULL) {
-//                               while (t->sibling != NULL){ t = t->sibling; }
-//                               t->sibling = $3;
-//                               $$ = $1;
-//                           }
-//                           else { $$ = $3;}
-//                   }
-//            | paramId { $$ = $1; }
-//            ;
+paramIdList: 
+    paramIdList ',' paramId {
+        addSibling($1, $3);
+    } |
+    paramId { $$ = $1; }
+    ;
 
-//paramId: ID { $$ = newNode(DeclK, ParamK, Void, $1->linenum, $1); }
-//        | ID '[' ']' { $$ = newNode(DeclK, ParamK, Void, $1->linenum, $1); $$->isArray = true; }
-//        ;
+paramId: 
+    ID { $$ = newDeclNode(ParamK, UndefinedType, $1); } |
+    ID '[' ']' { 
+        $$ = newDeclNode(ParamK, UndefinedType, $1); 
+        $$->isArray = true;
+    }
+    ;
 
 
-//statement    : matched { $$ = $1; } | unmatched { $$ = $1; }
-//          ;
+statement: 
+    expressionStmt { $$ = $1; } |
+    compoundStmt { $$ = $1; } |
+    selectStmt { $$ = $1; } |
+    iterStmt { $$ = $1; } |
+    returnStmt {$$ = $1; } |
+    breakStmt { $$ = $1; }
+    ;
 
-//matched    : expressionStmt { $$ = $1; }
-//        | compoundStmt { $$ = $1; }
-//        | matchedSelStmt { $$ = $1; }
-//        | matchedWhileStmt { $$ = $1; }
-//        | matchedLoopStmt { $$ = $1; }
-//        | returnStmt { $$ = $1; }
-//        | breakStmt { $$ = $1; }
-//        ;
+compoundStmt: 
+    '{' localDeclarations statementList '}' {
+        $$ = newStmtNode(CompoundK, $1, $2, $3);
+    };
 
-//unmatched    : unmatchedSelStmt { $$ = $1; }
-//          | unmatchedWhileStmt { $$ = $1; }
-//          | unmatchedLoopStmt { $$ = $1; }
-          
-//          ;
+selectStmt: 
+    IF simpleExpression THEN statement {
+        $$ = newStmtNode(IfK, $1, $2, $4);
+    } | 
+    IF simpleExpression THEN statement ELSE statement {
+        $$ = newStmtNode(IfK, $1, $2, $4, $6);
+    }
+    ;
 
-//compoundStmt    : '{' localDeclarations statementList '}'
-//               { $$ = newNode(StmtK, CompoundK, Void, $1->linenum, $1);
-//                 $$->child[0] = $2;
-//                 $$->child[1] = $3;
-//               }
-//          ;
+iterStmt:
+    WHILE simpleExpression DO statement {
+        $$ = newStmtNode(WhileK, $1, $2, $4);
+    } |
+    FOR ID '=' iterRange DO statement {
+        TreeNode *var = newDeclNode(VarK, Integer, $2);
+        $$ = newStmtNode(ForK, $1, var, $4, $6);
+    }
 
-//matchedSelStmt    : IF simpleExpression THEN matched matchedElsif
-//               {
-//                $$ = newNode(StmtK, IfK, Void, $1->linenum, $1);
-//                $$->child[0] = $2;
-//                $$->child[1] = $4;
-//                $$->child[2] = $5;
-//               }
-//             ;
+iterRange:
+    simpleExpression TO simpleExpression {
+        $$ = newStmtNode(RangeK, $2, $1, $3);
+    } |
+    simpleExpression TO simpleExpression BY simpleExpression {
+        $$ = newStmtNode(RangeK, $2, $1, $3, $5);
+    }
+
+returnStmt:
+    RETURN ';' {
+        $$ = newStmtNode(ReturnK, $1);
+    } |
+    RETURN expression ';' {
+        $$ = newStmtNode(ReturnK, $1, $2);
+    };
+
+breakStmt:
+    BREAK ';' {
+        $$ = newStmtNode(BreakK, $1);
+    }
 
 //matchedElsif    : ELSIF simpleExpression THEN matched matchedElsif
 //               {
@@ -320,18 +317,11 @@ varDeclId:
 //breakStmt    : BREAK ';' { $$ = newNode(StmtK, BreakK, Void, $1->linenum, $1); }
 //           ;
 
-//localDeclarations    : localDeclarations scopedVarDeclaration
-//               { TreeNode *t = $1;
-//                     if (t != NULL) {
-//                               while (t->sibling != NULL){ t = t->sibling; }
-//                               t->sibling = $2;
-//                               $$ = $1;
-//                           }
-//                           else { $$ = $2;}
-//                   }
-//               |  { $$ = NULL; }
-               
-//                ;
+localDeclarations: 
+    localDeclarations scopedVarDeclaration ';' { 
+        $$ = addSibling($1, $2);
+    } |
+    {  $$ = NULL; };
 
 
 
@@ -360,239 +350,174 @@ varDeclId:
 
 //             ;
 
-//statementList    : statementList statement
-//               { TreeNode *t = $1;
-//                     if (t != NULL) {
-//                               while (t->sibling != NULL){ t = t->sibling; }
-//                               t->sibling = $2;
-//                               $$ = $1;
-//                           }
-//                           else { $$ = $2;}
-//                   }
-//          | { $$ = NULL; }
-               
-//                ;
+statementList:
+    statementList statement { $$ = addSibling($1, $2); } |
+    { $$ = NULL; };
+
+expressionStmt: 
+    expression ';' { $$ = $1; } |
+    ';' { $$ = NULL; };
+
+expression: 
+    mutable '=' expression {
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); 
+    } |
+    mutable INC {
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1); 
+    } |
+    mutable DEC{ 
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1); 
+    } |
+    mutable ADDASS expression { 
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); 
+    } |
+    mutable SUBASS expression { 
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); 
+    } |
+    mutable MULASS expression { 
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); 
+    } |
+    mutable DIVASS expression { 
+        $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); 
+    } |
+    simpleExpression { $$ = $1; }
+;
+
+simpleExpression: 
+    simpleExpression OR andExpression {
+        $2->tokenstr = "OR";
+        $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
+    } |
+    andExpression {
+        $$ = $1;
+    };
 
 
-//expressionStmt    : expression ';' { $$ = $1; }
-//            | ';' { $$ = NULL; }
-//            ;
+andExpression: 
+    andExpression AND unaryRelExpression {
+        $2->tokenstr = "AND";
+        $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
+    } |
+    unaryRelExpression { $$ = $1; };
 
-//expression    : mutable '=' expression 
-//          { $$ = newNode(ExpK, AssignK, Void, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//            $$->child[1] = $3;
-//          }
+unaryRelExpression: 
+    NOT unaryRelExpression {
+        $1->tokenstr = "NOT";
+        $$ = newExpNode(OpK, UndefinedType, $1, $2);
+    } | 
+    relExpression { $$ = $1; };
 
-//           | mutable INC
-//          { $$ = newNode(ExpK, AssignK, Int, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//          }
-//           | mutable DEC
-//          { $$ = newNode(ExpK, AssignK, Int, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//          }
-//           |   mutable ADDASS expression 
-//          { $$ = newNode(ExpK, AssignK, Int, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//            $$->child[1] = $3;
-//          }
-//           |   mutable SUBASS expression 
-//          { $$ = newNode(ExpK, AssignK, Int, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//            $$->child[1] = $3;
-//          }
-//           |   mutable MULASS expression 
-//          { $$ = newNode(ExpK, AssignK, Int, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//            $$->child[1] = $3;
-//          }
-//           |   mutable DIVASS expression 
-//          { $$ = newNode(ExpK, AssignK, Int, $2->linenum, $2); 
-//            $$->child[0] = $1;
-//            $$->child[1] = $3;
-//          }
-//           | simpleExpression { $$ = $1; }
-//           ;
+relExpression:
+    minmaxExp relop minmaxExp {
+        $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3);
+    } |
+    minmaxExp { $$ = $1; };
 
-//simpleExpression    : simpleExpression OR andExpression
-//               {
-//                $$ = newNode(ExpK, OpK, Bool, $2->linenum, $2);
-//                $$->child[0] = $1;
-//                $$->child[1] = $3;
-//                if ($1 != NULL && $3 != NULL && $1->isConstant && $1->isConstant)
-//                    $$->isConstant = true;
-//               }
+minmaxExp:
+    minmaxExp minmaxop sumExpression {
+        $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3);
+    } |
+    sumExpression { $$ = $1; };
 
-//              | andExpression { $$ = $1; }
-//                   ;
+sumExpression:
+    sumExpression sumop mulExpression {
+        $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3);
+    } | 
+    mulExpression { $$ = $1; } ;
 
+mulExpression: 
+    mulExpression mulop unaryExpression {
+        $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3);
+    } |
+    unaryExpression { $$ = $1; } ;
 
-//andExpression    : andExpression AND unaryRelExpression
-//               {
-//                $$ = newNode(ExpK, OpK, Bool, $2->linenum, $2);
-//                $$->child[0] = $1;
-//                $$->child[1] = $3;
-//                if ($1 != NULL && $3 != NULL && $1->isConstant && $1->isConstant)
-//                    $$->isConstant = true;
-//               }
-//           | unaryRelExpression { $$ = $1; }
-//                ;
+minmaxop:
+    MAX { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    MIN { $$ = newExpNode(OpK, UndefinedType, $1); }
 
-//unaryRelExpression    : NOT unaryRelExpression 
-//               {
-//                $$ = newNode(ExpK, UnaryK, Bool, $1->linenum, $1);
-//                $$->child[0] = $2;
-               
-//                if ($2 != NULL && $2->isConstant) $$->isConstant = true;
-//                else $$->isConstant = false;
-//               }
+relop: 
+    '<' { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    '>' { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    LEQ { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    GEQ { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    NEQ { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    EQ { $$ = newExpNode(OpK, UndefinedType, $1); }
+    ;
 
-//                | relExpression { $$ = $1; }
-//                     ;
+sumop: 
+    '+' { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    '-' { $$ = newExpNode(OpK, UndefinedType, $1); } ;
 
-//relExpression    : sumExpression relop sumExpression
-//               {
-//                $$ = $2;
-//                $$->child[0] = $1;
-//                $$->child[1] = $3;
-//                if ($1 != NULL && $3 != NULL && $1->isConstant && $1->isConstant)
-//                    $$->isConstant = true;
-//               }
-//           | sumExpression { $$ = $1; }
-//                ;
+mulop: 
+    '/' { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    '*' { $$ = newExpNode(OpK, UndefinedType, $1); } |
+    '%' { $$ = newExpNode(OpK, UndefinedType, $1); } ;
 
-//relop     : LEQ { $$ = newNode(ExpK, OpK, Bool, $1->linenum, $1) ; }
-//      | '<' { $$ = newNode(ExpK, OpK, Bool, $1->linenum, $1) ; }
-//      | '>' { $$ = newNode(ExpK, OpK, Bool, $1->linenum, $1) ; }
-//      | GEQ { $$ = newNode(ExpK, OpK, Bool, $1->linenum, $1) ; }
-//      | EQ { $$ = newNode(ExpK, OpK, Bool, $1->linenum, $1) ; }
-//      | NEQ { $$ = newNode(ExpK, OpK, Bool, $1->linenum, $1) ; }
-//      ;
+unaryExpression: 
+    unaryop unaryExpression {
+        $$ = newExpNode(OpK, UndefinedType, $1->token, $2);
+    } |
+    factor { $$ = $1; } ; 
 
-//sumExpression    : sumExpression sumop mulExpression
-//               {
-//                $$ = $2;
-//                $$->child[0] = $1;
-//                $$->child[1] = $3;
-//                if ($1 != NULL && $3 != NULL && $1->isConstant && $1->isConstant)
-//                    $$->isConstant = true;
-//               }    
+unaryop:
+    '-' {
+        $1->tokenstr = "CHSIGN";
+        $$ = newExpNode(OpK, UndefinedType, $1); 
+    } |
+    '*' { 
+        $1->tokenstr = "SIZEOF";
+        $$ = newExpNode(OpK, UndefinedType, $1); 
+    } |
+    '?' { $$ = newExpNode(OpK, UndefinedType, $1); };
 
-//           | mulExpression { $$ = $1; }
-//                ;
+factor: 
+    mutable { $$ = $1; } | 
+    immutable { $$ = $1; } ;
 
-//sumop    : '+' { $$ = newNode(ExpK, OpK, Int, $1->linenum, $1); }
-//      | '-' { $$ = newNode(ExpK, OpK, Int, $1->linenum, $1); }
-//      ;
+mutable: 
+    ID { 
+        $$ = newExpNode(IdK, UndefinedType, $1);
+    } | 
+    mutable '[' expression ']' {
+        $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
+    };
 
-//mulExpression    : mulExpression mulop unaryExpression
-//               {
-//                $$ = $2;
-//                $$->child[0] = $1;
-//                $$->child[1] = $3;
-//                if ($1 != NULL && $3 != NULL && $1->isConstant && $1->isConstant)
-//                    $$->isConstant = true;
-//               }
+immutable: 
+    '(' expression ')' { $$ = $2; } |
+    call { $$ = $1; } |
+    constant { $$ = $1; };
 
-//           | unaryExpression { $$ = $1; }
-//                ;
+call: 
+    ID '(' args ')' {
+        $$ = newExpNode(CallK, UndefinedType, $1, $3);
+    };
 
-//mulop    : '/' { $$ = newNode(ExpK, OpK, Int, $1->linenum, $1); }
-//      | '*' { $$ = newNode(ExpK, OpK, Int, $1->linenum, $1); }
-//      | '%' { $$ = newNode(ExpK, OpK, Int, $1->linenum, $1); }
-//      ;
+args: 
+    argList { $$ = $1; } |
+    { $$ = NULL; };
 
 
-//unaryExpression    : unaryop unaryExpression
-//               {
-//                $$ = $1;
-//                for (int i = 0; i <= 2; i++)
-//                    if ($$->child[i] == NULL){ $$->child[i] = $2; break; }
-               
-//                if ($2 != NULL && $2->isConstant) $$->isConstant = true;
-//                else $$->isConstant = false;
-          
-//               }
-//             | factor { $$ = $1; }
-//             ; 
+argList: 
+    argList ',' expression {
+        $$ = addSibling($1, $3);
+    } |
+    expression { $$ = $1; }
+    ;
 
-//unaryop    : '-' { $$ = newNode(ExpK, UnaryK, Int, $1->linenum, $1); }
-//        | '*' { $$ = newNode(ExpK, UnaryK, Int, $1->linenum, $1); }
-//        | '?' { $$ = newNode(ExpK, UnaryK, Int, $1->linenum, $1); }
-//        ;
-
-
-//factor    : mutable { $$ = $1; } | immutable { $$ = $1; }
-//       ;
-
-//mutable    : ID { $$ = newNode(ExpK, IdK, Void, $1->linenum, $1); }
-//        | mutable '[' expression ']' 
-//          {
-//           $$ = newNode(ExpK, OpK, Void, $2->linenum, $2);
-//           $$->child[0] = $1;
-
-//           $3->isIndex = true;
-//           $$->child[1] = $3;
-//          }
-//        ;
-
-//immutable    : '(' expression ')' { $$ = $2; }
-//          | call { $$ = $1; }
-//          | constant { $$ = $1; }
-//          ;
-
-
-//call    : ID '(' args ')'
-//          {
-//           if ($3 != NULL){
-//               $$ = newNode(ExpK, CallK, $3->nodetype, $1->linenum, $1);
-//               $$->child[0] = $3;
-//           }
-//           else{
-//               $$ = newNode(ExpK, CallK, Void, $1->linenum, $1);
-//           }
-//          }
-//     ;
-
-
-//args    : argList { $$ = $1; }
-//     | { $$ = NULL; }
-//     ;
-
-
-//argList    : argList ',' expression
-//          { TreeNode *t = $1;
-//                if (t != NULL) {
-//                       while (t->sibling != NULL){ t = t->sibling; }
-//                       t->sibling = $3;
-//                       $$ = $1;
-//                   }
-//                   else { $$ = $3;}
-//              }
-//         | expression { $$ = $1; }
-//         ;
-           
-
-
-//constant    : NUMCONST
-//                 { $$ = newNode(ExpK, ConstK, Int, $1->linenum, $1);
-//                   $$->isConstant = true;
-//                 }
-//       | BOOLCONST
-//          { $$ = newNode(ExpK, ConstK, Bool, $1->linenum, $1);
-//            $$->isConstant = true;
-//          }
-//       | CHARCONST
-//          { $$ = newNode(ExpK, ConstK, Char, $1->linenum, $1);
-//            $$->isConstant = true;
-//          }
-//       | STRINGCONST
-//          { $$ = newNode(ExpK, ConstK, Char, $1->linenum, $1);
-//            $$->isConstant = true;
-//            $$->isArray = true;
-//          }
-//       ;
+constant:
+    NUMCONST { 
+        $$ = newExpNode(ConstantK, Integer, $1);
+    } |
+    BOOLCONST {
+        $$ = newExpNode(ConstantK, Boolean, $1);
+    } |
+    CHARCONST {
+        $$ = newExpNode(ConstantK, Char, $1);
+    } |
+    STRINGCONST {
+        $$ = newExpNode(ConstantK, Char, $1);
+        $$->isArray = true;
+    };
 
 %%
 
@@ -626,12 +551,12 @@ int main(int argc, char* argv[]) {
                //      tmp = tmp->sibling;
                // }
                // cout << savedTree->sibling->subkind.decl << endl;
-               if (printFlag) printTree(savedTree, 0, 0); //printTree(savedTree, 0, -1, false, false, "");
+               if (printFlag) printTree(savedTree, "", 0); //printTree(savedTree, 0, -1, false, false, "");
         }
         else {
                yyin = stdin;
                yyparse();
-               if (printFlag) printTree(savedTree, 0, 0); //printTree(savedTree, 0, -1, false, false, "");
+               if (printFlag) printTree(savedTree, "", 0); //printTree(savedTree, 0, -1, false, false, "");
         }
      }
 

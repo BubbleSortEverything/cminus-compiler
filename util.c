@@ -28,9 +28,10 @@ TreeNode *newStmtNode(StmtKind kind,
                       TreeNode *c0,
                       TreeNode *c1,
                       TreeNode *c2) {
-	TreeNode *node = (TreeNode*) malloc(sizeof(TreeNode));
+	TreeNode *node = new TreeNode;
 	node->nodekind = StmtK;
 	node->subkind.stmt = kind;
+	node->expType = UndefinedType;
 	node->lineno = token->linenum;
 	node->child[0] = c0;
 	node->child[1] = c1;
@@ -79,6 +80,17 @@ TreeNode *addSibling(TreeNode *t, TreeNode *s) {
     return s;
 }
 
+TreeNode *addChild(TreeNode *p, TreeNode *c){
+	for(int i = 0; i < MAXCHILDREN; i++){
+		if(p->child[i] == NULL) {
+			p->child[i] = c;
+			return p;
+		}
+	}
+	printf("ERROR(SYSTEM): exceeded maximum number of children.\n");
+    exit(1);
+}
+
 // pass the static and type attribute down the sibling list
 void setType(TreeNode *t, ExpType type, bool isStatic) {
     while (t) {
@@ -89,42 +101,101 @@ void setType(TreeNode *t, ExpType type, bool isStatic) {
     }
 }
 
-void printTree(TreeNode *node, int indent, int nSibling){
+void printTree(TreeNode *node, string childIndent, int nSibling){
 	if(!node) return;
 
 	switch(node->nodekind) {
 		case DeclK:
-			// if(nSibling > 0) cout << "Sibling: " << nSibling << " ";
 			cout << declString(node) << endl;
-			// nSibling++;
 			break;
 		case StmtK:
-			// nSibling++;
-			cout << declString(node) << endl;
+			cout << stmtString(node) << endl;
+			break;
+		case ExpK:
+			cout << expString(node) << endl;
 			break;
 	}
 
 	for (int i = 0; i < MAXCHILDREN; i++){
+		string indent = ".   ";
+		indent += childIndent;
 		if (node->child[i] != NULL){
-			printf("%*s Child: %d\n", indent*2, ". ", i);
-			printTree(node->child[i], indent++, nSibling);
+			printf("%sChild: %d ", indent.c_str(), i);
+			printTree(node->child[i], indent, 0);
 		}
     }
 
 	if (node->sibling != NULL) {
-		cout << "Sibling: " << ++nSibling << " ";
-		printTree(node->sibling, indent, nSibling);
+		printf("%sSibling: %d ", childIndent.c_str(), ++nSibling);
+		printTree(node->sibling, childIndent, nSibling);
 	}
 
+	return;
 }
 
 string declString(TreeNode *node) {
 	string str = "";
-	string arr = node->isArray ? " is array" : "";
+	string arr = node->isArray ? " is array" : "";;
 	switch(node->subkind.decl) {
 		case VarK:
-			str = "Var: " + string(node->token->tokenstr) + arr + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
+			str = "Var: " + string(node->token->tokenstr) + arr + " of type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
             break;
+        case FuncK:
+			str = "Func: " + string(node->token->tokenstr) + " returns type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
+			break;
+		case ParamK:
+			str = "Parm: " + string(node->token->tokenstr) + arr + " of type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
+			break;
+	}
+	return str;
+}
+
+string expString(TreeNode *node) {
+	string str = "";
+	switch(node->subkind.exp) {
+		case ConstantK:
+			str = "Const of type " + typeString(node->expType) + ": " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+            break;
+        case OpK:
+        	str = "Op: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	break;
+        case IdK:
+        	str = "Id: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	break;
+        case CallK:
+        	str = "Call: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	break;
+        case AssignK:
+        	str = "Assign: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	break;
+	}
+	return str;
+}
+
+string stmtString(TreeNode *node) {
+	string str = "";
+	switch(node->subkind.stmt) {
+		case CompoundK:
+			str = "Compound [line: " + to_string(node->lineno) + "]";
+			break;
+		case IfK:
+			str = "If [line: " + to_string(node->lineno) + "]";
+			break;
+		case WhileK:
+			str = "While [line: " + to_string(node->lineno) + "]";
+			break;
+		case ForK:
+			str = "For [line: " + to_string(node->lineno) + "]";
+			break;
+		case RangeK:
+			str = "Range [line: " + to_string(node->lineno) + "]";
+			break;
+		case ReturnK:
+			str = "Return [line: " + to_string(node->lineno) + "]";
+			break;
+		case BreakK:
+			str = "Break [line: " + to_string(node->lineno) + "]";
+			break;
 	}
 	return str;
 }
@@ -133,10 +204,16 @@ string typeString(ExpType type) {
 	string str = "";
 	switch(type) {
 		case Integer:
-			str = " of type Integer";
+			str = "int";
+			break;
+		case Boolean:
+			str = "bool";
 			break;
 		case Void:
-			str = "Void";
+			str = "void";
+			break;
+		case Char:
+			str = "char";
 			break;
 	}
 	return str;

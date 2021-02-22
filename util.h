@@ -11,7 +11,7 @@ using namespace std;
 
 
 TreeNode *newDeclNode(DeclKind kind, ExpType type,
-                      TokenData *token=NULL,
+                      TokenData *token,
                       TreeNode *c0=NULL,
                       TreeNode *c1=NULL,
                       TreeNode *c2=NULL);  // save TokenData block!!
@@ -29,13 +29,16 @@ TreeNode *newExpNode(ExpKind kind, ExpType type,
                      TreeNode *c2=NULL);
 
 TreeNode *addSibling(TreeNode *t, TreeNode *s);
+TreeNode *addChild(TreeNode *p, TreeNode *c);
 
 void setType(TreeNode *t, ExpType type, bool isStatic);
 
 // void printTree(TreeNode *tree, int nChild, int nSibling, bool isChild, bool isSibling, string formatStr);
 
-void printTree(TreeNode *node, int indent, int nSibling);
+void printTree(TreeNode *node, string childIndent, int nSibling);
 
 string declString(TreeNode *node);
+string expString(TreeNode *node);
+string stmtString(TreeNode *node);
 string typeString(ExpType type);
 #endif
