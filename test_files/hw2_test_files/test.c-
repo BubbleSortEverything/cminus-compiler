@@ -1,0 +1,29 @@
+int num, num3[3];
+int num2, num123;
+
+int var: 1 or 2 and not 3 < 4;
+int sum1: 1 or 2+3 or 56 * -7;
+
+int sum: v[e(Z,2)];
+
+int foo() 2 + 3;
+bar() 3*4;
+
+int funcTest(int a,b; bool q; int h[]) { 
+	int i;
+	4 + 5;
+
+	if 4+5 then i+7;
+
+	if 4+5 then i+7; else i - 8;
+
+	while 4*7 do i / 1;
+
+	for ginger=0 to 10 do i - 0;
+
+	for ginger=0 to 10 by ginger + 2 do i - 0;
+
+	break;
+
+	return 5+9;
+}
