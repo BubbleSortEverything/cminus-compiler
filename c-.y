@@ -40,8 +40,7 @@ void yyerror(const char *msg) {
 %type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression factor mutable immutable 
 %type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedTypeSpecifier scopedVarDeclaration funDeclaration params//typeSpecifier scopedTypeSpecifier scopedVarDeclaration paramId paramIdList paramTypeList paramList 
 %type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList//funDeclaration argList  call expression relop mulop unaryop mutable sumop statement matched expressionStmt 
-%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop//compoundStmt localDeclarations statementList matchedSelStmt unmatched unmatchedSelStmt iterationRange matchedWhileStmt 
-//%type <treeNode> unmatchedWhileStmt matchedLoopStmt unmatchedLoopStmt matchedElsif unmatchedElsif returnStmt breakStmt
+%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop
 %%
 
 program: 
@@ -387,18 +386,12 @@ int main(int argc, char* argv[]) {
      if (argc > 1) {
         if ((yyin = fopen(argv[optCount], "r"))) {
                yyparse();
-               // TreeNode* tmp = savedTree;
-               // while(tmp->sibling != NULL) {
-               //      cout << tmp->sibling->subkind.decl << endl;
-               //      tmp = tmp->sibling;
-               // }
-               // cout << savedTree->sibling->subkind.decl << endl;
-               if (printFlag) printTree(savedTree, "", 0); //printTree(savedTree, 0, -1, false, false, "");
+               if (printFlag) printTree(savedTree, "", 0);
         }
         else {
                yyin = stdin;
                yyparse();
-               if (printFlag) printTree(savedTree, "", 0); //printTree(savedTree, 0, -1, false, false, "");
+               if (printFlag) printTree(savedTree, "", 0);
         }
      }
 

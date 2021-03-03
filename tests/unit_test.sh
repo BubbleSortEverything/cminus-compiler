@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # unit test for c- outputs
-
-for FILE in test_files/*.c-; do 
+hw=hw2
+for FILE in test_files/${hw}_test_files/*.c-; do 
   echo -e '\n'
-  ./bin/c- $FILE > test_files/output.out
+  ./c- -p $FILE > test_files/output.out
   file_name=$(basename -- "$FILE")
   echo "***** Testing: $file_name *******************"
   output_file=${file_name%.*}
-  diff -y --suppress-common-lines test_files/output.out test_files/${output_file}.out
+  hw = hw2
+  diff -y --suppress-common-lines test_files/output.out test_files/${hw}_test_files/${output_file}.out
 done
