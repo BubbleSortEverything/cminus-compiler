@@ -4,6 +4,11 @@
 *.tab.c
 *.tab.o
 *.tab.h
+*.o
+
+.DS_Store
+output.out
+c-
 
 # ignoring dir
 /bin
