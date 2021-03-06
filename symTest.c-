@@ -1,0 +1,12 @@
+int vardecl;
+char vardecl;
+
+char var;
+
+int func(char pants; int pen) {
+    int var;
+    {
+        bool pen;
+        int pants;
+    }
+}
