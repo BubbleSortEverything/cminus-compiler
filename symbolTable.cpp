@@ -195,18 +195,41 @@ void SymbolTable::leave()
 
 // Lookup a symbol anywhere in the stack of scopes
 // Returns NULL if symbol not found, otherwise it returns the stored void * associated with the symbol
+// void * SymbolTable::lookup(std::string sym)
+// {
+//     void *data;
+//     std::string name;
+
+//     data = NULL;  // set even though the scope stack should never be empty
+//     for (std::vector<Scope *>::reverse_iterator it=stack.rbegin(); it!=stack.rend(); it++) {
+//         data = (*it)->lookup(sym);
+//         name = (*it)->scopeName();
+//         if (data!=NULL) break;
+//     }
+
+//     if (debugFlg) {
+//         printf("DEBUG(SymbolTable): lookup the symbol \"%s\" and ", sym.c_str());
+//         if (data) printf("found it in the scope named \"%s\".\n", name.c_str());
+//         else printf("did NOT find it!\n");
+//     }
+
+//     return data;
+// }
+
 void * SymbolTable::lookup(std::string sym)
 {
     void *data;
     std::string name;
 
-    data = NULL;  // set even though the scope stack should never be empty
-    for (std::vector<Scope *>::reverse_iterator it=stack.rbegin(); it!=stack.rend(); it++) {
-        data = (*it)->lookup(sym);
-        name = (*it)->scopeName();
-        if (data!=NULL) break;
-    }
-
+    // data = NULL;  // set even though the scope stack should never be empty
+    // for (std::vector<Scope *>::reverse_iterator it=stack.rbegin(); it!=stack.rend(); it++) {
+    //     data = (*it)->lookup(sym);
+    //     name = (*it)->scopeName();
+    //     if (data!=NULL) break;
+    // }
+    data = stack.back()->lookup(sym);
+    name = stack.back()->scopeName();
+    
     if (debugFlg) {
         printf("DEBUG(SymbolTable): lookup the symbol \"%s\" and ", sym.c_str());
         if (data) printf("found it in the scope named \"%s\".\n", name.c_str());
