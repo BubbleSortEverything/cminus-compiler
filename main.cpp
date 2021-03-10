@@ -5,11 +5,10 @@
 using namespace std;
 
 bool checkSymbol(TreeNode* node);
-int getType(TreeNode* node);
 
 void checkStmtKind(TreeNode* node, bool);
 void checkDeclKind(TreeNode* node);
-void checkExpKind(TreeNode* node);
+int checkExpKind(TreeNode* node);
 
 void printSymbolTable(TreeNode* savedTree, bool);
 
@@ -199,34 +198,44 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
     return;
 }
 
-void checkExpKind(TreeNode* node) {
-    if (!node) return;
+int checkExpKind(TreeNode* node) {
+    if (!node) return -1;
 
     int lhs, rhs;
+    char* tokenString;
+    TreeNode* symNode;
 
     switch(node->subkind.exp) {
         case OpK:
             cout << "OpK" << endl;
             break;
         case ConstantK:
-            cout << "ConstantK" << endl;
-            break;
+            return node->expType;
         case IdK:
-            cout << "IdK" << endl;
-            break;
-        case AssignK:
-            lhs = getType(node->child[0]);
-            rhs = getType(node->child[1]);
-            if(lhs != rhs){
-                printf("ERROR(%d): type is different\n", node->token->linenum);
+            tokenString = node->token->tokenstr;
+            symNode = (TreeNode*) symTable.lookupGlobal(tokenString);
+            symNode = symNode ? symNode : (TreeNode*) symTable.lookup(tokenString);
+            if(!symNode) {
+                printf("ERROR(%d): undeclared variable '%s' used \n", node->token->linenum, tokenString);
             }
-            return;
+            return symNode->expType;
+        case AssignK:
+            lhs = checkExpKind(node->child[0]);
+            rhs = checkExpKind(node->child[1]);
+            if(lhs != rhs){
+                printf("ERROR(%d): type is different lhs:%d rhs:%d \n", node->token->linenum, lhs, rhs);
+            }
+            return lhs;
         case InitK:
             cout << "InitK" << endl;
             break;
         case CallK:
-            cout << "CallK" << endl;
-            break;
+            tokenString = node->token->tokenstr;
+            symNode = (TreeNode*) symTable.lookupGlobal(tokenString);
+            if(!symNode){
+                printf("ERROR(%d): function %s is not defined\n", node->token->linenum, tokenString);
+            }
+            return symNode->expType;
     }
 
     for (int i = 0; i < MAXCHILDREN; i++){
@@ -234,10 +243,6 @@ void checkExpKind(TreeNode* node) {
             printSymbolTable(node->child[i], false);
         }
     }
-}
 
-int getType(TreeNode* node) {
-    if (node->child[0] == NULL){
-        return node->expType;
-    }
+    return -1;
 }

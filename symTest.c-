@@ -24,3 +24,8 @@ int func(char pants; int pen) {
             }
         }
 }
+
+int func2() {
+    char a;
+    a = func();
+}
