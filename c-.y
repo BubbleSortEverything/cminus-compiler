@@ -1,21 +1,9 @@
 %{ 
-#include <stdio.h>
-#include <stdlib.h>
-#include "scanType.h"
-#include "globals.h"
+
 #include "util.h"
-#include <string>
-#include <iostream>
-#include "ourgetopt.h"
 
-using namespace std;
-
-TreeNode *savedTree;     /* stores syntax tree */
-
-#ifdef CPLUSPLUS
-extern int yylex();
-extern FILE* yyin;
-#endif
+TreeNode *savedTree;    /* stores syntax tree */
+SymbolTable symTable;   /* symbol table */
 
 void yyerror(const char *msg) {
     printf("ERROR(PARSER): %s\n", msg);
@@ -37,13 +25,13 @@ void yyerror(const char *msg) {
 
 //type specifies the token classes used only in the parser
 %type <treeNode> program declList decl varDeclaration varDeclList varDeclInitialize varDeclId typeSpecifier simpleExpression
-%type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression factor mutable immutable 
-%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedTypeSpecifier scopedVarDeclaration funDeclaration params//typeSpecifier scopedTypeSpecifier scopedVarDeclaration paramId paramIdList paramTypeList paramList 
-%type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList//funDeclaration argList  call expression relop mulop unaryop mutable sumop statement matched expressionStmt 
-%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop
-%%
+%type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression  
+%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedTypeSpecifier scopedVarDeclaration 
+%type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList
+%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop factor mutable immutable funDeclaration params
 
-program: 
+%%
+program:
     declList  { savedTree = $1; };
 
 declList: 
@@ -359,41 +347,41 @@ constant:
         $$ = newExpNode(ConstantK, Char, $1);
         $$->isArray = true;
     };
-
 %%
 
-int main(int argc, char* argv[]) {
-     int c;
-     extern char *optarg;
-     extern int optind;
-     int pflg = 0;
-     int dflg = 0;
-     bool printFlag = false;
-     int optCount = 1;
+// int main(int argc, char* argv[]) {
+//     int c;
+//     extern char *optarg;
+//     extern int optind;
+//     int pflg = 0;
+//     int dflg = 0;
+//     bool printFlag = false;
+//     int optCount = 1;
 
-     while ((c = ourGetopt(argc, argv, (char *)"pd:")) != EOF){
-          switch (c) {
-             case 'p':
-                printFlag = true;
-                break;
-             case 'd':
-                yydebug=1;
-                break;
-              }
-          optCount++;
-     }
+//     while ((c = ourGetopt(argc, argv, (char *)"pd:")) != EOF){
+//         switch (c) {
+//             case 'p':
+//                 printFlag = true;
+//                 break;
+//             case 'd':
+//                 yydebug=1;
+//                 break;
+//         }
+//         optCount++;
+//     }
 
-     if (argc > 1) {
-        if ((yyin = fopen(argv[optCount], "r"))) {
-               yyparse();
-               if (printFlag) printTree(savedTree, "", 0);
-        }
-        else {
-               yyin = stdin;
-               yyparse();
-               if (printFlag) printTree(savedTree, "", 0);
-        }
-     }
+//     if (argc > 1) {
+//         if ((yyin = fopen(argv[optCount], "r"))) {
+//            yyparse();
+//            if (printFlag) printTree(savedTree, "", 0);
+//         }
+//         else {
+//            yyin = stdin;
+//            yyparse();
+//            if (printFlag) printTree(savedTree, "", 0);
+//         }
+//     }
 
-     return 0;  
-}
+//     return 0;  
+// }
+

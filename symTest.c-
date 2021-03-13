@@ -1,0 +1,31 @@
+int vardecl;
+char vardecl;
+
+char var;
+
+int func(char pants; int pen) {
+    int var;
+    var = 'a';
+    {
+        bool pen;
+        int pants;
+        {
+            int pants;
+            char vardecl;
+        }
+    }
+
+    for j = var to 3 do
+        for i = 0 to 2 do {
+            int i;
+            int nnn;
+            {
+                int nnn;
+            }
+        }
+}
+
+int func2() {
+    char a;
+    a = func();
+}
