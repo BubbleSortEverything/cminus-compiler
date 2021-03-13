@@ -4,9 +4,24 @@ char vardecl;
 char var;
 
 int func(char pants; int pen) {
-    int var;
+    bool c;
+    bool aa[3]; char ba[4]; int ca[5];
+    ca[aa[1]] = c; 
+    ca = c;
+    ca=ba;
+    ca=ba[2];
+    ba[2] = 'A';
     {
-        bool pen;
-        int pants;
+        int var;
+        bool c;
     }
 }
+
+int main () {
+     
+}
+
+int main(int a, b) {
+    
+}
+

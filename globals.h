@@ -68,6 +68,7 @@ enum ExpKind {OpK, ConstantK, IdK, AssignK, InitK, CallK};
 // ExpType is used for type checking (Void means no type or value, UndefinedType means undefined)
 enum ExpType {Void, Integer, Boolean, Char, CharInt, Equal, UndefinedType};
 
+// string representation of ExpType
 // What kind of scoping is used?  (decided during typing)
 enum VarKind {None, Local, Global, Parameter, LocalStatic};
 

@@ -101,7 +101,7 @@ void setType(TreeNode *t, ExpType type, bool isStatic) {
     }
 }
 
-void printTree(TreeNode *node, string childIndent, int nSibling){
+void printTree(TreeNode *node, string childIndent, int nSibling, bool typeFlag){
 	if(!node) return;
 
 	switch(node->nodekind) {
@@ -120,14 +120,14 @@ void printTree(TreeNode *node, string childIndent, int nSibling){
 		string indent = ".   ";
 		indent += childIndent;
 		if (node->child[i] != NULL){
-			printf("%sChild: %d ", indent.c_str(), i);
-			printTree(node->child[i], indent, 0);
+			printf("%sChild: %d of type ", indent.c_str(), i);
+			printTree(node->child[i], indent, 0, typeFlag);
 		}
     }
 
 	if (node->sibling != NULL) {
 		printf("%sSibling: %d ", childIndent.c_str(), ++nSibling);
-		printTree(node->sibling, childIndent, nSibling);
+		printTree(node->sibling, childIndent, nSibling, typeFlag);
 	}
 
 	return;

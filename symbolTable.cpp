@@ -99,7 +99,7 @@ void Scope::applyToAll(void (*action)(std::string , void *)) {
 
 
 // returns true if insert was successful and false if symbol already in this scope
-bool Scope::insert(std::string sym, void *ptr) {
+bool Scope:: insert(std::string sym, void *ptr) {
     if (symbols.find(sym) == symbols.end()) {
         if (debugFlg) printf("DEBUG(Scope): insert in \"%s\" the symbol \"%s\".\n",
                              name.c_str(),
@@ -159,6 +159,8 @@ int SymbolTable::depth()
     return stack.size();
 }
 
+// Returns true if there is only one symbol implying it as global
+bool SymbolTable::isGlobal() { return stack.size() == 1; }
 
 // print all scopes using data printing func
 void SymbolTable::print(void (*printData)(void *))
@@ -206,6 +208,22 @@ void * SymbolTable::lookup(std::string sym)
         name = (*it)->scopeName();
         if (data!=NULL) break;
     }
+
+    if (debugFlg) {
+        printf("DEBUG(SymbolTable): lookup the symbol \"%s\" and ", sym.c_str());
+        if (data) printf("found it in the scope named \"%s\".\n", name.c_str());
+        else printf("did NOT find it!\n");
+    }
+
+    return data;
+}
+
+void* SymbolTable::lookupLocal(std::string sym) {
+    void* data;
+    std::string name;
+
+    data = stack.back()->lookup(sym);
+    name = stack.back()->scopeName();
 
     if (debugFlg) {
         printf("DEBUG(SymbolTable): lookup the symbol \"%s\" and ", sym.c_str());

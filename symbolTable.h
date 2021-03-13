@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 // // // // // // // // // // // // // // // // // // // // 
 //
 // Some sample void * printing routines.   User should supply their own.
@@ -51,6 +52,7 @@ private:
     static bool debugFlg;                      // turn on tedious debugging
     std::string name;                          // name of scope
     std::map<std::string , void *> symbols;    // use an ordered map (not as fast as unordered)
+    // std::map<std::string , > symbolTracker;    // use an ordered map (not as fast as unordered)
 
 public:
     Scope(std::string newname);
@@ -85,10 +87,12 @@ public:
     SymbolTable();
     void debug(bool state);                          // sets the debug flags
     int depth();                                     // what is the depth of the scope stack?
+    bool isGlobal();                                    
     void print(void (*printData)(void *));           // print all scopes using data printing function
     void enter(std::string name);                    // enter a scope with given name
     void leave();                                    // leave a scope (not allowed to leave global)
     void *lookup(std::string sym);                   // returns ptr associated with sym anywhere in symbol table
+    void* lookupLocal(std::string sym);
                                                      // returns NULL if symbol not found
     void *lookupGlobal(std::string sym);             // returns ptr associated with sym in globals
                                                      // returns NULL if symbol not found

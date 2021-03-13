@@ -3,7 +3,7 @@
 #include "util.h"
 
 TreeNode *savedTree;    /* stores syntax tree */
-SymbolTable symTable;   /* symbol table */
+SymbolTable symbolTable;   /* symbol table */
 
 void yyerror(const char *msg) {
     printf("ERROR(PARSER): %s\n", msg);
@@ -214,7 +214,7 @@ expression:
 
 simpleExpression: 
     simpleExpression OR andExpression {
-        $2->tokenstr = "OR";
+        $2->tokenstr = "or";
         $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
     } |
     andExpression {
@@ -224,14 +224,14 @@ simpleExpression:
 
 andExpression: 
     andExpression AND unaryRelExpression {
-        $2->tokenstr = "AND";
+        $2->tokenstr = "and";
         $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
     } |
     unaryRelExpression { $$ = $1; };
 
 unaryRelExpression: 
     NOT unaryRelExpression {
-        $1->tokenstr = "NOT";
+        $1->tokenstr = "not";
         $$ = newExpNode(OpK, UndefinedType, $1, $2);
     } | 
     relExpression { $$ = $1; };
@@ -262,7 +262,7 @@ mulExpression:
 
 minmaxop:
     MAX { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    MIN { $$ = newExpNode(OpK, UndefinedType, $1); }
+    MIN { $$ = newExpNode(OpK, UndefinedType, $1); };
 
 relop: 
     '<' { $$ = newExpNode(OpK, UndefinedType, $1); } |
@@ -290,11 +290,11 @@ unaryExpression:
 
 unaryop:
     '-' {
-        $1->tokenstr = "CHSIGN";
+        $1->tokenstr = "chsign";
         $$ = newExpNode(OpK, UndefinedType, $1); 
     } |
     '*' { 
-        $1->tokenstr = "SIZEOF";
+        $1->tokenstr = "sizeof";
         $$ = newExpNode(OpK, UndefinedType, $1); 
     } |
     '?' { $$ = newExpNode(OpK, UndefinedType, $1); };
@@ -309,6 +309,7 @@ mutable:
     } | 
     mutable '[' expression ']' {
         $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
+        $$->isArray = true;
     };
 
 immutable: 
@@ -348,40 +349,3 @@ constant:
         $$->isArray = true;
     };
 %%
-
-// int main(int argc, char* argv[]) {
-//     int c;
-//     extern char *optarg;
-//     extern int optind;
-//     int pflg = 0;
-//     int dflg = 0;
-//     bool printFlag = false;
-//     int optCount = 1;
-
-//     while ((c = ourGetopt(argc, argv, (char *)"pd:")) != EOF){
-//         switch (c) {
-//             case 'p':
-//                 printFlag = true;
-//                 break;
-//             case 'd':
-//                 yydebug=1;
-//                 break;
-//         }
-//         optCount++;
-//     }
-
-//     if (argc > 1) {
-//         if ((yyin = fopen(argv[optCount], "r"))) {
-//            yyparse();
-//            if (printFlag) printTree(savedTree, "", 0);
-//         }
-//         else {
-//            yyin = stdin;
-//            yyparse();
-//            if (printFlag) printTree(savedTree, "", 0);
-//         }
-//     }
-
-//     return 0;  
-// }
-
