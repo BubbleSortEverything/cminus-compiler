@@ -295,6 +295,7 @@ TreeNode* handleArray(TreeNode* node) {
         printf("ERROR(%d): Cannot index nonarray '%s'.\n", node->lineno, lhs->token->tokenstr);
         numErrors++;
     }
+
     if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
         printf("ERROR(%d): Array '%s' should be indexed by type int but got type %s.\n", node->lineno, node->child[0]->token->tokenstr, ExpTypeStr[rhs->expType]);
         numErrors++;
@@ -321,9 +322,7 @@ TreeNode* checkExpKind(TreeNode* node) {
         case OpK:
             tokenString = node->token->tokenstr;
 
-            if (node->isArray) {
-                return handleArray(node);
-            }
+            if (node->isArray) return handleArray(node);
 
             lhs = node->child[0] ? checkExpKind(node->child[0]) : node;
             rhs = node->child[1] ? checkExpKind(node->child[1]) : node;
@@ -354,13 +353,16 @@ TreeNode* checkExpKind(TreeNode* node) {
                     printf("ERROR(%d): '%s' requires operands of type %s but lhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                     numErrors++;
                 }
-                if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
+                else if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
                     printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[rhs->expType]);
                     numErrors++;
                 }
-                if (lhs->isArray or rhs->isArray) {
+                else if ( (lhs->isArray and !node->child[0]->child[1]) or (rhs->isArray and !node->child[1]->child[1]) ) { // Fix this:
                     printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
                     numErrors++;
+                } 
+                else {
+                    return newExpNode(OpK, Integer, lhs->token);    // if successful int operation then return integer type newnode.
                 }
             }
             else if (isUnaryOp((std::string)tokenString)) {
@@ -370,7 +372,7 @@ TreeNode* checkExpKind(TreeNode* node) {
                         numErrors++;
                     }
                     else if (lhs->isArray and !node->child[0]->child[1]) {
-                        lhs->expType = Integer;
+                        return newExpNode(OpK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
                     }
                 } 
                 else if ((std::string)tokenString=="?" or (std::string)tokenString=="chsign") {
@@ -405,7 +407,10 @@ TreeNode* checkExpKind(TreeNode* node) {
                             printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[2], ExpTypeStr[rhs->expType]);
                             numErrors++;
                         }
-                        else if ( (lhs->isArray and !isIndexed(node)) or (rhs->isArray and !isIndexed(node)) ) {
+                        else if ( (lhs->isArray and !node->child[0]->child[1]) or (rhs->isArray and !isIndexed(node)) ) {
+                            printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
+                            numErrors++;
+                        } else if (lhs->isArray or rhs->isArray) {
                             printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
                             numErrors++;
                         }
@@ -495,7 +500,6 @@ TreeNode* checkExpKind(TreeNode* node) {
             symNode = (TreeNode*) symbolTable.lookupGlobal(tokenString);
             symNode = symNode ? symNode : (TreeNode*) symbolTable.lookup(tokenString);
             if(!symNode) {
-                // if ()
                 printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
                 numErrors++;
             } else if (symNode and symNode->subkind.decl == VarK) {
@@ -515,6 +519,9 @@ TreeNode* checkExpKind(TreeNode* node) {
     return NULL;
 }
 
+
+/***    Helper Functions    ***/
+
 bool isIndexed(TreeNode* node) {
     return node->child[0]->child[1] ? true : false;
 }
@@ -526,8 +533,6 @@ bool isIntOperator(std::string opstr) {
 bool isUnaryOp(std:: string opstr) {
     return (opstr=="chsign" or opstr=="sizeof" or opstr=="?" or opstr=="and" or opstr=="not" or opstr=="or") ? true : false;
 }
-
-// bool isminmaxOp()
 
 /*  return true if integer operators
  */

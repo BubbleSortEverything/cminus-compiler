@@ -1,5 +1,3 @@
-====================================
-FILE: everythingS21.c-
 WARNING(46): Variable 'trousers' may be uninitialized when used here.
 WARNING(62): Variable 'Wensleydale' may be uninitialized when used here.
 WARNING(58): The variable 'c' seems not to be used.

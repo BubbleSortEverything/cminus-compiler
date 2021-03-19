@@ -119,8 +119,8 @@ void printTree(TreeNode *node, string childIndent, int nSibling, bool typeFlag){
 	for (int i = 0; i < MAXCHILDREN; i++){
 		string indent = ".   ";
 		indent += childIndent;
-		if (node->child[i] != NULL){
-			printf("%sChild: %d of type ", indent.c_str(), i);
+		if (node->child[i] != NULL) {
+			printf("%sChild: %d ", indent.c_str(), i);
 			printTree(node->child[i], indent, 0, typeFlag);
 		}
     }
