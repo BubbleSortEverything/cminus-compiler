@@ -126,10 +126,11 @@ bool checkSymbol(TreeNode* node, bool isNewCompound) {
     }
     TreeNode* localSym = (TreeNode* )symbolTable.lookupLocal(tokenString);
 
-    if (globalSym) {
-        cout <<"ERROR("<<node->token->linenum<<"): Symbol '"<<tokenString<<"' is already declared at line "<<globalSym->token->linenum<<"."<<endl;
-        numErrors++;
-    } else if(localSym) {
+    // if (globalSym) {
+    //     cout <<"ERROR("<<node->token->linenum<<"): Symbol '"<<tokenString<<"' is already declared at line "<<globalSym->token->linenum<<"."<<endl;
+    //     numErrors++;
+    // } else 
+    if(localSym) {
         cout <<"ERROR("<<node->token->linenum<<"): Symbol '"<<tokenString<<"' is already declared at line "<<localSym->token->linenum<<"."<<endl;
         numErrors++;
     } else {
@@ -191,6 +192,7 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
             if (!symExists) {
                 symbolTable.insert(syntaxTree->token->tokenstr, syntaxTree);
                 symbolTable.enter(syntaxTree->token->tokenstr);
+                isNewCompound = true;
                 newScope = true;
 
                 if (strcmp(syntaxTree->token->tokenstr, "main") == 0 and !syntaxTree->child[0]) {
@@ -207,7 +209,7 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
 
     for (int i = 0; i < MAXCHILDREN; i++) {
         if (syntaxTree->child[i] != NULL) {
-            printSymbolTable(syntaxTree->child[i], true);
+            printSymbolTable(syntaxTree->child[i], true, isNewCompound);
         }
     }
 
@@ -353,17 +355,19 @@ TreeNode* checkExpKind(TreeNode* node) {
                     printf("ERROR(%d): '%s' requires operands of type %s but lhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                     numErrors++;
                 }
-                else if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
+                if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
                     printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[rhs->expType]);
                     numErrors++;
                 }
-                else if ( (lhs->isArray and !node->child[0]->child[1]) or (rhs->isArray and !node->child[1]->child[1]) ) { // Fix this:
+                if ( (lhs->isArray and !node->child[0]->child[1] and lhs->subkind.exp != OpK) or (rhs->isArray and !node->child[1]->child[1] and rhs->subkind.exp != OpK) ) { // Fix this:
                     printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
+                    printf("lhs token string: %s\n", lhs->token->tokenstr);
+                    printf("rhs token string: %s\n", rhs->token->tokenstr);
                     numErrors++;
                 } 
-                else {
-                    return newExpNode(OpK, Integer, lhs->token);    // if successful int operation then return integer type newnode.
-                }
+                // else {
+                //     return newExpNode(OpK, Integer, lhs->token);    // if successful int operation then return integer type newnode.
+                // }
             }
             else if (isUnaryOp((std::string)tokenString)) {
                 if ((std::string)tokenString == "sizeof") {
@@ -424,8 +428,9 @@ TreeNode* checkExpKind(TreeNode* node) {
 
         case IdK:
             tokenString = node->token->tokenstr;
-            symNode = (TreeNode*) symbolTable.lookupGlobal(tokenString);
-            symNode = symNode ? symNode : (TreeNode*) symbolTable.lookup(tokenString);
+            // symNode = (TreeNode*) symbolTable.lookupGlobal(tokenString);
+            // symNode = symNode ? symNode : (TreeNode*) symbolTable.lookup(tokenString);
+            symNode = (TreeNode*) symbolTable.lookup(tokenString);
 
             if(!symNode) {
                 printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
