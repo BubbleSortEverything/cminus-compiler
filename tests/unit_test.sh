@@ -9,4 +9,9 @@ for FILE in test_files/${hw}_test_files/*.c-; do
   echo "***** Testing: $file_name *******************"
   output_file=${file_name%.*}
   diff -y --suppress-common-lines test_files/output.out test_files/${hw}_test_files/${output_file}.out
+
+  if [ "${output_file}.c-" == "nest.c-" ] ; then
+    exit 1
+    fi
+
 done

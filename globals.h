@@ -100,6 +100,7 @@ typedef struct treeNode {
     ExpType expType;                   // used when ExpK for type checking
     bool isArray;                          // is this an array
     bool isStatic;                         // is staticly allocated?
+    bool changedToInt;                        // is sizeof an array
 
     TokenData* token;           // for tokens
 

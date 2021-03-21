@@ -293,20 +293,31 @@ TreeNode* handleArray(TreeNode* node) {
     lhs = node->child[0] ? checkExpKind(node->child[0]) : node;
     rhs = node->child[1] ? checkExpKind(node->child[1]) : node;
 
+    // if (!lhs->isArray) {
+
+    // }
+    // printf("*** In Handle Array ***\n");
+
     if (!lhs->isArray) {
         printf("ERROR(%d): Cannot index nonarray '%s'.\n", node->lineno, lhs->token->tokenstr);
         numErrors++;
     }
+
+    // printf("*** After is not Array ***\n");
 
     if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
         printf("ERROR(%d): Array '%s' should be indexed by type int but got type %s.\n", node->lineno, node->child[0]->token->tokenstr, ExpTypeStr[rhs->expType]);
         numErrors++;
     }
 
+    // printf("After checking type\n");
+
     if (rhs->isArray and !node->child[1]->child[0]) {
         printf("ERROR(%d): Array index is the unindexed array '%s'.\n", node->lineno, rhs->token->tokenstr);
         numErrors++;
     }
+    // Fix for.c- seg fault
+    // printf("After checking child\n");
 
     // if (lhs->isArray and ExpTypeStr[rhs->type]=="integer") return rhs;
 
@@ -355,19 +366,18 @@ TreeNode* checkExpKind(TreeNode* node) {
                     printf("ERROR(%d): '%s' requires operands of type %s but lhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                     numErrors++;
                 }
+
                 if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
                     printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[rhs->expType]);
                     numErrors++;
                 }
-                if ( (lhs->isArray and !node->child[0]->child[1] and lhs->subkind.exp != OpK) or (rhs->isArray and !node->child[1]->child[1] and rhs->subkind.exp != OpK) ) { // Fix this:
+                if ( (lhs->isArray and !node->child[0]->child[1] and lhs->changedToInt != true) or (rhs->isArray and !node->child[1]->child[1] and rhs->changedToInt != true) ) {
                     printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
-                    printf("lhs token string: %s\n", lhs->token->tokenstr);
-                    printf("rhs token string: %s\n", rhs->token->tokenstr);
                     numErrors++;
-                } 
-                // else {
-                //     return newExpNode(OpK, Integer, lhs->token);    // if successful int operation then return integer type newnode.
-                // }
+                }
+                else {
+                    return newExpNode(OpK, Integer, lhs->token);    // if successful int operation then return integer type newnode.
+                }
             }
             else if (isUnaryOp((std::string)tokenString)) {
                 if ((std::string)tokenString == "sizeof") {
@@ -376,7 +386,9 @@ TreeNode* checkExpKind(TreeNode* node) {
                         numErrors++;
                     }
                     else if (lhs->isArray and !node->child[0]->child[1]) {
-                        return newExpNode(OpK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
+                        TreeNode* copyNode = newExpNode(OpK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
+                        copyNode->changedToInt = true;
+                        return copyNode;
                     }
                 } 
                 else if ((std::string)tokenString=="?" or (std::string)tokenString=="chsign") {
@@ -390,6 +402,10 @@ TreeNode* checkExpKind(TreeNode* node) {
                     } else if (ExpTypeStr[lhs->expType] != ExpTypeStr[1]) {
                         printf("ERROR(%d): Unary '%s' requires an operand of type %s but was given type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                         numErrors++;
+                    } if ((std::string)tokenString=="chsign") {
+                        TreeNode* copyNode = newExpNode(OpK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
+                        copyNode->changedToInt = true;
+                        return copyNode;
                     }
                 } 
                 else if ((std::string)tokenString=="not") {

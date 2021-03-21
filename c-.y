@@ -181,7 +181,13 @@ localDeclarations:
     {  $$ = NULL; };
 
 statementList:
-    statementList statement { $$ = addSibling($1, $2); } |
+    statementList statement { 
+        if ($2 == NULL) {
+            $$ = $1;
+        } else {
+            $$ = addSibling($1, $2);
+        }
+    } |
     { $$ = NULL; };
 
 expressionStmt: 
