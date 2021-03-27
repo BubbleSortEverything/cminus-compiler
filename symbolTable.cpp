@@ -293,6 +293,59 @@ void SymbolTable::applyToAllGlobal(void (*action)(std::string , void *))
     stack[0]->applyToAll(action);
 }
 
+void SymbolTable::addSymbolToCurrentScope(TreeNode* node) {
+    /*  Mark node as not used and push it to the symbolList of current stack
+     */
+    node->isUsed = false;
+    (stack.back())->symbolList.push_back(node);
+}
+
+void SymbolTable::markSymbolAsUsed(TreeNode* node) {
+    /* loop thru the list of symbols in scope sitting at top of the scope stack
+
+        []-> |x|x|x|x|x|x|x| { symbol list in each scope (string `symName`, bool `isUsed`) }
+        []
+        []
+        []
+        ___
+    scope stack
+    */
+    std::vector<TreeNode*> curScope = stack.back()->symbolList;
+    for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
+        if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
+            node->isUsed = true;
+        }
+    }
+}
+
+void SymbolTable::checkUnusedVariable() {
+    /*  Loop through symbol list from the current scope and if any variable is not used print Warning.
+     */
+    std::vector<TreeNode*> curScope = stack.back()->symbolList;
+    for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
+        if(!(*it)->isUsed) {
+            if ((*it)->subkind.decl == FuncK) {
+                printf("WARNING(%d): The function '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+            } else {
+                printf("WARNING(%d): '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+            }
+        }
+    }
+}
+
+std::string SymbolTable::currentScopeName() {
+    return stack.back()->scopeName();
+}
+
+
+void SymbolTable::reverseScopeStack() {
+    std::reverse(stack.begin(), stack.end());
+}
+
+// void * SymbolTable::getCurrentScopeNode() {
+//     return stack.back();
+// }
+
 
 
 

@@ -23,7 +23,7 @@ extern int yyparse();
 extern int yydebug;
 extern FILE* yyin;
 extern TreeNode* savedTree;
-extern SymbolTable symbolTable;
+extern bool typeFlag;
 // #endif  
 
 using namespace std;
@@ -54,7 +54,7 @@ void setType(TreeNode *t, ExpType type, bool isStatic);
 
 // void printTree(TreeNode *tree, int nChild, int nSibling, bool isChild, bool isSibling, string formatStr);
 
-void printTree(TreeNode *node, string childIndent, int nSibling, bool typeFlag=false);
+void printTree(TreeNode *node, string childIndent, int nSibling);
 
 string declString(TreeNode *node);
 string expString(TreeNode *node);

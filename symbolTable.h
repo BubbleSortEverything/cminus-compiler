@@ -5,6 +5,8 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
+#include "globals.h"
 
 
 // // // // // // // // // // // // // // // // // // // // 
@@ -49,14 +51,15 @@ void pointerPrintStr(void *data);
 
 class Scope {
 private:
-    static bool debugFlg;                      // turn on tedious debugging
-    std::string name;                          // name of scope
-    std::map<std::string , void *> symbols;    // use an ordered map (not as fast as unordered)
-    // std::map<std::string , > symbolTracker;    // use an ordered map (not as fast as unordered)
+    static bool debugFlg;                       // turn on tedious debugging
+    std::string name;                           // name of scope
+    std::map<std::string , void *> symbols;     // use an ordered map (not as fast as unordered)
+
 
 public:
     Scope(std::string newname);
     ~Scope();
+    std::vector<TreeNode*> symbolList;             // vector list to keep track of used symbols in a scope
     std::string scopeName();                   // returns name of scope
     void debug(bool state);                    // sets the debug flag to state
     void print(void (*printData)(void *));     // prints the table using the supplied function to print the void *
@@ -94,6 +97,12 @@ public:
     void *lookup(std::string sym);                   // returns ptr associated with sym anywhere in symbol table
     void* lookupLocal(std::string sym);
                                                      // returns NULL if symbol not found
+    void addSymbolToCurrentScope(TreeNode* node);           // add symbol to current scope
+    void markSymbolAsUsed(TreeNode* node);
+    void checkUnusedVariable();
+    std::string currentScopeName();
+    void reverseScopeStack();
+    // std::vector<stack *> returnCurrentScope();
     void *lookupGlobal(std::string sym);             // returns ptr associated with sym in globals
                                                      // returns NULL if symbol not found
     bool insert(std::string sym, void *ptr);         // inserts new ptr associated with symbol sym in current scope
