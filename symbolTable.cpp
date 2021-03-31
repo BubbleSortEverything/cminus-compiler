@@ -324,9 +324,13 @@ void SymbolTable::checkUnusedVariable() {
     std::vector<TreeNode*> curScope = stack.back()->symbolList;
     for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
         if(!(*it)->isUsed) {
-            if ((*it)->subkind.decl == FuncK) {
-                printf("WARNING(%d): The function '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
-            } else {
+            // if ((*it)->subkind.decl == FuncK) {
+            //     printf("WARNING(%d): The function '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+            // }
+            if ((*it)->subkind.decl == ParamK) {
+                printf("WARNING(%d): The Parameter '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+            } 
+            else {
                 printf("WARNING(%d): '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
             }
         }

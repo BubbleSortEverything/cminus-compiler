@@ -63,6 +63,7 @@ varDeclList:
 varDeclInitialize: 
     varDeclId { $$ = $1; } |
     varDeclId ':' simpleExpression {
+        //$$ = newExpNode(InitK, UndefinedType, $2, $1, $3);
         $1 = addChild($1, $3);
         $$ = $1;
     };

@@ -82,12 +82,12 @@ typedef struct treeNode {
     } attr;                                 
     ExpType expType;                   // used when ExpK for type checking
     
+    bool isUsed;                       // true if the variable is used.
     bool isArray;                          // is this an array
     bool isStatic;                         // is staticly allocated?
-    bool changedToInt;                        // is sizeof an array
-    bool isUsed;                       // true if the variable is used.
-    bool isInit;
     bool hasReturn;
+    bool changedToInt;                        // is sizeof an array
+    bool isInitialized;
 
     TokenData* token;           // for tokens
 
