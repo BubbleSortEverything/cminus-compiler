@@ -89,6 +89,10 @@ void Scope::print(void (*printData)(void *)) {
     
 }
 
+std::map<std::string, void *> Scope::getSymbols() {
+    return symbols;
+}
+
 
 // apply the function to each symbol in this scope
 void Scope::applyToAll(void (*action)(std::string , void *)) {
@@ -294,10 +298,16 @@ void SymbolTable::applyToAllGlobal(void (*action)(std::string , void *))
 }
 
 void SymbolTable::addSymbolToCurrentScope(TreeNode* node) {
-    /*  Mark node as not used and push it to the symbolList of current stack
+    /*  Mark node as 'not used' and push it to the symbolList of current stack
      */
+    // printf("%s added to symbollist\n", node->token->tokenstr);
     node->isUsed = false;
     (stack.back())->symbolList.push_back(node);
+}
+
+void SymbolTable::addSymbolToGlobalScope(TreeNode* node) {
+    node->isUsed = false;
+    (stack[0])->symbolList.push_back(node);
 }
 
 void SymbolTable::markSymbolAsUsed(TreeNode* node) {
@@ -314,37 +324,70 @@ void SymbolTable::markSymbolAsUsed(TreeNode* node) {
     for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
         if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
             node->isUsed = true;
+            (*it)->isUsed = true;
         }
     }
 }
 
-void SymbolTable::checkUnusedVariable() {
+void SymbolTable::markFunctionAsUsed(TreeNode* node) {
+    /* loop thru the list of symbols in scope sitting at top of the scope stack
+
+        []-> |x|x|x|x|x|x|x| { symbol list in each scope (string `symName`, bool `isUsed`) }
+        []
+        []
+        []
+        ___
+    scope stack
+    */
+    std::vector<TreeNode*> curScope = stack[0]->symbolList;
+    for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
+        if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
+            node->isUsed = true;
+            (*it)->isUsed = true;
+        }
+    }
+}
+
+int SymbolTable::checkUnusedVariable() {
     /*  Loop through symbol list from the current scope and if any variable is not used print Warning.
      */
+    int numWarning = 0;
     std::vector<TreeNode*> curScope = stack.back()->symbolList;
     for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
         if(!(*it)->isUsed) {
-            // if ((*it)->subkind.decl == FuncK) {
-            //     printf("WARNING(%d): The function '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
-            // }
+            if ((*it)->subkind.decl == FuncK and ( strcmp((*it)->token->tokenstr, "main") != 0) ) {
+                printf("WARNING(%d): The function '%s' seems not to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+                numWarning++;
+            }
+
             if ((*it)->subkind.decl == ParamK) {
-                printf("WARNING(%d): The Parameter '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
-            } 
-            else {
-                printf("WARNING(%d): '%s' not seems to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+                printf("WARNING(%d): The Parameter '%s' seems not to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+                numWarning++;
+            }
+
+            if ((*it)->subkind.decl == VarK) {
+                printf("WARNING(%d): The variable '%s' seems not to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
+                numWarning++;
             }
         }
     }
+
+    return numWarning;
 }
 
-std::string SymbolTable::currentScopeName() {
-    return stack.back()->scopeName();
+std::vector<std::string> SymbolTable::getGlobalVariables() {
+    std::vector<std::string> globalVariables;
+    std::map<std::string , void *> curScope = stack.back()->getSymbols();
+
+    for (std::map<std::string , void *>::iterator it=curScope.begin(); it!=curScope.end(); it++) {
+        globalVariables.push_back(it->first);
+    }
+
+    return globalVariables;
 }
 
-
-void SymbolTable::reverseScopeStack() {
-    std::reverse(stack.begin(), stack.end());
-}
+std::string SymbolTable::currentScopeName() { return stack.back()->scopeName(); }
+void SymbolTable::reverseScopeStack() { std::reverse(stack.begin(), stack.end()); }
 
 // void * SymbolTable::getCurrentScopeNode() {
 //     return stack.back();

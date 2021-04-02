@@ -1,5 +1,3 @@
-====================================
-FILE: allgood.c-
 WARNING(40): Variable 'aa' may be uninitialized when used here.
 WARNING(41): Variable 'b' may be uninitialized when used here.
 WARNING(42): Variable 'c' may be uninitialized when used here.

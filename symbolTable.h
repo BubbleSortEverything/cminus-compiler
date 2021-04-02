@@ -68,6 +68,8 @@ public:
                                                // returns false if already defined
     void *lookup(std::string sym);             // returns the ptr associated with sym
                                                // returns NULL if symbol not found
+    // void checkUnusedFunction();
+    std::map<std::string, void *> getSymbols();
 };
 
 
@@ -98,10 +100,13 @@ public:
     void* lookupLocal(std::string sym);
                                                      // returns NULL if symbol not found
     void addSymbolToCurrentScope(TreeNode* node);           // add symbol to current scope
+    void addSymbolToGlobalScope(TreeNode* node);
     void markSymbolAsUsed(TreeNode* node);
-    void checkUnusedVariable();
+    void markFunctionAsUsed(TreeNode* node);   
+    int checkUnusedVariable();
     std::string currentScopeName();
     void reverseScopeStack();
+    std::vector<std::string> getGlobalVariables();
     // std::vector<stack *> returnCurrentScope();
     void *lookupGlobal(std::string sym);             // returns ptr associated with sym in globals
                                                      // returns NULL if symbol not found

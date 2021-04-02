@@ -26,13 +26,14 @@ bool isRelopOperator(std::string opstr);
 bool isBinaryOperator(std::string opstr);
 bool isAssignOperator(std::string opstr);
 
+void checkUnusedFunc();
 /*  Array handler
  */
 bool isIndexed(TreeNode* node);
-TreeNode* handleArray(TreeNode* node);
+TreeNode* handleArray(TreeNode* node, bool isLHS);
 
 bool checkSymbol(TreeNode* syntaxTree, bool isNewCompound);
-TreeNode* checkExpKind(TreeNode* syntaxTree);
+TreeNode* checkExpKind(TreeNode* syntaxTree, bool isLHS=false);
 void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound);
 void checkStmtKind(TreeNode* syntaxTree, bool functionDeclared);
 
@@ -101,15 +102,17 @@ int main(int argc, char* argv[]) {
              */
             createIO();
             printSymbolTable(savedTree);
-            // symbolTable.checkUnusedVariable();
 
+            /*  check for unused variables and functions
+             */
+            numWarnings += symbolTable.checkUnusedVariable();
             /* check for main and main params
              */
             checkMainFuncParams();
 
             if (numErrors == 0) printTree(savedTree, "", 0);
+            printf("Number of warnings: %d\n", numWarnings);
             printf("Number of errors: %d\n", numErrors);
-            printf("Number of warnings: %d\n", numErrors);
         }
         else {
             yyin = stdin;
@@ -118,10 +121,10 @@ int main(int argc, char* argv[]) {
             if (symFlag) { 
                 symbolTable.debug(symFlag);
                 printSymbolTable(savedTree);
-                // symbolTable.checkUnusedVariable();
+                numWarnings += symbolTable.checkUnusedVariable();
                 if (numErrors == 0) printTree(savedTree, "", 0);
-                printf("Number of errors: %d\n", numWarnings);
                 printf("Number of warnings: %d\n", numWarnings);
+                printf("Number of errors: %d\n", numWarnings);
             }
         }
     }
@@ -253,7 +256,7 @@ void printSymbolTable(TreeNode* syntaxTree, bool functionDeclared, bool isNewCom
             break;
 
         case ExpK:
-            checkExpKind(syntaxTree);
+            checkExpKind(syntaxTree, false);
             break;
 
         default:
@@ -281,9 +284,13 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
             if (!symExists) {
                 symbolTable.insert(syntaxTree->token->tokenstr, syntaxTree);
                 symbolTable.addSymbolToCurrentScope(syntaxTree);
+
                 /*  check if the variable has been correctly initialized
                  */
                 checkInitialization(syntaxTree);
+                if (symbolTable.currentScopeName() == "For Loop") {
+                    syntaxTree->isInitialized = true;
+                }
             }
             break;
 
@@ -305,7 +312,7 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
                 if (strcmp(syntaxTree->token->tokenstr, "main") == 0 and !syntaxTree->child[0]) {
                     mainDefined = true;
                 }
-                symbolTable.addSymbolToCurrentScope(syntaxTree);
+                symbolTable.addSymbolToGlobalScope(syntaxTree);
                 hasReturn = false;
             } 
             break;
@@ -360,6 +367,8 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
             }
             break;
 
+        /*  IF STATEMENT
+         */
         case IfK:
             symbolTable.enter("If Statmenet");
             scopeEntered = true;
@@ -368,12 +377,14 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
              */
             for (int i = 0; i < MAXCHILDREN; i++) {
                 if (node->child[i] != NULL) {
-                    testCondition = checkExpKind(node->child[i]);
+                    testCondition = checkExpKind(node->child[i], false);
                     checkBooleanCondition(node, testCondition, "if");
                 }
             }
             break;
 
+        /*  WHILE STATEMENT
+         */
         case WhileK:
             symbolTable.enter("While Loop");
             scopeEntered = true;
@@ -382,12 +393,14 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
              */
             for (int i = 0; i < MAXCHILDREN; i++) {
                 if (node->child[i] != NULL) {
-                    testCondition = checkExpKind(node->child[i]);
+                    testCondition = checkExpKind(node->child[i], false);
                     checkBooleanCondition(node, testCondition, "while");
                 }
             }
             break;
 
+        /*  FOR STATEMENT
+         */
         case ForK:
             symbolTable.enter("For Loop");
 
@@ -395,20 +408,24 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
             newScope = true;
             break;
 
+        /*  RANGE STATEMENT
+         */
         case RangeK:
             /*  check that all the expressions in the range are scalar integers. If not, throw out error.
              */
-            posOne = checkExpKind(node->child[0]);
-            posTwo = checkExpKind(node->child[1]);
-            posThree = checkExpKind(node->child[2]);
+            posOne = checkExpKind(node->child[0], false);
+            posTwo = checkExpKind(node->child[1], false);
+            posThree = checkExpKind(node->child[2], false);
 
             checkRangeScalars(node, posOne, 1);
             checkRangeScalars(node, posTwo, 2);
             if (posThree) checkRangeScalars(node, posThree, 3);     // posThree is optional
             break;
 
+        /*  RETURN STATEMENT
+         */
         case ReturnK:
-            retNode = node->child[0] ? checkExpKind(node->child[0]) : NULL;
+            retNode = node->child[0] ? checkExpKind(node->child[0], false) : NULL;
             funcNode = (TreeNode*)symbolTable.lookup(symbolTable.currentScopeName());
             
             if (funcNode != NULL and funcNode->subkind.decl == FuncK) {
@@ -421,7 +438,7 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
                         printf("ERROR(%d): Function '%s' at line %d is expecting no return value, but return has a value.\n", node->lineno, funcNode->token->tokenstr, funcNode->lineno);
                         numErrors++;
                     } 
-                    else if (funcNode->expType != retNode->expType) {
+                    else if ( (funcNode->expType != retNode->expType) and retNode->expType != UndefinedType) {
                         printf("ERROR(%d): Function '%s' at line %d is expecting to return type %s but returns type %s.\n", node->lineno, funcNode->token->tokenstr, funcNode->lineno, ExpTypeStr[funcNode->expType], ExpTypeStr[retNode->expType]);
                         numErrors++;
                     } 
@@ -436,6 +453,8 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
             }
             break;
 
+        /*  BREAK STATEMENT
+         */
         case BreakK:
             /*  check if the break is inside the loop. If not, throw out error.
              */
@@ -454,15 +473,15 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
 
     for (int i = 0; i < MAXCHILDREN; i++){
         /*  Only search child if child is not null or current node is
-         *  neither IfK or WhileK
+         *  neither IfK, WhileK or ReturnK
          */
-        if (node->child[i] != NULL and (node->subkind.stmt != IfK and node->subkind.stmt != WhileK) ){
+        if (node->child[i] != NULL and (node->subkind.stmt != IfK and node->subkind.stmt != WhileK and node->subkind.stmt != ReturnK) ){
             printSymbolTable(node->child[i], newScope, isNewCompound);
         }
     }
 
     if (scopeEntered) {
-        // symbolTable.checkUnusedVariable();
+        numWarnings += symbolTable.checkUnusedVariable();
         symbolTable.leave();
     }
 
@@ -470,10 +489,9 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
 }
 
 
-TreeNode* checkExpKind(TreeNode* node) {
+TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
     if (!node) return NULL;
-    /*  If 
-     */
+   
     if (node->subkind.stmt == IfK or node->subkind.stmt == WhileK) {
         checkStmtKind(node, false);
     }
@@ -489,9 +507,11 @@ TreeNode* checkExpKind(TreeNode* node) {
         case OpK:
             tokenString = node->token->tokenstr;
 
-            if (node->isArray) return handleArray(node);
+            if (node->isArray) {
+                return handleArray(node, isLHS);  
+            } 
 
-            lhs = node->child[0] ? checkExpKind(node->child[0]) : node;
+            lhs = node->child[0] ? checkExpKind(node->child[0], true) : node;
             rhs = node->child[1] ? checkExpKind(node->child[1]) : node;
 
             if (!lhs or !rhs) return NULL;
@@ -519,37 +539,48 @@ TreeNode* checkExpKind(TreeNode* node) {
                     return NULL;
                 }
                 else if (lhs->expType == rhs->expType) {
-                    // return newExpNode(OpK, Boolean, lhs->token);
-                    lhs->expType = Boolean;
+                    // node->expType = Boolean;
                     // return node;
+                    return newExpNode(ConstantK, Boolean, lhs->token);
                 }
             }
             else if (isIntOperator((std::string)tokenString)) {
+                node->expType = Integer;
+                bool hasErr = false;
                 if (ExpTypeStr[lhs->expType] != ExpTypeStr[1]) {
                     printf("ERROR(%d): '%s' requires operands of type %s but lhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                     numErrors++;
+                    hasErr = true;
                 }
-                else if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
+
+                if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
                     printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[rhs->expType]);
                     numErrors++;
+                    hasErr = true;
                 }
-                else if ( (lhs->isArray and !node->child[0]->child[1] and lhs->changedToInt != true) or (rhs->isArray and !node->child[1]->child[1] and rhs->changedToInt != true) ) {
+
+                if ( (lhs->isArray and !node->child[0]->child[1] and lhs->changedToInt != true) or (rhs->isArray and !node->child[1]->child[1] and rhs->changedToInt != true) ) {
                     printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
                     numErrors++;
+                    hasErr = true;
                 }
-                else {
+
+                if (not hasErr) {
                     if (!rhs->isInitialized and rhs->subkind.exp != ConstantK) {
                         printf("WARNING(%d): Variable '%s' may be uninitialized when used here.\n", node->lineno, rhs->token->tokenstr);
+                        numWarnings++;
                     }
 
-                    if (!lhs->isInitialized and lhs->subkind.exp != ConstantK) {
-                        printf("WARNING(%d): Variable '%s' may be uninitialized when used here.\n", node->lineno, lhs->token->tokenstr);
-                    }
                     return newExpNode(ConstantK, Integer, lhs->token);    // if successful int operation then return integer type newnode.
+                }
+
+                if (hasErr) {
+                    return newExpNode(ConstantK, UndefinedType, lhs->token);
                 }
             }
             else if (isUnaryOp((std::string)tokenString)) {
                 if ((std::string)tokenString == "sizeof") {
+                    node->expType = Integer;
                     if ( (lhs->isArray and node->child[0]->child[1] ) or !lhs->isArray) {
                         printf("ERROR(%d): The operation '%s' only works with arrays.\n", node->lineno, tokenString);
                         numErrors++;
@@ -565,7 +596,6 @@ TreeNode* checkExpKind(TreeNode* node) {
                     if (lhs->isArray and ExpTypeStr[lhs->expType] != ExpTypeStr[1]) {
                         printf("ERROR(%d): Unary '%s' requires an operand of type %s but was given type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                         numErrors++;
-                        return NULL;
                     }
                     if (lhs->isArray and !node->child[0]->child[1] and !node->child[0]->child[0]) {
                         printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
@@ -620,7 +650,10 @@ TreeNode* checkExpKind(TreeNode* node) {
 
         case ConstantK:
             return node;
+            break;
 
+        /*  IDENTIFIERS
+         */
         case IdK:
             tokenString = node->token->tokenstr;
             // symNode = (TreeNode*) symbolTable.lookupGlobal(tokenString);
@@ -628,11 +661,11 @@ TreeNode* checkExpKind(TreeNode* node) {
             symNode = (TreeNode*) symbolTable.lookup(tokenString);
 
             if(!symNode) {
-                if (node->subkind.stmt != WhileK and node->subkind.stmt != IfK) {
+                if (strcmp(tokenString, "while") != 0 ) {
                     printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
-                    printf("while as IdK\n");
+                    numErrors++;
                 }
-                numErrors++;
+                    
                 return NULL;
             }
             else if (symNode->subkind.decl == FuncK) {
@@ -642,18 +675,25 @@ TreeNode* checkExpKind(TreeNode* node) {
 
             node->expType = symNode->expType;
             return symNode;
+            break;
 
+        /*  ASSIGNMENT OPERATORS
+         */
         case AssignK:
             tokenString = node->token->tokenstr;
-            lhs = node->child[0] ? checkExpKind(node->child[0]) : node;
-            rhs = node->child[1] ? checkExpKind(node->child[1]) : node;
+            lhs = node->child[0] ? checkExpKind(node->child[0], true) : node;
+            rhs = node->child[1] ? checkExpKind(node->child[1], false) : node;
 
             if (!lhs or !rhs) return NULL;
             
             if (strcmp(tokenString, "=") == 0) {
+                
                 /* check if the assignment initializes values.
                  */
-
+                if (!rhs->isInitialized and rhs->subkind.exp != ConstantK) {
+                    printf("WARNING(%d): Variable '%s' may be uninitialized when used here.\n", node->lineno, rhs->token->tokenstr);
+                    numWarnings++;
+                }
 
                 /* Mark symbols as used
                  */
@@ -682,7 +722,7 @@ TreeNode* checkExpKind(TreeNode* node) {
                     printf("ERROR(%d): '%s' requires both operands be arrays or not but lhs is an array and rhs is not an array.\n", node->lineno, tokenString);
                     numErrors++;
                 } else {
-                    if (!lhs->isInitialized) {
+                    if (!lhs->isInitialized) { 
                         lhs->isInitialized = true;
                     }
                 }
@@ -711,7 +751,6 @@ TreeNode* checkExpKind(TreeNode* node) {
             break;
 
         case InitK:
-            printf("*** Is InitK ***\n");
             node->isInitialized = true;
             symList.push_back(node);
             break;
@@ -732,7 +771,12 @@ TreeNode* checkExpKind(TreeNode* node) {
                 numErrors++;
                 break;  // stop when call to function errors out.
             }
-            node->isUsed = true;
+
+            /*  mark called function as used.
+             */
+            symbolTable.markFunctionAsUsed(node);
+
+            node->expType = symNode->expType;
 
             /*  check for function params and call params.
              */
@@ -820,7 +864,7 @@ void checkFuncParams(TreeNode* symNode, TreeNode* node) {
                 numErrors++;
             }
             else if (funcParam->expType != dummy->expType) {
-                printf("ERROR(%d): Expecting %s in parameter %i of call to '%s' declared on line %d but got %s.\n", node->lineno, ExpTypeStr[funcParam->expType], paramPosition, symNode->token->tokenstr, symNode->lineno, ExpTypeStr[dummy->expType]);
+                printf("ERROR(%d): Expecting type %s in parameter %i of call to '%s' declared on line %d but got type %s.\n", node->lineno, ExpTypeStr[funcParam->expType], paramPosition, symNode->token->tokenstr, symNode->lineno, ExpTypeStr[dummy->expType]);
                 numErrors++;
             }
             
@@ -850,40 +894,41 @@ TreeNode* getType(TreeNode* node) {
 }
 
 
-TreeNode* handleArray(TreeNode* node) {
+TreeNode* handleArray(TreeNode* node, bool isLHS) {
+    bool hasErr = false;
     TreeNode* lhs, *rhs;
+
     lhs = node->child[0] ? checkExpKind(node->child[0]) : node;
     rhs = node->child[1] ? checkExpKind(node->child[1]) : node;
 
-    // if (!lhs->isArray) {
-
-    // }
-    // printf("*** In Handle Array ***\n");
+    node->expType = lhs->expType;
 
     if (!lhs->isArray) {
         printf("ERROR(%d): Cannot index nonarray '%s'.\n", node->lineno, lhs->token->tokenstr);
         numErrors++;
+        hasErr = true;
     }
-
-    // printf("*** After is not Array ***\n");
 
     if (ExpTypeStr[rhs->expType] != ExpTypeStr[1]) {
         printf("ERROR(%d): Array '%s' should be indexed by type int but got type %s.\n", node->lineno, node->child[0]->token->tokenstr, ExpTypeStr[rhs->expType]);
         numErrors++;
+        hasErr = true;
     }
 
-    // printf("After checking type\n");
 
     if (rhs->isArray and !node->child[1]->child[0]) {
         printf("ERROR(%d): Array index is the unindexed array '%s'.\n", node->lineno, rhs->token->tokenstr);
         numErrors++;
+        hasErr = true;
     }
-    // Fix for.c- seg fault
-    // printf("After checking child\n");
 
-    // if (lhs->isArray and ExpTypeStr[rhs->type]=="integer") return rhs;
-
-    // if (node->child[1]) lhs->isArray = false;
+    if (not hasErr and node->child[1] and not isLHS) {
+        if (!lhs->isInitialized) {
+            printf("WARNING(%d): Variable '%s' may be uninitialized when used here.\n", node->lineno, lhs->token->tokenstr);
+            numWarnings++;
+            lhs->isInitialized = true;
+        }
+    }
 
     return lhs;
 }
@@ -896,7 +941,6 @@ void checkBooleanCondition(TreeNode* parentNode, TreeNode* booleanNode, std::str
     if (booleanNode == NULL or booleanNode->subkind.exp == ConstantK) return;
     if ((std::string)ExpTypeStr[booleanNode->expType] != "bool") {
         printf("ERROR(%d): Expecting Boolean test condition in %s statement but got type %s.\n", parentNode->lineno, stmtType.c_str(), ExpTypeStr[booleanNode->expType]);
-        // printf("line: %d count %d symbol: %s of type: %s in %s statement\n", parentNode->lineno, boolCount++, booleanNode->token->tokenstr,ExpTypeStr[booleanNode->expType], stmtType.c_str());
         numErrors++;
     }
 
@@ -926,7 +970,7 @@ void checkRangeScalars(TreeNode* parentNode, TreeNode* posNode, int pos) {
 void checkMainFuncParams() {
     TreeNode* mainNode = (TreeNode*)symbolTable.lookupGlobal("main");
     if (mainNode == NULL) {
-        printf("ERROR(LINKER): A function named 'main()' must be defined.\n");
+        printf("ERROR(LINKER): A function named 'main' with no parameters must be defined.\n");
         numErrors++;
     }
 
@@ -937,31 +981,25 @@ void checkMainFuncParams() {
         }
     }
 }
- 
+
+void checkUnusedFunc() {
+    std::vector<std::string> globals = symbolTable.getGlobalVariables();
+
+    for (std::vector<string>::iterator it = globals.begin(); it != globals.end(); it++) {
+        TreeNode* func = (TreeNode*)symbolTable.lookupGlobal((*it));
+        if (func != NULL) {
+            if (not func->isUsed) {
+                printf("%s not used.\n", func->token->tokenstr);
+            }
+        }
+    }
+}
+
 /*  Helper Functions    
  */
-bool isIndexed(TreeNode* node) {
-    return node->child[0]->child[1] ? true : false;
-}
-
-bool isIntOperator(std::string opstr) {
-    return (opstr=="+" or opstr=="-" or opstr=="*" or opstr=="/" or opstr=="%" or opstr==":>:" or opstr==":<:") ? true : false;
-}
-
-bool isUnaryOp(std:: string opstr) {
-    return (opstr=="chsign" or opstr=="sizeof" or opstr=="?" or opstr=="and" or opstr=="not" or opstr=="or") ? true : false;
-}
-
-/*  return true if integer operators
- */
-bool isAssignOperator(std::string opstr) {
-    return (opstr=="+=" or opstr=="-=" or opstr=="*=" or opstr=="/=" or opstr=="++" or opstr=="--") ? true : false;
-}
-
-bool isRelopOperator(std::string opstr) {
-    return (opstr=="<" or opstr==">" or opstr=="!=" or opstr=="<=" or opstr==">=" or opstr=="==") ? true: false;
-}
-
-bool isBinaryOperator(std::string opstr) {
-    return (isIntOperator(opstr) or isRelopOperator(opstr) or opstr=="+=" or opstr=="-=" or opstr=="*=" or opstr=="/=" or opstr=="and" or opstr=="or") ? true : false;
-}
+bool isIndexed(TreeNode* node) { return node->child[0]->child[1] ? true : false; }
+bool isUnaryOp(std:: string opstr) { return (opstr=="chsign" or opstr=="sizeof" or opstr=="?" or opstr=="and" or opstr=="not" or opstr=="or") ? true : false; }
+bool isIntOperator(std::string opstr) { return (opstr=="+" or opstr=="-" or opstr=="*" or opstr=="/" or opstr=="%" or opstr==":>:" or opstr==":<:") ? true : false; }
+bool isRelopOperator(std::string opstr) { return (opstr=="<" or opstr==">" or opstr=="!=" or opstr=="<=" or opstr==">=" or opstr=="==") ? true: false; }
+bool isAssignOperator(std::string opstr) { return (opstr=="+=" or opstr=="-=" or opstr=="*=" or opstr=="/=" or opstr=="++" or opstr=="--") ? true : false; }
+bool isBinaryOperator(std::string opstr) { return (isIntOperator(opstr) or isRelopOperator(opstr) or opstr=="+=" or opstr=="-=" or opstr=="*=" or opstr=="/=" or opstr=="and" or opstr=="or") ? true : false; }

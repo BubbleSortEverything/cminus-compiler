@@ -162,10 +162,10 @@ string expString(TreeNode *node) {
 		case ConstantK:
 			type = typeString(node->expType);
 			tStr = constValue(node->expType, node);
-			str = "Const" + arr + " of type " + type + ": " + tStr + " [line: " + to_string(node->lineno) + "]";
+			str = "Const " + arr + tStr + typeStr + " " + " [line: " + to_string(node->lineno) + "]";
             break;
         case OpK:
-        	str = "Op: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	str = "Op: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case IdK:
         	str = "Id: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
