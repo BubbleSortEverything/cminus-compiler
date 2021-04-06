@@ -2,10 +2,30 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include "globals.h"
 #include "stdio.h"
+#include "globals.h"
+#include "scanType.h"
+#include "c-.tab.h"
+#include "ourgetopt.h"
+#include "symbolTable.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <string>
+#include <string.h>
 #include <iostream>
+#include <vector>
+
+// #ifdef CPLUSPLUS
+extern int yylex();
+extern void yyerror();
+extern int yyparse();
+extern int yydebug;
+extern FILE* yyin;
+extern TreeNode* savedTree;
+extern bool typeFlag;
+// #endif  
 
 using namespace std;
 
@@ -43,4 +63,5 @@ string stmtString(TreeNode *node);
 
 string constValue(ExpType type, TreeNode* node);
 string typeString(ExpType type);
+
 #endif

@@ -119,7 +119,7 @@ void printTree(TreeNode *node, string childIndent, int nSibling){
 	for (int i = 0; i < MAXCHILDREN; i++){
 		string indent = ".   ";
 		indent += childIndent;
-		if (node->child[i] != NULL){
+		if (node->child[i] != NULL) {
 			printf("%sChild: %d ", indent.c_str(), i);
 			printTree(node->child[i], indent, 0);
 		}
@@ -151,25 +151,30 @@ string declString(TreeNode *node) {
 }
 
 string expString(TreeNode *node) {
+    string typeStr = "";
+    if (typeFlag) {
+        typeStr = node ? " of type " + typeString(node->expType) : "";
+    }
+
 	string str = "", type = "", tStr = "";
 	string arr = node->isArray ? " is array" : "";
 	switch(node->subkind.exp) {
 		case ConstantK:
 			type = typeString(node->expType);
 			tStr = constValue(node->expType, node);
-			str = "Const" + arr + " of type " + type + ": " + tStr + " [line: " + to_string(node->lineno) + "]";
+			str = "Const " + arr + tStr + typeStr + " " + " [line: " + to_string(node->lineno) + "]";
             break;
         case OpK:
-        	str = "Op: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	str = "Op: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case IdK:
-        	str = "Id: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	str = "Id: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case CallK:
-        	str = "Call: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	str = "Call: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case AssignK:
-        	str = "Assign: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	str = "Assign: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
 	}
 	return str;

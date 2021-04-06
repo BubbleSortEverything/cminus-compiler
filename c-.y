@@ -1,25 +1,20 @@
 %{ 
-#include <stdio.h>
-#include <stdlib.h>
-#include "scanType.h"
-#include "globals.h"
+
+//#include "symbolTable.h"
 #include "util.h"
-#include <string>
-#include <iostream>
-#include "ourgetopt.h"
 
-using namespace std;
+TreeNode *savedTree;    /* stores syntax tree */
+SymbolTable symbolTable;   /* symbol table */
 
-TreeNode *savedTree;     /* stores syntax tree */
+bool typeFlag = false;
 
-#ifdef CPLUSPLUS
-extern int yylex();
-extern FILE* yyin;
-#endif
+/*
+    void yyerror(const char *msg) {
+        printf("ERROR(PARSER): %s\n", msg);
+    }
+*/
 
-void yyerror(const char *msg) {
-    printf("ERROR(PARSER): %s\n", msg);
-}
+void yyerror(const char *msg);
 
 %}
 
@@ -37,13 +32,13 @@ void yyerror(const char *msg) {
 
 //type specifies the token classes used only in the parser
 %type <treeNode> program declList decl varDeclaration varDeclList varDeclInitialize varDeclId typeSpecifier simpleExpression
-%type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression factor mutable immutable 
-%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedTypeSpecifier scopedVarDeclaration funDeclaration params//typeSpecifier scopedTypeSpecifier scopedVarDeclaration paramId paramIdList paramTypeList paramList 
-%type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList//funDeclaration argList  call expression relop mulop unaryop mutable sumop statement matched expressionStmt 
-%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop
-%%
+%type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression  
+%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedTypeSpecifier scopedVarDeclaration 
+%type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList
+%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop factor mutable immutable funDeclaration params
 
-program: 
+%%
+program:
     declList  { savedTree = $1; };
 
 declList: 
@@ -72,6 +67,7 @@ varDeclList:
 varDeclInitialize: 
     varDeclId { $$ = $1; } |
     varDeclId ':' simpleExpression {
+        //$$ = newExpNode(InitK, UndefinedType, $2, $1, $3);
         $1 = addChild($1, $3);
         $$ = $1;
     };
@@ -193,7 +189,13 @@ localDeclarations:
     {  $$ = NULL; };
 
 statementList:
-    statementList statement { $$ = addSibling($1, $2); } |
+    statementList statement { 
+        if ($2 == NULL) {
+            $$ = $1;
+        } else {
+            $$ = addSibling($1, $2);
+        }
+    } |
     { $$ = NULL; };
 
 expressionStmt: 
@@ -226,7 +228,7 @@ expression:
 
 simpleExpression: 
     simpleExpression OR andExpression {
-        $2->tokenstr = "OR";
+        $2->tokenstr = "or";
         $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
     } |
     andExpression {
@@ -236,14 +238,14 @@ simpleExpression:
 
 andExpression: 
     andExpression AND unaryRelExpression {
-        $2->tokenstr = "AND";
+        $2->tokenstr = "and";
         $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
     } |
     unaryRelExpression { $$ = $1; };
 
 unaryRelExpression: 
     NOT unaryRelExpression {
-        $1->tokenstr = "NOT";
+        $1->tokenstr = "not";
         $$ = newExpNode(OpK, UndefinedType, $1, $2);
     } | 
     relExpression { $$ = $1; };
@@ -274,7 +276,7 @@ mulExpression:
 
 minmaxop:
     MAX { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    MIN { $$ = newExpNode(OpK, UndefinedType, $1); }
+    MIN { $$ = newExpNode(OpK, UndefinedType, $1); };
 
 relop: 
     '<' { $$ = newExpNode(OpK, UndefinedType, $1); } |
@@ -302,11 +304,11 @@ unaryExpression:
 
 unaryop:
     '-' {
-        $1->tokenstr = "CHSIGN";
+        $1->tokenstr = "chsign";
         $$ = newExpNode(OpK, UndefinedType, $1); 
     } |
     '*' { 
-        $1->tokenstr = "SIZEOF";
+        $1->tokenstr = "sizeof";
         $$ = newExpNode(OpK, UndefinedType, $1); 
     } |
     '?' { $$ = newExpNode(OpK, UndefinedType, $1); };
@@ -321,6 +323,7 @@ mutable:
     } | 
     mutable '[' expression ']' {
         $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
+        $$->isArray = true;
     };
 
 immutable: 
@@ -359,41 +362,4 @@ constant:
         $$ = newExpNode(ConstantK, Char, $1);
         $$->isArray = true;
     };
-
 %%
-
-int main(int argc, char* argv[]) {
-     int c;
-     extern char *optarg;
-     extern int optind;
-     int pflg = 0;
-     int dflg = 0;
-     bool printFlag = false;
-     int optCount = 1;
-
-     while ((c = ourGetopt(argc, argv, (char *)"pd:")) != EOF){
-          switch (c) {
-             case 'p':
-                printFlag = true;
-                break;
-             case 'd':
-                yydebug=1;
-                break;
-              }
-          optCount++;
-     }
-
-     if (argc > 1) {
-        if ((yyin = fopen(argv[optCount], "r"))) {
-               yyparse();
-               if (printFlag) printTree(savedTree, "", 0);
-        }
-        else {
-               yyin = stdin;
-               yyparse();
-               if (printFlag) printTree(savedTree, "", 0);
-        }
-     }
-
-     return 0;  
-}

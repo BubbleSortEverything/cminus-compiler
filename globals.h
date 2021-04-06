@@ -31,23 +31,6 @@ extern int lineno;
 
 //*******************************************************************
 
-// enums of tree nodes
-// typedef enum { StmtK, ExpK, DeclK } NodeKind;
-
-// typedef enum {
-
-// 	LoopK, WhileK, CompoundK, IfK, 
-// 	ReturnK, BreakK, CallK,
-// 	OpK, AssignK, VarK, FunK, ParamK,
-// 	TypeK, ConstK, IdK, UnaryK, RangeK, LoopForeverK, ElsifK
-// } Kind;
-
-// typedef enum {Int, Void, Char, Bool, String } Type;
-
-
-// the exact type of the token or node involved.  These are divided into
-// various "kinds" in the enums that follow
-
 // Kinds of Operators
 // these are the token numbers for the operators same as in flex
 typedef int OpKind;  
@@ -68,6 +51,7 @@ enum ExpKind {OpK, ConstantK, IdK, AssignK, InitK, CallK};
 // ExpType is used for type checking (Void means no type or value, UndefinedType means undefined)
 enum ExpType {Void, Integer, Boolean, Char, CharInt, Equal, UndefinedType};
 
+// string representation of ExpType
 // What kind of scoping is used?  (decided during typing)
 enum VarKind {None, Local, Global, Parameter, LocalStatic};
 
@@ -97,38 +81,16 @@ typedef struct treeNode {
         char *name;                        // used when IdK
     } attr;                                 
     ExpType expType;                   // used when ExpK for type checking
+    
+    bool isUsed;                       // true if the variable is used.
     bool isArray;                          // is this an array
     bool isStatic;                         // is staticly allocated?
+    bool hasReturn;
+    bool changedToInt;                        // is sizeof an array
+    bool isInitialized;
 
     TokenData* token;           // for tokens
 
     // even more semantic stuff will go here in later assignments.
 } TreeNode;
 #endif
-
-
-// struct TreeNode
-// {
-//     int lineno;             
-//     char * svalue; 
-
-//     bool isStatic;         
-//     bool isArray; 
-
-//     NodeKind nodekind;  
-//     Kind kind;          
-//     Type nodetype;          
-
-//     TokenData * token;      
-//     int arraySize;          
-    
-//     int numChildren;                        
-//     struct TreeNode *child[MAXCHILDREN]; 
-//     bool isConstant;   
-//     struct TreeNode *sibling;               
-
-     
-         
-//     bool isIndex;          
-       
-// };
