@@ -1,5 +1,3 @@
-====================================
-FILE: array2.c-
 WARNING(24): Variable 'y' may be uninitialized when used here.
 Var: w is array of type int [line: 2]
 Sibling: 1  Func: dog returns type int [line: 4]

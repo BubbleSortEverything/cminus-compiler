@@ -326,6 +326,15 @@ void SymbolTable::markSymbolAsUsed(TreeNode* node) {
             node->isUsed = true;
             (*it)->isUsed = true;
         }
+        else {
+            std::vector<TreeNode*> gScope = stack.front()->symbolList;
+            for (std::vector<TreeNode*>::iterator it = gScope.begin(); it != gScope.end(); it++) {
+                if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
+                    node->isUsed = true;
+                    (*it)->isUsed = true;
+                }
+            }
+        }
     }
 }
 

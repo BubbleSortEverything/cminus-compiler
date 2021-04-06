@@ -174,7 +174,7 @@ string expString(TreeNode *node) {
         	str = "Call: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case AssignK:
-        	str = "Assign: " + string(node->token->tokenstr) + " [line: " + to_string(node->lineno) + "]";
+        	str = "Assign: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
 	}
 	return str;

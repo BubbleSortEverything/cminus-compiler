@@ -25,19 +25,19 @@ bool isIntOperator(std::string str);
 bool isRelopOperator(std::string opstr);
 bool isBinaryOperator(std::string opstr);
 bool isAssignOperator(std::string opstr);
-
 void checkUnusedFunc();
+
 /*  Array handler
  */
 bool isIndexed(TreeNode* node);
-TreeNode* handleArray(TreeNode* node, bool isLHS);
-
 bool checkSymbol(TreeNode* syntaxTree, bool isNewCompound);
-TreeNode* checkExpKind(TreeNode* syntaxTree, bool isLHS=false);
+
 void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound);
 void checkStmtKind(TreeNode* syntaxTree, bool functionDeclared);
-
 void printSymbolTable(TreeNode* savedTree, bool functionDeclared=false, bool isNewCompound=false);
+
+TreeNode* handleArray(TreeNode* node, bool isLHS);
+TreeNode* checkExpKind(TreeNode* syntaxTree, bool isLHS=false);
 
 /* Globals
  */
@@ -45,8 +45,10 @@ int numErrors = 0;
 int numWarnings = 0;
 bool hasReturn = false;
 bool mainDefined = false;
+
 vector<string> *symbolNames = new vector<string>;
 vector<string> *symbolStack = new vector<string>;
+
 const char* ExpTypeStr[] = {"void", "int", "bool", "char", "charint", "equal", "undefinedtype"};
 const char* UnaryStr[] = {"and", "not"};
 
@@ -298,6 +300,7 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
             if (!symExists) {
                 symbolTable.insert(syntaxTree->token->tokenstr, syntaxTree);
                 symbolTable.addSymbolToCurrentScope(syntaxTree);
+                syntaxTree->isInitialized = true;
             }
             break;
 
@@ -314,6 +317,7 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
                 }
                 symbolTable.addSymbolToGlobalScope(syntaxTree);
                 hasReturn = false;
+                // printf("Func is: %s\n", syntaxTree->token->tokenstr);
             } 
             break;
 
@@ -404,6 +408,10 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
         case ForK:
             symbolTable.enter("For Loop");
 
+            /*  mark next variable after For Loop as used
+             */
+            node->child[0]->isUsed = true;
+
             scopeEntered = true;
             newScope = true;
             break;
@@ -458,7 +466,7 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
         case BreakK:
             /*  check if the break is inside the loop. If not, throw out error.
              */
-            if (symbolTable.currentScopeName() != "For Loop") {
+            if ( (symbolTable.currentScopeName() != "For Loop") and (symbolTable.currentScopeName() != "While Loop") ) {
                 printf("ERROR(%d): Cannot have a break statement outside of loop.\n", node->lineno);
                 numErrors++;
             }
@@ -581,6 +589,7 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
             else if (isUnaryOp((std::string)tokenString)) {
                 if ((std::string)tokenString == "sizeof") {
                     node->expType = Integer;
+                    symbolTable.markSymbolAsUsed(lhs);
                     if ( (lhs->isArray and node->child[0]->child[1] ) or !lhs->isArray) {
                         printf("ERROR(%d): The operation '%s' only works with arrays.\n", node->lineno, tokenString);
                         numErrors++;
@@ -593,6 +602,7 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                     }
                 } 
                 else if ((std::string)tokenString=="?" or (std::string)tokenString=="chsign") {
+                    node->expType = Integer;
                     if (lhs->isArray and ExpTypeStr[lhs->expType] != ExpTypeStr[1]) {
                         printf("ERROR(%d): Unary '%s' requires an operand of type %s but was given type %s.\n", node->lineno, tokenString, ExpTypeStr[1], ExpTypeStr[lhs->expType]);
                         numErrors++;
@@ -627,12 +637,12 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                     if (ExpTypeStr[lhs->expType] != ExpTypeStr[2]) {
                         printf("ERROR(%d): '%s' requires operands of type %s but lhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[2], ExpTypeStr[lhs->expType]);
                         numErrors++;
-                        return NULL;
+                        // return NULL;
                     } 
                     if (ExpTypeStr[rhs->expType] != ExpTypeStr[2]) {
                         printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[2], ExpTypeStr[rhs->expType]);
                         numErrors++;
-                        return NULL;
+                        // return NULL;
                     }
                     else if ( (lhs->isArray and !node->child[0]->child[1]) or (rhs->isArray and !isIndexed(node)) ) {
                         printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
@@ -662,6 +672,7 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
 
             if(!symNode) {
                 if (strcmp(tokenString, "while") != 0 ) {
+                    // printf("here\n");
                     printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
                     numErrors++;
                 }
@@ -686,8 +697,10 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
 
             if (!lhs or !rhs) return NULL;
             
+            node->expType = lhs->expType;
+
             if (strcmp(tokenString, "=") == 0) {
-                
+
                 /* check if the assignment initializes values.
                  */
                 if (!rhs->isInitialized and rhs->subkind.exp != ConstantK) {
@@ -762,8 +775,10 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
             symNode = symNode ? symNode : (TreeNode*) symbolTable.lookup(tokenString);
 
             if(!symNode and (node->subkind.stmt != IfK or node->subkind.stmt != WhileK) ) {
-                printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
-                numErrors++;
+                if ( (std::string)tokenString != "return" ) {
+                    printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
+                    numErrors++;
+                }
                 break;  // stop when call to function errors out.
             } 
             else if (symNode and symNode->subkind.decl == VarK) {

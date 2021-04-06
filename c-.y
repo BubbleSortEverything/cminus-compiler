@@ -8,9 +8,13 @@ SymbolTable symbolTable;   /* symbol table */
 
 bool typeFlag = false;
 
-void yyerror(const char *msg) {
-    printf("ERROR(PARSER): %s\n", msg);
-}
+/*
+    void yyerror(const char *msg) {
+        printf("ERROR(PARSER): %s\n", msg);
+    }
+*/
+
+void yyerror(const char *msg);
 
 %}
 
