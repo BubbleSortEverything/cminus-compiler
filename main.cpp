@@ -1,5 +1,4 @@
 #include "util.h"
-
 #include "ourgetopt.h"
 
 using namespace std;
@@ -41,7 +40,7 @@ TreeNode* checkExpKind(TreeNode* syntaxTree, bool isLHS=false);
 
 /* Globals
  */
-int numErrors = 0;
+extern int numErrors;
 int numWarnings = 0;
 bool hasReturn = false;
 bool mainDefined = false;
@@ -67,6 +66,7 @@ int main(int argc, char* argv[]) {
     bool printFlag, symFlag = false;
     int optCount = 1;
 
+    initErrorProcessing();
     while ((c = ourGetopt(argc, argv, (char *)"phdDP:")) != EOF) {
         switch (c) {
             case 'p':
@@ -95,7 +95,6 @@ int main(int argc, char* argv[]) {
     if (argc > 1) {
         if ((yyin = fopen(argv[optCount], "r"))) {
             yyparse();
-            
             if (printFlag) printTree(savedTree, "", 0);
             if (symFlag) symbolTable.debug(symFlag);
 
@@ -120,14 +119,16 @@ int main(int argc, char* argv[]) {
             yyin = stdin;
             yyparse();
             if (printFlag) printTree(savedTree, "", 0);
-            if (symFlag) { 
-                symbolTable.debug(symFlag);
-                printSymbolTable(savedTree);
-                numWarnings += symbolTable.checkUnusedVariable();
-                if (numErrors == 0) printTree(savedTree, "", 0);
-                printf("Number of warnings: %d\n", numWarnings);
-                printf("Number of errors: %d\n", numWarnings);
-            }
+            if (symFlag) symbolTable.debug(symFlag);
+
+            createIO();
+            printSymbolTable(savedTree);
+            numWarnings += symbolTable.checkUnusedVariable();
+            checkMainFuncParams();
+
+            if (numErrors == 0) printTree(savedTree, "", 0);
+            printf("Number of warnings: %d\n", numWarnings);
+            printf("Number of errors: %d\n", numWarnings);
         }
     }
 
@@ -362,6 +363,9 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
     TreeNode *posOne, *posTwo, *posThree, *testCondition, *funcNode, *retNode;
 
     switch(node->subkind.stmt) {
+
+        /*  COMPOUND STATEMENT
+         */
         case CompoundK:
             if (!functionDeclared) {
                 symbolTable.enter("Compound Statmenet");
@@ -382,7 +386,7 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
             for (int i = 0; i < MAXCHILDREN; i++) {
                 if (node->child[i] != NULL) {
                     testCondition = checkExpKind(node->child[i], false);
-                    checkBooleanCondition(node, testCondition, "if");
+                    if (i==0) checkBooleanCondition(node, testCondition, "if");
                 }
             }
             break;
@@ -398,7 +402,7 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
             for (int i = 0; i < MAXCHILDREN; i++) {
                 if (node->child[i] != NULL) {
                     testCondition = checkExpKind(node->child[i], false);
-                    checkBooleanCondition(node, testCondition, "while");
+                    if (i==0) checkBooleanCondition(node, testCondition, "while");
                 }
             }
             break;
@@ -529,27 +533,33 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
             }
 
             if (isRelopOperator((std::string)tokenString)) {
+                bool hasErr = false;
+                node->expType = Boolean;
+
                 if(lhs->expType != rhs->expType) {
                     printf("ERROR(%d): '%s' requires operands of the same type but lhs is type %s and rhs is type %s.\n", node->lineno, tokenString, ExpTypeStr[lhs->expType], ExpTypeStr[rhs->expType]);
                     numErrors++;
-                    return NULL;
+                    hasErr = true;
                 }
+                
                 /* comparasion among arrays
                  */
                 if (!rhs->isArray and lhs->isArray and !node->child[0]->child[1]) {
                     printf("ERROR(%d): '%s' requires both operands be arrays or not but lhs is an array and rhs is not an array.\n", node->lineno, tokenString);
                     numErrors++;
-                    return NULL;
+                    hasErr = true;
                 }
                 else if (!lhs->isArray and rhs->isArray) {
                     printf("ERROR(%d): '%s' requires both operands be arrays or not but lhs is not an array and rhs is an array.\n", node->lineno, tokenString);
                     numErrors++;
-                    return NULL;
+                    hasErr = true;
                 }
+
+                if (hasErr) return NULL;
                 else if (lhs->expType == rhs->expType) {
                     // node->expType = Boolean;
                     // return node;
-                    return newExpNode(ConstantK, Boolean, lhs->token);
+                    return newExpNode(ConstantK, Boolean, node->token);
                 }
             }
             else if (isIntOperator((std::string)tokenString)) {
@@ -616,12 +626,14 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                         numErrors++;
                         return NULL;
                     } if ((std::string)tokenString=="chsign") {
-                        TreeNode* copyNode = newExpNode(OpK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
+                        TreeNode* copyNode = newExpNode(ConstantK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
                         copyNode->changedToInt = true;
                         return copyNode;
                     }
                 } 
                 else if ((std::string)tokenString=="not") {
+                    node->expType = Boolean;
+
                     if (ExpTypeStr[lhs->expType] != ExpTypeStr[2]) {
                         printf("ERROR(%d): Unary '%s' requires an operand of type %s but was given type %s.\n", node->lineno, tokenString, ExpTypeStr[2], ExpTypeStr[lhs->expType]);
                         numErrors++;
@@ -634,25 +646,39 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                     }
                 } 
                 else if ((std::string)tokenString=="and" or (std::string)tokenString=="or") {
+                    bool hasErr = false;
+                    node->expType = Boolean;
+
+                    if (lhs->expType == Boolean and rhs->expType == Boolean) {
+                        return newExpNode(ConstantK, Boolean, lhs->token);
+                    }
+
                     if (ExpTypeStr[lhs->expType] != ExpTypeStr[2]) {
                         printf("ERROR(%d): '%s' requires operands of type %s but lhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[2], ExpTypeStr[lhs->expType]);
                         numErrors++;
-                        // return NULL;
-                    } 
+                        hasErr = true;
+                    }
+
                     if (ExpTypeStr[rhs->expType] != ExpTypeStr[2]) {
                         printf("ERROR(%d): '%s' requires operands of type %s but rhs is of type %s.\n", node->lineno, tokenString, ExpTypeStr[2], ExpTypeStr[rhs->expType]);
                         numErrors++;
-                        // return NULL;
+                        hasErr = true;
                     }
                     else if ( (lhs->isArray and !node->child[0]->child[1]) or (rhs->isArray and !isIndexed(node)) ) {
                         printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
                         numErrors++;
-                        return NULL;
-                    } else if (lhs->isArray or rhs->isArray) {
+                        hasErr = true;
+                    } 
+                    else if (lhs->isArray or rhs->isArray) {
                         printf("ERROR(%d): The operation '%s' does not work with arrays.\n", node->lineno, tokenString);
                         numErrors++;
-                        return NULL;
+                        hasErr = true;
                     }
+
+                    /*  if error, then return NULL which will then evaluated
+                     *  in `checkBooleanCondition` at WhileK. 
+                     */
+                    if (hasErr) return NULL;
                 }
             }
 

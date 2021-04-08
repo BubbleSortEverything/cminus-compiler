@@ -12,14 +12,17 @@
 #include "globals.h"    // defines a TreeNode
 #include "c-.tab.h"     // token defs (needs to know what a TreeNode is)
 
-// extern void yyerror(const char *msg);
-//char *lastToken=(char *)"";
+; extern void yyerror(const char *msg);
+
+char *lastToken=(char *)"";
 static int line=1;
+int numErrors = 0;
 
 static int setValue(int linenum, int tokenClass, char *svalue)
 {
     //printf("got to funct %d\n", tokenClass);
     // create and handle default data storage
+    lastToken = svalue;
     yylval.tokenData = new TokenData;
     yylval.tokenData->tokenclass = tokenClass;
     yylval.tokenData->linenum = linenum;
@@ -125,6 +128,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 %}
 
 %option noyywrap
+%option yylineno
 
 %%
 "int"                   { return setValue(line, INT, yytext); }
