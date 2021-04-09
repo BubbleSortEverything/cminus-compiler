@@ -162,8 +162,6 @@ void yyerror(const char *msg)
     // make a copy of msg string
     space = strdup(msg);
 
-    // printf("msg: %s\n", msg);
-
     // split out components
     numstrs = split(space, strs, ' ');
     if (numstrs>4) trim(strs[3]);

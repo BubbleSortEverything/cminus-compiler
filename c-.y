@@ -36,10 +36,10 @@ extern int yylineno;
 //type specifies the token classes used only in the parser
 %type <treeNode> program declList decl varDeclaration varDeclList varDeclInitialize varDeclId typeSpecifier simpleExpression
 %type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression  
-%type <treeNode> constant relop sumop mulop assignop unaryop expression call args argList scopedVarDeclaration 
+%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedVarDeclaration 
 %type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList
 %type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop factor mutable immutable funDeclaration params
-%type <treeNode> scopedTypeSpecifier
+%type <treeNode> scopedTypeSpecifier matched unmatched
 
 %%
 program
@@ -60,7 +60,7 @@ decl
 varDeclaration
     : typeSpecifier varDeclList ';'     { setType($2, $1->expType, false); $$ = $2; yyerrok; } 
     | error varDeclList ';'             { $$ = NULL; yyerrok; } 
-    | typeSpecifier error ';'           { $$ = NULL; yyerrok; }
+    | typeSpecifier error ';'           { $$ = NULL; yyerrok; yyerrok; }
     ;
 
 typeSpecifier
@@ -84,8 +84,7 @@ varDeclInitialize
         $1 = addChild($1, $3);
         $$ = $1;
     } 
-    | error ':' simpleExpression { $$ = NULL; yyerrok; }
-    //| varDeclId ':' error   { $$ = NULL; }
+    | error ':' simpleExpression        { $$ = NULL; yyerrok; }
     ;
 
 varDeclId
@@ -103,8 +102,8 @@ varDeclId
 scopedVarDeclaration
     : scopedTypeSpecifier varDeclList 
     { 
-        setType($2, $1->expType, $1->isStatic); 
         $$ = $2; 
+        setType($2, $1->expType, $1->isStatic); 
         yyerrok; 
     }
     | scopedTypeSpecifier error ';'         { $$ = NULL; yyerrok; }
@@ -160,10 +159,10 @@ paramTypeList
     ;
 
 paramIdList
-    : paramIdList ',' paramId { addSibling($1, $3); yyerrok; } 
-    | paramId { $$ = $1; } 
-    | paramIdList ',' error { $$ = NULL; } 
-    | error { $$ = NULL; }
+    : paramIdList ',' paramId           { $$ = addSibling($1, $3); yyerrok; } 
+    | paramId                           { $$ = $1; } 
+    | paramIdList ',' error             { $$ = NULL; } 
+    | error                             { $$ = NULL; }
     ;
 
 paramId
@@ -173,7 +172,6 @@ paramId
                         $$ = newDeclNode(ParamK, UndefinedType, $1); 
                         $$->isArray = true;
     }
-    | error ']'         { $$ = NULL; yyerrok; }
     ;
 
 statement
@@ -183,21 +181,32 @@ statement
     | iterStmt                                { $$ = $1; } 
     | returnStmt                              { $$ = $1; } 
     | breakStmt                               { $$ = $1; }
+    | matched                                 { $$ = $1; }
+    | unmatched                               { $$ = $1; }
+    ;
+
+matched 
+    : IF error                                { $$ = NULL; }
+    | IF error ELSE matched                   { $$ = NULL; yyerrok; }
+    | IF error THEN matched ELSE matched      { $$ = NULL; yyerrok; }
+    | WHILE error DO matched                  { $$ = NULL; yyerrok; }
+    | WHILE error                             { $$ = NULL; }
+    | FOR ID '=' error DO matched             { $$ = NULL; yyerrok; }
+    | FOR error                               { $$ = NULL; }
+    ;
+
+unmatched    
+    : IF error THEN statement                       { $$ = NULL; yyerrok; }
+    | IF error THEN matched ELSE unmatched          { $$ = NULL; yyerrok; }
     ;
 
 compoundStmt
     : '{' localDeclarations statementList '}'   { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok; }
-    | '{' error statementList '}'               { $$ = NULL; yyerrok; }
-    | '{' localDeclarations error '}'           { $$ = NULL; yyerrok; }
     ;
 
 selectStmt
     : IF simpleExpression THEN statement                { $$ = newStmtNode(IfK, $1, $2, $4); } 
     | IF simpleExpression THEN statement ELSE statement { $$ = newStmtNode(IfK, $1, $2, $4, $6); }
-    | IF error                                          { $$ = NULL; }
-    | IF error ELSE statement                           { $$ = NULL; yyerrok; }
-    | IF error THEN statement ELSE statement            { $$ = NULL; yyerrok; }
-    | IF error THEN statement                           { $$ = NULL; yyerrok; }
     ;
 
 iterStmt
@@ -206,10 +215,6 @@ iterStmt
                                                     TreeNode *var = newDeclNode(VarK, Integer, $2); 
                                                     $$ = newStmtNode(ForK, $1, var, $4, $6); 
                                                 }
-    | WHILE error DO statement                  { $$ = NULL; yyerrok; }
-    | WHILE error                               { $$ = NULL; }
-    | FOR ID '=' error DO statement             { $$ = NULL; yyerrok; }
-    | FOR error                                 { $$ = NULL; }
     ;
 
 iterRange
@@ -248,9 +253,9 @@ statementList
     ;
 
 expressionStmt
-    : expression ';'  { $$ = $1; }
-    | ';'           { $$ = NULL; }
-    | error ';'     { $$ = NULL; yyerrok; }
+    : expression ';'        { $$ = $1; yyerrok; }
+    | ';'                   { $$ = NULL; yyerrok; }
+    | error ';'             { $$ = NULL; yyerrok; }
     ;
 
 expression
@@ -263,6 +268,14 @@ expression
     | mutable DIVASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
     | simpleExpression              { $$ = $1; }
     | error '=' error               { $$ = NULL; }
+    | mutable ADDASS error            { $$ = NULL; }
+    | mutable SUBASS error            { $$ = NULL; }
+    | mutable MULASS error            { $$ = NULL; }
+    | mutable DIVASS error            { $$ = NULL; }
+    | error ADDASS expression            { $$ = NULL; }
+    | error SUBASS expression            { $$ = NULL; }
+    | error MULASS expression            { $$ = NULL; }
+    | error DIVASS expression            { $$ = NULL; }
     | error ADDASS error            { $$ = NULL; }
     | error SUBASS error            { $$ = NULL; }
     | error MULASS error            { $$ = NULL; }
@@ -277,12 +290,14 @@ simpleExpression
     | simpleExpression OR error             { $$ = NULL; }
     ;
 
+/*
 assignop
     : sumop         { $$ = $1; }
     | mulop         { $$ = $1; }
     | minmaxop      { $$ = $1; }
     | relop         { $$ = $1; }
     ;
+*/
 
 andExpression
     : andExpression AND unaryRelExpression 
@@ -325,7 +340,7 @@ sumExpression:
 mulExpression: 
     mulExpression mulop unaryExpression     { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
     | unaryExpression                       { $$ = $1; }
-    | mulExpression mulop error                    { $$ = NULL; }
+    | mulExpression mulop error             { $$ = NULL; }
     ;
 
 
@@ -389,7 +404,6 @@ immutable:
     | call                          { $$ = $1; } 
     | constant                      { $$ = $1; }
     | '(' error                     { $$ = NULL; }
-    | error ')'                     { $$ = NULL; yyerrok; }
     ;
 
 call

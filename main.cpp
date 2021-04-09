@@ -98,18 +98,22 @@ int main(int argc, char* argv[]) {
             if (printFlag) printTree(savedTree, "", 0);
             if (symFlag) symbolTable.debug(symFlag);
 
-            /*  create IO functions and go thru symbol table while generating erros
+            /* If no parser error then, 
+             * create IO functions and go thru symbol table while generating erros
              *  chaeck for unused variables after done generating errors
              */
-            createIO();
-            printSymbolTable(savedTree);
+            if (numErrors==0) {
+                createIO();
+                printSymbolTable(savedTree);
 
-            /*  check for unused variables and functions
-             */
-            numWarnings += symbolTable.checkUnusedVariable();
-            /* check for main and main params
-             */
-            checkMainFuncParams();
+                /*  check for unused variables and functions
+                 */
+                numWarnings += symbolTable.checkUnusedVariable();
+
+                /* check for main and main params
+                 */
+                checkMainFuncParams();
+            }
 
             if (numErrors == 0) printTree(savedTree, "", 0);
             printf("Number of warnings: %d\n", numWarnings);
@@ -541,7 +545,7 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                     numErrors++;
                     hasErr = true;
                 }
-                
+
                 /* comparasion among arrays
                  */
                 if (!rhs->isArray and lhs->isArray and !node->child[0]->child[1]) {
@@ -727,8 +731,9 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
 
             if (strcmp(tokenString, "=") == 0) {
 
-                /* check if the assignment initializes values.
+                /* check if the rhs has already been initialized
                  */
+                
                 if (!rhs->isInitialized and rhs->subkind.exp != ConstantK) {
                     printf("WARNING(%d): Variable '%s' may be uninitialized when used here.\n", node->lineno, rhs->token->tokenstr);
                     numWarnings++;
