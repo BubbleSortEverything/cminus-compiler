@@ -77,16 +77,18 @@ TreeNode *addSibling(TreeNode *t, TreeNode *s) {
         tmp = t;
         while (tmp->sibling!=NULL) tmp = tmp->sibling;
         tmp->sibling = s;
+        
         return t;
     }
 
     return s;
 }
 
-TreeNode *addChild(TreeNode *p, TreeNode *c){
-	for(int i = 0; i < MAXCHILDREN; i++){
+TreeNode *addChild(TreeNode *p, TreeNode *c) {
+	for(int i = 0; i < MAXCHILDREN; i++) {
 		if(p->child[i] == NULL) {
 			p->child[i] = c;
+
 			return p;
 		}
 	}
@@ -99,7 +101,6 @@ void setType(TreeNode *t, ExpType type, bool isStatic) {
     while (t) {
         t->expType = type;
         t->isStatic = isStatic;
-
         t = t->sibling;
     }
 }

@@ -81,19 +81,18 @@ varDeclInitialize
     | varDeclId ':' simpleExpression 
     {
         //$$ = newExpNode(InitK, UndefinedType, $2, $1, $3);
-        $1 = addChild($1, $3);
-        $$ = $1;
+        if ($$ != NULL) $$ = addChild($1, $3);
     } 
     | error ':' simpleExpression        { $$ = NULL; yyerrok; }
     ;
 
 varDeclId
-    : ID { $$ = newDeclNode(VarK, UndefinedType, $1); } 
+    : ID                                { $$ = newDeclNode(VarK, UndefinedType, $1); } 
     | ID '[' NUMCONST ']' 
     {
-        /***** prolly need to save NUMCONST in the node for future reference *****/
-        $$ = newDeclNode(VarK, UndefinedType, $1);
-        $$->isArray = true;
+                                        /***** prolly need to save NUMCONST in the node for future reference *****/
+                                        $$ = newDeclNode(VarK, UndefinedType, $1);
+                                        $$->isArray = true;
     } 
     | ID '[' error                      { $$ = NULL; } 
     | error ']'                         { $$ = NULL; yyerrok; }

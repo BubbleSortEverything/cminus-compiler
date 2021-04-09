@@ -194,6 +194,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 "//".*                      ;  //comments
 \n                          { line++; }
 
-.                           {printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++;}
+[ \" ]                      { printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++; }
+.                           { printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++; }
 %%
 
