@@ -8,6 +8,7 @@
 #include "c-.tab.h"
 #include "ourgetopt.h"
 #include "symbolTable.h"
+#include "yyerror.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,6 +26,7 @@ extern int yydebug;
 extern FILE* yyin;
 extern TreeNode* savedTree;
 extern bool typeFlag;
+extern int numErrors;
 // #endif  
 
 using namespace std;

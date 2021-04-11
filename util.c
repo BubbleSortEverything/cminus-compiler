@@ -66,24 +66,29 @@ TreeNode *newExpNode(ExpKind kind, ExpType type,
 // add a TreeNode to a list of siblings.
 // Adding a NULL to the list is probably a programming error!
 TreeNode *addSibling(TreeNode *t, TreeNode *s) {
-    if (s==NULL) {
+
+    if (s==NULL and numErrors==0) {
         printf("ERROR(SYSTEM): never add a NULL to a sibling list.\n");
         exit(1);
     }
+
     if (t!=NULL) { 
         TreeNode *tmp;
         tmp = t;
         while (tmp->sibling!=NULL) tmp = tmp->sibling;
         tmp->sibling = s;
+        
         return t;
     }
+
     return s;
 }
 
-TreeNode *addChild(TreeNode *p, TreeNode *c){
-	for(int i = 0; i < MAXCHILDREN; i++){
+TreeNode *addChild(TreeNode *p, TreeNode *c) {
+	for(int i = 0; i < MAXCHILDREN; i++) {
 		if(p->child[i] == NULL) {
 			p->child[i] = c;
+
 			return p;
 		}
 	}
@@ -96,7 +101,6 @@ void setType(TreeNode *t, ExpType type, bool isStatic) {
     while (t) {
         t->expType = type;
         t->isStatic = isStatic;
-
         t = t->sibling;
     }
 }
@@ -157,7 +161,7 @@ string expString(TreeNode *node) {
     }
 
 	string str = "", type = "", tStr = "";
-	string arr = node->isArray ? " is array" : "";
+	string arr = node->isArray ? " is array " : "";
 	switch(node->subkind.exp) {
 		case ConstantK:
 			type = typeString(node->expType);

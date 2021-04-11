@@ -12,14 +12,17 @@
 #include "globals.h"    // defines a TreeNode
 #include "c-.tab.h"     // token defs (needs to know what a TreeNode is)
 
-// extern void yyerror(const char *msg);
-//char *lastToken=(char *)"";
+; extern void yyerror(const char *msg);
+
+char *lastToken=(char *)"";
 static int line=1;
+int numErrors = 0;
 
 static int setValue(int linenum, int tokenClass, char *svalue)
 {
     //printf("got to funct %d\n", tokenClass);
     // create and handle default data storage
+    lastToken = svalue;
     yylval.tokenData = new TokenData;
     yylval.tokenData->tokenclass = tokenClass;
     yylval.tokenData->linenum = linenum;
@@ -125,71 +128,73 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 %}
 
 %option noyywrap
+%option yylineno
 
 %%
-"int"                   { return setValue(line, INT, yytext); }
-"bool"                  { return setValue(line, BOOL, yytext); }
-"true"                  { return setValue(line, BOOLCONST, yytext); }
-"and"                   { return setValue(line, AND, yytext); }
-"or"                    { return setValue(line, OR, yytext); }
-"not"                   { return setValue(line, NOT, yytext); }
-"if"                    { return setValue(line, IF, yytext); }
-"then"                  { return setValue(line, THEN, yytext); }
-"to"                    { return setValue(line, TO, yytext); }
-"by"                    { return setValue(line, BY, yytext); }
-"elsif"                 { return setValue(line, ID, yytext); }
-"else"                  { return setValue(line, ELSE, yytext); }
-"while"                 { return setValue(line, WHILE, yytext); }
-"for"                   { return setValue(line, FOR, yytext); }
-"do"                    { return setValue(line, DO, yytext); }
-"break"                 { return setValue(line, BREAK, yytext); }
-"loop"                  { return setValue(line, ID, yytext); }
-".."                    { return setValue(line, RANGE, yytext); }
-"forever"               { return setValue(line, ID, yytext); }
-"static"                { return setValue(line, STATIC, yytext); }
-"return"                { return setValue(line, RETURN, yytext); }
-"char"                  { return setValue(line, CHAR, yytext); }
-[0-9]+                  { return setValue(line, NUMCONST, yytext); }
-":<:"                   { return setValue(line, MIN, yytext); }
-":>:"                   { return setValue(line, MAX, yytext); }
-"false"                 { return setValue(line, BOOLCONST, yytext); }
-[a-zA-Z]+[a-zA-Z0-9]*   { return setValue(line, ID, yytext); }
-";"                     { return setValue(line, ';', yytext); }
-":"                     { return setValue(line, ':', yytext); }
-","                     { return setValue(line, ',', yytext); }
-"["                     { return setValue(line, '[', yytext); }
-"]"                     { return setValue(line, ']', yytext); }
-"("                     { return setValue(line, '(', yytext); }
-")"                     { return setValue(line, ')', yytext); }
-"{"                     { return setValue(line, '{', yytext); }
-"}"                     { return setValue(line, '}', yytext); }
-"="                     { return setValue(line, '=', yytext); }
-"<"                     { return setValue(line, '<', yytext); }
-">"                     { return setValue(line, '>', yytext); }
-"+"                     { return setValue(line, '+', yytext); }
-"-"                     { return setValue(line, '-', yytext); }
-"_"                     { return setValue(line, UNDEFINED, yytext); }
-"*"                     { return setValue(line, '*', yytext); }
-"/"                     { return setValue(line, '/', yytext); }
-"%"                     { return setValue(line, '%', yytext); }
-"?"                     { return setValue(line, '?', yytext); }
-"+="                    { return setValue(line, ADDASS, yytext); }
-"-="                    { return setValue(line, SUBASS, yytext); }
-"/="                    { return setValue(line, DIVASS, yytext); }
-"*="                    { return setValue(line, MULASS, yytext); }
-"<="                    { return setValue(line, LEQ, yytext); }
-">="                    { return setValue(line, GEQ, yytext); }
-"!="                    { return setValue(line, NEQ, yytext); }
-"=="                    { return setValue(line, EQ, yytext); }
-"--"                    { return setValue(line, DEC, yytext); }
-"++"                    { return setValue(line, INC, yytext); }                 
-'\\.'                   { return setValue(line, CHARCONST, yytext); }
-'[^\n\']'               { return setValue(line, CHARCONST, yytext); }
-"\""(\\.|[^\\"\n])*"\""  { return setValue(line, STRINGCONST, yytext); }
-[ \t]                   ;  // white space
-"//".*                  ;  //comments
-\n                      { line++; }
+"int"                       { return setValue(line, INT, yytext); }
+"bool"                      { return setValue(line, BOOL, yytext); }
+"true"                      { return setValue(line, BOOLCONST, yytext); }
+"and"                       { return setValue(line, AND, yytext); }
+"or"                        { return setValue(line, OR, yytext); }
+"not"                       { return setValue(line, NOT, yytext); }
+"if"                        { return setValue(line, IF, yytext); }
+"then"                      { return setValue(line, THEN, yytext); }
+"to"                        { return setValue(line, TO, yytext); }
+"by"                        { return setValue(line, BY, yytext); }
+"elsif"                     { return setValue(line, ID, yytext); }
+"else"                      { return setValue(line, ELSE, yytext); }
+"while"                     { return setValue(line, WHILE, yytext); }
+"for"                       { return setValue(line, FOR, yytext); }
+"do"                        { return setValue(line, DO, yytext); }
+"break"                     { return setValue(line, BREAK, yytext); }
+"loop"                      { return setValue(line, ID, yytext); }
+".."                        { return setValue(line, RANGE, yytext); }
+"forever"                   { return setValue(line, ID, yytext); }
+"static"                    { return setValue(line, STATIC, yytext); }
+"return"                    { return setValue(line, RETURN, yytext); }
+"char"                      { return setValue(line, CHAR, yytext); }
+[0-9]+                      { return setValue(line, NUMCONST, yytext); }
+":<:"                       { return setValue(line, MIN, yytext); }
+":>:"                       { return setValue(line, MAX, yytext); }
+"false"                     { return setValue(line, BOOLCONST, yytext); }
+[a-zA-Z]+[a-zA-Z0-9]*       { return setValue(line, ID, yytext); }
+";"                         { return setValue(line, ';', yytext); }
+":"                         { return setValue(line, ':', yytext); }
+","                         { return setValue(line, ',', yytext); }
+"["                         { return setValue(line, '[', yytext); }
+"]"                         { return setValue(line, ']', yytext); }
+"("                         { return setValue(line, '(', yytext); }
+")"                         { return setValue(line, ')', yytext); }
+"{"                         { return setValue(line, '{', yytext); }
+"}"                         { return setValue(line, '}', yytext); }
+"="                         { return setValue(line, '=', yytext); }
+"<"                         { return setValue(line, '<', yytext); }
+">"                         { return setValue(line, '>', yytext); }
+"+"                         { return setValue(line, '+', yytext); }
+"-"                         { return setValue(line, '-', yytext); }
+"_"                         { return setValue(line, UNDEFINED, yytext); }
+"*"                         { return setValue(line, '*', yytext); }
+"/"                         { return setValue(line, '/', yytext); }
+"%"                         { return setValue(line, '%', yytext); }
+"?"                         { return setValue(line, '?', yytext); }
+"+="                        { return setValue(line, ADDASS, yytext); }
+"-="                        { return setValue(line, SUBASS, yytext); }
+"/="                        { return setValue(line, DIVASS, yytext); }
+"*="                        { return setValue(line, MULASS, yytext); }
+"<="                        { return setValue(line, LEQ, yytext); }
+">="                        { return setValue(line, GEQ, yytext); }
+"!="                        { return setValue(line, NEQ, yytext); }
+"=="                        { return setValue(line, EQ, yytext); }
+"--"                        { return setValue(line, DEC, yytext); }
+"++"                        { return setValue(line, INC, yytext); }                 
+'\\.'                       { return setValue(line, CHARCONST, yytext); }
+'[^\n\']'                   { return setValue(line, CHARCONST, yytext); }
+"\""(\\.|[^\\"\n])*"\""     { return setValue(line, STRINGCONST, yytext); }
+[ \t]                       ;  // white space
+"//".*                      ;  //comments
+\n                          { line++; }
 
-.                       { return setValue(line, UNDEFINED, yytext); }
+[ \" ]                      { printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++; }
+.                           { printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++; }
 %%
 
