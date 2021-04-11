@@ -43,30 +43,30 @@ extern int yylineno;
 
 %%
 program
-    : declList  { savedTree = $1; }
+    : declList                                      { savedTree = $1; }
     ;
 
 declList
-    : declList decl             { $$ = addSibling($1, $2); } 
-    | decl                      { $$ = $1; }
+    : declList decl                                 { $$ = addSibling($1, $2); } 
+    | decl                                          { $$ = $1; }
     ;
 
 decl
-    : varDeclaration            { $$ = $1; } 
-    | funDeclaration            { $$ = $1; } 
-    | error                     { $$ = NULL; }
+    : varDeclaration                                { $$ = $1; } 
+    | funDeclaration                                { $$ = $1; } 
+    | error                                         { $$ = NULL; }
     ;
 
 varDeclaration
-    : typeSpecifier varDeclList ';'     { setType($2, $1->expType, false); $$ = $2; yyerrok; } 
-    | error varDeclList ';'             { $$ = NULL; yyerrok; } 
-    | typeSpecifier error ';'           { $$ = NULL; yyerrok; yyerrok; }
+    : typeSpecifier varDeclList ';'                 { setType($2, $1->expType, false); $$ = $2; yyerrok; } 
+    | error varDeclList ';'                         { $$ = NULL; yyerrok; } 
+    | typeSpecifier error ';'                       { $$ = NULL; yyerrok; yyerrok; }
     ;
 
 typeSpecifier
-    : INT           { $$ = newExpNode(InitK, Integer, $1); } 
-    | BOOL          { $$ = newExpNode(InitK, Boolean, $1); } 
-    | CHAR          { $$ = newExpNode(InitK, Char, $1); }
+    : INT                                           { $$ = newExpNode(InitK, Integer, $1); } 
+    | BOOL                                          { $$ = newExpNode(InitK, Boolean, $1); } 
+    | CHAR                                          { $$ = newExpNode(InitK, Char, $1); }
     ;
 
 varDeclList
@@ -174,18 +174,18 @@ paramId
     ;
 
 statement
+    : matched                                 { $$ = $1; }
+    | unmatched                               { $$ = $1; }
+    ;
+
+matched
     : expressionStmt                          { $$ = $1; } 
     | compoundStmt                            { $$ = $1; } 
     | selectStmt                              { $$ = $1; } 
     | iterStmt                                { $$ = $1; } 
     | returnStmt                              { $$ = $1; } 
     | breakStmt                               { $$ = $1; }
-    | matched                                 { $$ = $1; }
-    | unmatched                               { $$ = $1; }
-    ;
-
-matched 
-    : IF error                                { $$ = NULL; }
+    | IF error                                { $$ = NULL; }
     | IF error ELSE matched                   { $$ = NULL; yyerrok; }
     | IF error THEN matched ELSE matched      { $$ = NULL; yyerrok; }
     | WHILE error DO matched                  { $$ = NULL; yyerrok; }
@@ -194,9 +194,9 @@ matched
     | FOR error                               { $$ = NULL; }
     ;
 
-unmatched    
-    : IF error THEN statement                       { $$ = NULL; yyerrok; }
-    | IF error THEN matched ELSE unmatched          { $$ = NULL; yyerrok; }
+unmatched 
+    : IF error THEN statement                           { $$ = NULL; yyerrok; }
+    | IF error THEN matched ELSE unmatched              { $$ = NULL; yyerrok; }
     ;
 
 compoundStmt
@@ -252,8 +252,8 @@ statementList
     ;
 
 expressionStmt
-    : expression ';'        { $$ = $1; yyerrok; }
-    | ';'                   { $$ = NULL; yyerrok; }
+    : expression ';'        { $$ = $1; }
+    | ';'                   { $$ = NULL; }
     | error ';'             { $$ = NULL; yyerrok; }
     ;
 
@@ -266,19 +266,16 @@ expression
     | mutable MULASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
     | mutable DIVASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
     | simpleExpression              { $$ = $1; }
-    | error '=' error               { $$ = NULL; }
-    | mutable ADDASS error            { $$ = NULL; }
-    | mutable SUBASS error            { $$ = NULL; }
-    | mutable MULASS error            { $$ = NULL; }
-    | mutable DIVASS error            { $$ = NULL; }
-    | error ADDASS expression            { $$ = NULL; }
-    | error SUBASS expression            { $$ = NULL; }
-    | error MULASS expression            { $$ = NULL; }
-    | error DIVASS expression            { $$ = NULL; }
-    | error ADDASS error            { $$ = NULL; }
-    | error SUBASS error            { $$ = NULL; }
-    | error MULASS error            { $$ = NULL; }
-    | error DIVASS error            { $$ = NULL; }
+    | mutable '=' error             { $$ = NULL; }
+    | mutable ADDASS error          { $$ = NULL; }
+    | mutable SUBASS error          { $$ = NULL; }
+    | mutable MULASS error          { $$ = NULL; }
+    | mutable DIVASS error          { $$ = NULL; }
+    | error "=" expression          { $$ = NULL; yyerrok; }
+    | error ADDASS expression       { $$ = NULL; yyerrok; }
+    | error SUBASS expression       { $$ = NULL; yyerrok; }
+    | error MULASS expression       { $$ = NULL; yyerrok; }
+    | error DIVASS expression       { $$ = NULL; yyerrok; }
     | error INC                     { $$ = NULL; yyerrok; }
     | error DEC                     { $$ = NULL; yyerrok; }
     ;
@@ -330,18 +327,17 @@ minmaxExp:
     } |
     sumExpression { $$ = $1; };
 
-sumExpression:
-    sumExpression sumop mulExpression   { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
+sumExpression
+    : sumExpression sumop mulExpression   { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
     | mulExpression                     { $$ = $1; } 
     | sumExpression sumop error         { $$ = NULL; }
     ;
 
-mulExpression: 
-    mulExpression mulop unaryExpression     { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
+mulExpression
+    : mulExpression mulop unaryExpression     { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
     | unaryExpression                       { $$ = $1; }
     | mulExpression mulop error             { $$ = NULL; }
     ;
-
 
 minmaxop:
     MAX { $$ = newExpNode(OpK, UndefinedType, $1); } |
@@ -425,7 +421,7 @@ argList
 constant    
     : NUMCONST          { $$ = newExpNode(ConstantK, Integer, $1); } 
     | BOOLCONST         { $$ = newExpNode(ConstantK, Boolean, $1); } 
-    |CHARCONST          { $$ = newExpNode(ConstantK, Char, $1); } 
+    | CHARCONST         { $$ = newExpNode(ConstantK, Char, $1); } 
     | STRINGCONST 
     {
                         $$ = newExpNode(ConstantK, Char, $1);
