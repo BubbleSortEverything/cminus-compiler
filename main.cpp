@@ -632,6 +632,7 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                     } if ((std::string)tokenString=="chsign") {
                         TreeNode* copyNode = newExpNode(ConstantK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
                         copyNode->changedToInt = true;
+                        copyNode->isArray = false;
                         return copyNode;
                     }
                 } 
