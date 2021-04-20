@@ -1,5 +1,7 @@
 #include "util.h"
 
+const char* varKindStr[] = {"None", "Local", "Global", "Parameter", "LocalStatic"};
+
 /*	Declarations
  */
 TreeNode *newDeclNode(DeclKind kind, ExpType type,
@@ -139,16 +141,22 @@ void printTree(TreeNode *node, string childIndent, int nSibling){
 
 string declString(TreeNode *node) {
 	string str = "";
-	string arr = node->isArray ? " is array" : "";
+    string staticdecl = node->isStatic ? "static " : "";
+	string arr = node->isArray ? " of " + staticdecl + "array" : "";
+
+    string mem = getMemoryInfo(node);
+    string varStatic = "";
+
 	switch(node->subkind.decl) {
 		case VarK:
-			str = "Var: " + string(node->token->tokenstr) + arr + " of type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
+            if (node->isStatic and !node->isArray) { varStatic = " static"; }
+			str = " Var: " + string(node->token->tokenstr) + arr + " of" + varStatic + " type " + typeString(node->expType) + " " + mem + " [line: " + to_string(node->lineno) + "]";
             break;
         case FuncK:
-			str = "Func: " + string(node->token->tokenstr) + " returns type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
+			str = " Func: " + string(node->token->tokenstr) + " returns type " + typeString(node->expType) + " " + mem + " [line: " + to_string(node->lineno) + "]";
 			break;
 		case ParamK:
-			str = "Parm: " + string(node->token->tokenstr) + arr + " of type " + typeString(node->expType) + " [line: " + to_string(node->lineno) + "]";
+			str = " Parm: " + string(node->token->tokenstr) + arr + " of type " + typeString(node->expType) +" " + mem + " [line: " + to_string(node->lineno) + "]";
 			break;
 	}
 	return str;
@@ -160,27 +168,34 @@ string expString(TreeNode *node) {
         typeStr = node ? " of type " + typeString(node->expType) : "";
     }
 
-	string str = "", type = "", tStr = "";
-	string arr = node->isArray ? " is array " : "";
+    string constMem = "";
+    string mem = getMemoryInfo(node);
+
+	string str = "", type = "", tStr = "", assignArr = "";
+    string staticdecl = node->isStatic ? "static " : "";
+	string arr = node->isArray ? " of " + staticdecl + "array" : "";
 	switch(node->subkind.exp) {
 		case ConstantK:
 			type = typeString(node->expType);
 			tStr = constValue(node->expType, node);
-			str = "Const " + arr + tStr + typeStr + " " + " [line: " + to_string(node->lineno) + "]";
+            if (node->isArray) constMem = getMemoryInfo(node) + " ";
+			str = " Const " + tStr + arr + typeStr + " " + constMem + "[line: " + to_string(node->lineno) + "]";
             break;
         case OpK:
-        	str = "Op: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
+        	str = " Op: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case IdK:
-        	str = "Id: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
+        	str = " Id: " + string(node->token->tokenstr) + arr + typeStr + " " + mem + " [line: " + to_string(node->lineno) + "]";
         	break;
         case CallK:
-        	str = "Call: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
+        	str = " Call: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
         case AssignK:
-        	str = "Assign: " + string(node->token->tokenstr) + typeStr + " [line: " + to_string(node->lineno) + "]";
+            assignArr = (node->isArray) ? arr : "";
+        	str = " Assign: " + string(node->token->tokenstr) + assignArr + typeStr + " [line: " + to_string(node->lineno) + "]";
         	break;
 	}
+
 	return str;
 }
 
@@ -197,34 +212,38 @@ string constValue(ExpType type, TreeNode* node) {
 		default:
 			str = string(node->token->tokenstr);
 	}
+
 	return str;
 }
 
 string stmtString(TreeNode *node) {
+    string mem = getMemoryInfo(node);
+
 	string str = "";
 	switch(node->subkind.stmt) {
 		case CompoundK:
-			str = "Compound [line: " + to_string(node->lineno) + "]";
+			str = " Compound " + mem + " [line: " + to_string(node->lineno) + "]";
 			break;
 		case IfK:
-			str = "If [line: " + to_string(node->lineno) + "]";
+			str = " If [line: " + to_string(node->lineno) + "]";
 			break;
 		case WhileK:
-			str = "While [line: " + to_string(node->lineno) + "]";
+			str = " While [line: " + to_string(node->lineno) + "]";
 			break;
 		case ForK:
-			str = "For [line: " + to_string(node->lineno) + "]";
+			str = " For " + mem + " [line: " + to_string(node->lineno) + "]";
 			break;
 		case RangeK:
-			str = "Range [line: " + to_string(node->lineno) + "]";
+			str = " Range [line: " + to_string(node->lineno) + "]";
 			break;
 		case ReturnK:
-			str = "Return [line: " + to_string(node->lineno) + "]";
+			str = " Return [line: " + to_string(node->lineno) + "]";
 			break;
 		case BreakK:
-			str = "Break [line: " + to_string(node->lineno) + "]";
+			str = " Break [line: " + to_string(node->lineno) + "]";
 			break;
 	}
+
 	return str;
 }
 
@@ -244,5 +263,44 @@ string typeString(ExpType type) {
 			str = "char";
 			break;
 	}
+
 	return str;
+}
+
+string varKind(VarKind varKind) {
+    string str = "";
+
+    switch(varKind) {
+        case None:
+            str = "None";
+            break;
+        case Local:
+            str = "Local";
+            break;
+        case Global:
+            str = "Global";
+            break;
+        case Parameter:
+            str = "Parameter";
+            break;
+        case LocalStatic:
+            str = "LocalStatic";
+            break;
+        default:
+            cout << "something went wrong on VarKind" << endl;
+            break;
+    }
+
+    return str;
+}
+
+string getMemoryInfo(TreeNode* node) {
+    string locInfo = to_string(node->memOffset);
+    string memInfo = "";
+    string memSize = to_string(node->memSize);
+    if (memFlag) {
+        memInfo = "[mem: " + varKind(node->varKind) + " loc: " + locInfo + " size: " + memSize + "]";
+    }
+
+    return memInfo;
 }

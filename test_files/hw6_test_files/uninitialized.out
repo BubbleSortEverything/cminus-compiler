@@ -1,0 +1,84 @@
+====================================
+FILE: uninitialized.c-
+WARNING(11): Variable 'y' may be uninitialized when used here.
+WARNING(13): Variable 'a' may be uninitialized when used here.
+WARNING(13): Variable 'v' may be uninitialized when used here.
+WARNING(16): Variable 'r' may be uninitialized when used here.
+WARNING(3): Expecting to return type int but function 'dwarfStar173' has no return statement.
+WARNING(5): The variable 'x' seems not to be used.
+WARNING(27): The variable 'a' seems not to be used.
+WARNING(27): The variable 'b' seems not to be used.
+WARNING(27): The variable 'c' seems not to be used.
+WARNING(27): The variable 'd' seems not to be used.
+WARNING(26): The variable 'mexilcan404' seems not to be used.
+Var: g of type int [mem: Global loc: 0 size: 1] [line: 1]
+Sibling: 1  Func: dwarfStar173 returns type int [mem: Global loc: 0 size: -3] [line: 3]
+.   Child: 0  Parm: h of type int [mem: Parameter loc: -2 size: 1] [line: 3]
+.   Child: 1  Compound [mem: None loc: 0 size: -23] [line: 3]
+.   .   Child: 0  Var: s of static type int [mem: LocalStatic loc: -1 size: 1] [line: 4]
+.   .   Sibling: 1  Var: v of type int [mem: Local loc: -3 size: 1] [line: 5]
+.   .   Sibling: 2  Var: w of type int [mem: Local loc: -4 size: 1] [line: 5]
+.   .   Sibling: 3  Var: x of type int [mem: Local loc: -5 size: 1] [line: 5]
+.   .   Sibling: 4  Var: y of type int [mem: Local loc: -6 size: 1] [line: 5]
+.   .   Sibling: 5  Var: z of type int [mem: Local loc: -7 size: 1] [line: 5]
+.   .   Sibling: 6  Var: p of type int [mem: Local loc: -8 size: 1] [line: 6]
+.   .   Sibling: 7  Var: q of type int [mem: Local loc: -9 size: 1] [line: 6]
+.   .   Sibling: 8  Var: r of type int [mem: Local loc: -10 size: 1] [line: 6]
+.   .   Sibling: 9  Var: a of array of type int [mem: Local loc: -12 size: 11] [line: 7]
+.   .   Sibling: 10  Var: t of type int [mem: Local loc: -22 size: 1] [line: 8]
+.   .   .   Child: 0  Const 1000 of type int [line: 8]
+.   .   Child: 1  Assign: = of type int [line: 10]
+.   .   .   Child: 0  Id: z of type int [mem: Local loc: -7 size: 1] [line: 10]
+.   .   .   Child: 1  Const 4 of type int [line: 10]
+.   .   Sibling: 1  Assign: = of type int [line: 11]
+.   .   .   Child: 0  Id: z of type int [mem: Local loc: -7 size: 1] [line: 11]
+.   .   .   Child: 1  Op: * of type int [line: 11]
+.   .   .   .   Child: 0  Id: y of type int [mem: Local loc: -6 size: 1] [line: 11]
+.   .   .   .   Child: 1  Id: y of type int [mem: Local loc: -6 size: 1] [line: 11]
+.   .   Sibling: 2  Id: y of type int [mem: Local loc: -6 size: 1] [line: 12]
+.   .   Sibling: 3  Op: [ of type int [line: 13]
+.   .   .   Child: 0  Id: a of array of type int [mem: Local loc: -12 size: 11] [line: 13]
+.   .   .   Child: 1  Id: v of type int [mem: Local loc: -3 size: 1] [line: 13]
+.   .   Sibling: 4  Assign: = of type int [line: 14]
+.   .   .   Child: 0  Id: v of type int [mem: Local loc: -3 size: 1] [line: 14]
+.   .   .   Child: 1  Op: + of type int [line: 14]
+.   .   .   .   Child: 0  Id: v of type int [mem: Local loc: -3 size: 1] [line: 14]
+.   .   .   .   Child: 1  Const 1 of type int [line: 14]
+.   .   Sibling: 5  Assign: = of type int [line: 15]
+.   .   .   Child: 0  Id: w of type int [mem: Local loc: -4 size: 1] [line: 15]
+.   .   .   Child: 1  Assign: = of type int [line: 15]
+.   .   .   .   Child: 0  Id: z of type int [mem: Local loc: -7 size: 1] [line: 15]
+.   .   .   .   Child: 1  Id: y of type int [mem: Local loc: -6 size: 1] [line: 15]
+.   .   Sibling: 6  Assign: = of type int [line: 16]
+.   .   .   Child: 0  Id: p of type int [mem: Local loc: -8 size: 1] [line: 16]
+.   .   .   Child: 1  Assign: = of type int [line: 16]
+.   .   .   .   Child: 0  Id: q of type int [mem: Local loc: -9 size: 1] [line: 16]
+.   .   .   .   Child: 1  Id: r of type int [mem: Local loc: -10 size: 1] [line: 16]
+.   .   Sibling: 7  Id: y of type int [mem: Local loc: -6 size: 1] [line: 17]
+.   .   Sibling: 8  Id: v of type int [mem: Local loc: -3 size: 1] [line: 18]
+.   .   Sibling: 9  Id: h of type int [mem: Parameter loc: -2 size: 1] [line: 19]
+.   .   Sibling: 10  Id: g of type int [mem: Global loc: 0 size: 1] [line: 20]
+.   .   Sibling: 11  Id: s of static type int [mem: LocalStatic loc: -1 size: 1] [line: 21]
+.   .   Sibling: 12  Id: t of type int [mem: Local loc: -22 size: 1] [line: 22]
+Sibling: 2  Func: main returns type void [mem: Global loc: 0 size: -2] [line: 25]
+.   Child: 1  Compound [mem: None loc: 0 size: -107] [line: 25]
+.   .   Child: 0  Var: mexilcan404 of array of type bool [mem: Local loc: -3 size: 101] [line: 26]
+.   .   Sibling: 1  Var: a of type int [mem: Local loc: -103 size: 1] [line: 27]
+.   .   Sibling: 2  Var: b of type int [mem: Local loc: -104 size: 1] [line: 27]
+.   .   Sibling: 3  Var: c of type int [mem: Local loc: -105 size: 1] [line: 27]
+.   .   Sibling: 4  Var: d of type int [mem: Local loc: -106 size: 1] [line: 27]
+.   .   Child: 1  Call: dwarfStar173 of type int [line: 29]
+.   .   .   Child: 0  Op: + of type int [line: 29]
+.   .   .   .   Child: 0  Op: + of type int [line: 29]
+.   .   .   .   .   Child: 0  Op: + of type int [line: 29]
+.   .   .   .   .   .   Child: 0  Op: + of type int [line: 29]
+.   .   .   .   .   .   .   Child: 0  Op: + of type int [line: 29]
+.   .   .   .   .   .   .   .   Child: 0  Const 1 of type int [line: 29]
+.   .   .   .   .   .   .   .   Child: 1  Const 2 of type int [line: 29]
+.   .   .   .   .   .   .   Child: 1  Const 3 of type int [line: 29]
+.   .   .   .   .   .   Child: 1  Const 4 of type int [line: 29]
+.   .   .   .   .   Child: 1  Const 5 of type int [line: 29]
+.   .   .   .   Child: 1  Const 6 of type int [line: 29]
+Offset for end of global space: -2
+Number of warnings: 11
+Number of errors: 0

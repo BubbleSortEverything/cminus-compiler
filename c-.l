@@ -18,8 +18,7 @@ char *lastToken=(char *)"";
 static int line=1;
 int numErrors = 0;
 
-static int setValue(int linenum, int tokenClass, char *svalue)
-{
+static int setValue(int linenum, int tokenClass, char *svalue) {
     //printf("got to funct %d\n", tokenClass);
     // create and handle default data storage
     lastToken = svalue;
@@ -39,86 +38,72 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         else{
             yylval.tokenData->numValue = 0;
         }
-
         break;
 
      case NUMCONST:
-        
         yylval.tokenData->numValue = atoi(svalue);
-
         break;
 
      case CHARCONST:
-
-        if (svalue[1] == '\\'){
-
-                if (svalue[2] == 'n'){
-			char *temp = new char('\n');
-			yylval.tokenData->strValue = temp;
-                }
-                else if (svalue[2] == '0'){
-			char *temp = new char('\0');
-			yylval.tokenData->strValue = temp;
-                }
-                else{
-			char *temp = new char(svalue[2]);
-			yylval.tokenData->strValue = temp;
-                }
-
+        if (svalue[1] == '\\') {
+            if (svalue[2] == 'n') {
+    			char *temp = new char('\n');
+    			yylval.tokenData->strValue = temp;
+            }
+            else if (svalue[2] == '0') {
+    			char *temp = new char('\0');
+    			yylval.tokenData->strValue = temp;
+            }
+            else {
+            	char *temp = new char(svalue[2]);
+            	yylval.tokenData->strValue = temp;
+            }
         }
-
-        else{
-		char *temp = new char(svalue[1]);
-		yylval.tokenData->strValue = temp;
+        else {
+    		char *temp = new char(svalue[1]);
+    		yylval.tokenData->strValue = temp;
         }
-      
         break;
 
 
      case STRINGCONST:
-          //printf("got str\n");
-          int input_length = strlen(svalue);
-          //printf("str length: %d\n", input_length);
+        int input_length = strlen(svalue);
+        char *temp = new char;
+        int temp_len = 0;
 
-	  char *temp = new char;
-	  int temp_len = 0;
+        for (int i = 1; i < input_length - 1; i++){
+            if (svalue[i] != '\\') {
+            	temp[temp_len] = svalue[i];
+            	temp_len++;
+            }
+            else {
+            	if (svalue[i + 1] == 'n'){
+            		temp[temp_len] = '\n';
+            		i++;
+            		temp_len++;
+            	}
+            	else if (svalue[i + 1] == '0'){
+            		temp[temp_len] = '\0';
+            		i++;
+            		temp_len++;
+            	}
+            	else if (svalue[i + 1] == '\\'){
+            		temp[temp_len] = '\\';
+            		i++;
+            		temp_len++;
+            	}
+                            else{
+            	        temp[temp_len] = svalue[i + 1];
+            		temp_len++;
+            		i++;
+            	}
 
-	  for (int i = 1; i < input_length - 1; i++){
-		if (svalue[i] != '\\'){
-			temp[temp_len] = svalue[i];
-			temp_len++;
-		}
-		else{
+            }
+        }
 
-		
-			if (svalue[i + 1] == 'n'){
-				temp[temp_len] = '\n';
-				i++;
-				temp_len++;
-			}
-			else if (svalue[i + 1] == '0'){
-				temp[temp_len] = '\0';
-				i++;
-				temp_len++;
-			}
-			else if (svalue[i + 1] == '\\'){
-				temp[temp_len] = '\\';
-				i++;
-				temp_len++;
-			}
-                        else{
-			        temp[temp_len] = svalue[i + 1];
-				temp_len++;
-				i++;
-			}
-		
-		}
-	   }
-
-	   yylval.tokenData->strValue = temp;
-	   break;
-		
-    
+        yylval.tokenData->strValue = temp;
+        yylval.tokenData->numValue = strlen(temp);
+        break;
     }
 
     // return token class

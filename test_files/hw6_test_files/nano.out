@@ -1,0 +1,6 @@
+====================================
+FILE: nano.c-
+ERROR(3): Too many parameters passed for function 'dog' declared on line 1.
+WARNING(1): The parameter 'x' seems not to be used.
+Number of warnings: 1
+Number of errors: 1

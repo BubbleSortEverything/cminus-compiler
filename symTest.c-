@@ -1,48 +1,25 @@
-int vardecl;
-char chardecl:'r';
+int g;                  // loc G 0
+char h[10]:"dogs";      // loc G -2
 
-char var:vardecl;
-
-int initarr[3];
-int initarr2[3]: 3;
-
-elk(int asp[]; bool bull[]; char crow[]);
-nonArray(int xint; int yint);
-
-int noret(int xparam, yparam);
-
-int ret() return 'c';
-yesreturn (int p1; char p2) return var;
-bool hasReturn(bool b1; bool b2);
-
-int paramusecheck2(int xp; char yp) {
-    int some: 5;
-    int kind: 5;
-    return xp;
+beachDay(int p, q[])  // loc L -2, -3
+{
+    int a:17;         // loc L -4
+    bool b[10];       // loc L -6
+    static int s;     // loc G -12
+    static int t[10]; // loc G -14
+    static char u[10]:"corgi";  // loc 0G -25
+    int z;            // loc L -16
+    a;
+    b;
+    s;
+    t;
+    u;
+    666;
+    'x';
+    "purple";
+    true;
 }
 
-int paramusecheck(int xp1; char yp2) {
-    int some: 5;
-    int kind: 5;
-    return xp;
+int main() {
+
 }
-
-int main(int notparam) {
-    int initK:'c';
-    char initChar:initK;
-    int milchar:2*4*5;
-    char arr[4], xt, yt;
-    int iarr[3], nt, mt;
-    bool b;
-    bool bb[5];
-    b = true;
-    for x = arr[1] to arr[1] by arr do 22*4;
-
-    if iarr then 5*5;
-
-    elk(arr, bb, 'c');
-    nonArray(iarr);
-
-    break;
-}
-

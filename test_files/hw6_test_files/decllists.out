@@ -1,0 +1,60 @@
+====================================
+FILE: decllists.c-
+WARNING(5): Expecting to return type int but function 'fred' has no return statement.
+WARNING(5): The parameter 'a' seems not to be used.
+WARNING(7): The variable 'aa' seems not to be used.
+WARNING(5): The parameter 'b' seems not to be used.
+WARNING(7): The variable 'bb' seems not to be used.
+WARNING(5): The parameter 'c' seems not to be used.
+WARNING(7): The variable 'cc' seems not to be used.
+WARNING(5): The parameter 'd' seems not to be used.
+WARNING(7): The variable 'dd' seems not to be used.
+WARNING(5): The parameter 'e' seems not to be used.
+WARNING(7): The variable 'ee' seems not to be used.
+WARNING(5): The parameter 'f' seems not to be used.
+WARNING(7): The variable 'ff' seems not to be used.
+WARNING(5): The parameter 'g' seems not to be used.
+WARNING(7): The variable 'gg' seems not to be used.
+WARNING(5): The parameter 'h' seems not to be used.
+WARNING(7): The variable 'hh' seems not to be used.
+WARNING(5): The parameter 'i' seems not to be used.
+WARNING(7): The variable 'ii' seems not to be used.
+WARNING(5): The parameter 'j' seems not to be used.
+WARNING(5): The parameter 'k' seems not to be used.
+WARNING(5): The parameter 'l' seems not to be used.
+WARNING(5): The parameter 'm' seems not to be used.
+WARNING(5): The function 'fred' seems not to be used.
+WARNING(1): The variable 'x' seems not to be used.
+WARNING(1): The variable 'y' seems not to be used.
+WARNING(1): The variable 'z' seems not to be used.
+Var: x of type int [mem: Global loc: 0 size: 1] [line: 1]
+Sibling: 1  Var: y of type int [mem: Global loc: -1 size: 1] [line: 1]
+Sibling: 2  Var: z of type int [mem: Global loc: -2 size: 1] [line: 1]
+Sibling: 3  Func: main returns type void [mem: Global loc: 0 size: -2] [line: 3]
+Sibling: 4  Func: fred returns type int [mem: Global loc: 0 size: -15] [line: 5]
+.   Child: 0  Parm: a of type int [mem: Parameter loc: -2 size: 1] [line: 5]
+.   Sibling: 1  Parm: b of type int [mem: Parameter loc: -3 size: 1] [line: 5]
+.   Sibling: 2  Parm: c of type int [mem: Parameter loc: -4 size: 1] [line: 5]
+.   Sibling: 3  Parm: d of type int [mem: Parameter loc: -5 size: 1] [line: 5]
+.   Sibling: 4  Parm: e of type int [mem: Parameter loc: -6 size: 1] [line: 5]
+.   Sibling: 5  Parm: f of type char [mem: Parameter loc: -7 size: 1] [line: 5]
+.   Sibling: 6  Parm: g of type char [mem: Parameter loc: -8 size: 1] [line: 5]
+.   Sibling: 7  Parm: h of type char [mem: Parameter loc: -9 size: 1] [line: 5]
+.   Sibling: 8  Parm: i of type char [mem: Parameter loc: -10 size: 1] [line: 5]
+.   Sibling: 9  Parm: j of type bool [mem: Parameter loc: -11 size: 1] [line: 5]
+.   Sibling: 10  Parm: k of type bool [mem: Parameter loc: -12 size: 1] [line: 5]
+.   Sibling: 11  Parm: l of array of type int [mem: Parameter loc: -13 size: 1] [line: 5]
+.   Sibling: 12  Parm: m of array of type int [mem: Parameter loc: -14 size: 1] [line: 5]
+.   Child: 1  Compound [mem: None loc: 0 size: -24] [line: 6]
+.   .   Child: 0  Var: ii of type int [mem: Local loc: -15 size: 1] [line: 7]
+.   .   Sibling: 1  Var: hh of type int [mem: Local loc: -16 size: 1] [line: 7]
+.   .   Sibling: 2  Var: gg of type int [mem: Local loc: -17 size: 1] [line: 7]
+.   .   Sibling: 3  Var: ff of type int [mem: Local loc: -18 size: 1] [line: 7]
+.   .   Sibling: 4  Var: ee of type int [mem: Local loc: -19 size: 1] [line: 7]
+.   .   Sibling: 5  Var: dd of type int [mem: Local loc: -20 size: 1] [line: 7]
+.   .   Sibling: 6  Var: cc of type int [mem: Local loc: -21 size: 1] [line: 7]
+.   .   Sibling: 7  Var: bb of type int [mem: Local loc: -22 size: 1] [line: 7]
+.   .   Sibling: 8  Var: aa of type int [mem: Local loc: -23 size: 1] [line: 7]
+Offset for end of global space: -3
+Number of warnings: 27
+Number of errors: 0

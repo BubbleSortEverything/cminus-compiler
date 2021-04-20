@@ -93,6 +93,7 @@ varDeclId
                                         /***** prolly need to save NUMCONST in the node for future reference *****/
                                         $$ = newDeclNode(VarK, UndefinedType, $1);
                                         $$->isArray = true;
+                                        $$->attr.arrSize = $3->numValue;
     } 
     | ID '[' error                      { $$ = NULL; } 
     | error ']'                         { $$ = NULL; yyerrok; }
@@ -102,7 +103,7 @@ scopedVarDeclaration
     : scopedTypeSpecifier varDeclList 
     { 
         $$ = $2; 
-        setType($2, $1->expType, $1->isStatic); 
+        setType($2, $1->expType, $1->isStatic);
         yyerrok; 
     }
     | scopedTypeSpecifier error ';'         { $$ = NULL; yyerrok; }
@@ -131,8 +132,18 @@ scopedTypeSpecifier
     ;
 
 funDeclaration
-    : typeSpecifier ID '(' params ')' statement     { $$ = newDeclNode(FuncK, $1->expType, $2, $4, $6); } 
-    | ID '(' params ')' statement                   { $$ = newDeclNode(FuncK, Void, $1, $3, $5); } 
+    : typeSpecifier ID '(' params ')' statement     
+    { 
+                                                    $$ = newDeclNode(FuncK, $1->expType, $2, $4, $6); 
+                                                    $$->varKind = Global; 
+                                                    $$->memOffset = 0; 
+    } 
+    | ID '(' params ')' statement                   
+    { 
+                                                    $$ = newDeclNode(FuncK, Void, $1, $3, $5); 
+                                                    $$->varKind = Global; 
+                                                    $$->memOffset = 0; 
+    } 
     | typeSpecifier error                           { $$ = NULL; } 
     | typeSpecifier ID '(' error                    { $$ = NULL; }
     | typeSpecifier ID '(' params ')' error         { $$ = NULL; } 
@@ -165,11 +176,12 @@ paramIdList
     ;
 
 paramId
-    : ID                { $$ = newDeclNode(ParamK, UndefinedType, $1); } 
+    : ID                { $$ = newDeclNode(ParamK, UndefinedType, $1); $$->varKind = Parameter; } 
     | ID '[' ']' 
     { 
                         $$ = newDeclNode(ParamK, UndefinedType, $1); 
                         $$->isArray = true;
+                        $$->varKind = Parameter;
     }
     ;
 
@@ -200,7 +212,7 @@ unmatched
     ;
 
 compoundStmt
-    : '{' localDeclarations statementList '}'   { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok; }
+    : '{' localDeclarations statementList '}'   { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok; $$->varKind = None; }
     ;
 
 selectStmt
@@ -328,15 +340,15 @@ minmaxExp:
     sumExpression { $$ = $1; };
 
 sumExpression
-    : sumExpression sumop mulExpression   { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
-    | mulExpression                     { $$ = $1; } 
-    | sumExpression sumop error         { $$ = NULL; }
+    : sumExpression sumop mulExpression     { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
+    | mulExpression                         { $$ = $1; } 
+    | sumExpression sumop error             { $$ = NULL; }
     ;
 
 mulExpression
-    : mulExpression mulop unaryExpression     { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
-    | unaryExpression                       { $$ = $1; }
-    | mulExpression mulop error             { $$ = NULL; }
+    : mulExpression mulop unaryExpression       { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
+    | unaryExpression                           { $$ = $1; }
+    | mulExpression mulop error                 { $$ = NULL; }
     ;
 
 minmaxop:
@@ -426,6 +438,8 @@ constant
     {
                         $$ = newExpNode(ConstantK, Char, $1);
                         $$->isArray = true;
+                        $$->varKind = Global;
+                        $$->attr.arrSize = $$->token->numValue;
     }
     ;
 %%

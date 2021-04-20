@@ -12,19 +12,20 @@ void createIO();
 void useageMessage();
 void checkMainFuncParams();
 TreeNode* getType(TreeNode* node);
-void checkInitialization(TreeNode* syntaxTree);
+bool checkInitialization(TreeNode* syntaxTree);
+void setVarKind(SymbolTable st, TreeNode* node);
 void checkFuncParams(TreeNode* funcParam, TreeNode* callParam);
 void checkRangeScalars(TreeNode* parentNode, TreeNode* posNode, int pos);
 void checkBooleanCondition(TreeNode* parentNode, TreeNode* node, std::string stmtType);
 
 /*  Checking different types of operators
  */
+void checkUnusedFunc();
 bool isUnaryOp(std:: string opstr);
 bool isIntOperator(std::string str);
 bool isRelopOperator(std::string opstr);
 bool isBinaryOperator(std::string opstr);
 bool isAssignOperator(std::string opstr);
-void checkUnusedFunc();
 
 /*  Array handler
  */
@@ -36,12 +37,18 @@ void checkStmtKind(TreeNode* syntaxTree, bool functionDeclared);
 void printSymbolTable(TreeNode* savedTree, bool functionDeclared=false, bool isNewCompound=false);
 
 TreeNode* handleArray(TreeNode* node, bool isLHS);
-TreeNode* checkExpKind(TreeNode* syntaxTree, bool isLHS=false);
+TreeNode* checkExpKind(TreeNode* syntaxTree, bool isLHS=false, bool dontExecuteConst=false);
+
+extern int numErrors;
 
 /* Globals
  */
-extern int numErrors;
 int numWarnings = 0;
+int localOffset = 0, prevLocalOffset = 0;
+int globalOffset = 0, prevGlobalSize = 0;
+bool memoryOverflow = false;
+int compoundMemory = 0;
+bool memFlag = false;
 bool hasReturn = false;
 bool mainDefined = false;
 
@@ -61,13 +68,11 @@ int main(int argc, char* argv[]) {
     int c;
     extern char *optarg;
     extern int optind;
-    int pflg = 0;
-    int dflg = 0;
     bool printFlag, symFlag = false;
     int optCount = 1;
 
     initErrorProcessing();
-    while ((c = ourGetopt(argc, argv, (char *)"phdDP:")) != EOF) {
+    while ((c = ourGetopt(argc, argv, (char *)"phdDPM:")) != EOF) {
         switch (c) {
             case 'p':
                 printFlag = true;
@@ -85,6 +90,10 @@ int main(int argc, char* argv[]) {
             case 'P':
                 typeFlag = true;
                 break;
+            case 'M':
+                typeFlag = true;
+                memFlag = true;
+                break;
             default:
                 cout << "no option given" << endl;
                 break;
@@ -95,6 +104,7 @@ int main(int argc, char* argv[]) {
     if (argc > 1) {
         if ((yyin = fopen(argv[optCount], "r"))) {
             yyparse();
+
             if (printFlag) printTree(savedTree, "", 0);
             if (symFlag) symbolTable.debug(symFlag);
 
@@ -116,6 +126,8 @@ int main(int argc, char* argv[]) {
             }
 
             if (numErrors == 0) printTree(savedTree, "", 0);
+            if (prevGlobalSize != 0) { globalOffset += 1; }
+            if (numErrors == 0) printf("Offset for end of global space: %d\n", globalOffset-prevGlobalSize);
             printf("Number of warnings: %d\n", numWarnings);
             printf("Number of errors: %d\n", numErrors);
         }
@@ -131,6 +143,7 @@ int main(int argc, char* argv[]) {
             checkMainFuncParams();
 
             if (numErrors == 0) printTree(savedTree, "", 0);
+            printf("Offset for end of global space: %d\n", globalOffset);
             printf("Number of warnings: %d\n", numWarnings);
             printf("Number of errors: %d\n", numWarnings);
         }
@@ -231,18 +244,18 @@ void createIO() {
 
 bool checkSymbol(TreeNode* node, bool isNewCompound) {
     bool symExist = true;
-    char* tokenString = node->token->tokenstr;
     TreeNode* globalSym = NULL;
+    char* tokenString = node->token->tokenstr;
 
-    if (!isNewCompound) {
-        globalSym = (TreeNode* )symbolTable.lookupGlobal(tokenString);
-    }
+    if (!isNewCompound) globalSym = (TreeNode*) symbolTable.lookupGlobal(tokenString);
 
-    TreeNode* localSym = (TreeNode* )symbolTable.lookupLocal(tokenString);
+    TreeNode* localSym = (TreeNode*) symbolTable.lookupLocal(tokenString);
+
     if(localSym) {
         cout <<"ERROR("<<node->token->linenum<<"): Symbol '"<<tokenString<<"' is already declared at line "<<localSym->token->linenum<<"."<<endl;
         numErrors++;
-    } else {
+    } 
+    else {
         symExist = false;
     }
 
@@ -276,28 +289,35 @@ void printSymbolTable(TreeNode* syntaxTree, bool functionDeclared, bool isNewCom
 }
 
 void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
-    if(!syntaxTree) {
-        return;
-    }
+    if(!syntaxTree) return;
 
-    //  push all declarations to `symList` list
     bool newScope = false;
     bool symExists = checkSymbol(syntaxTree, isNewCompound);
 
-    TreeNode* initNode;
-    
+    /* set memory size
+     */
+    if (!symExists) { syntaxTree->memSize = (syntaxTree->isArray) ? (syntaxTree->attr.arrSize + 1) : 1; }
+
+    if (isNewCompound and !syntaxTree->isStatic) { compoundMemory -= (syntaxTree->memSize); }
+
+    TreeNode* initNode, *paramNode;
+
     switch(syntaxTree->subkind.decl) {
         case VarK:
             if (!symExists) {
                 symbolTable.insert(syntaxTree->token->tokenstr, syntaxTree);
                 symbolTable.addSymbolToCurrentScope(syntaxTree);
 
+                syntaxTree->varKind = (symbolTable.isGlobal()) ? Global : Local;
+                if (syntaxTree->isStatic) { syntaxTree->varKind = LocalStatic; }
+
                 /*  check if the variable has been correctly initialized
+                 *  if then, assign memory loc.
                  */
                 checkInitialization(syntaxTree);
-                if (symbolTable.currentScopeName() == "For Loop") {
-                    syntaxTree->isInitialized = true;
-                }
+
+                // variables declaration in for loop is always initialized
+                if (symbolTable.currentScopeName() == "For Loop") { syntaxTree->isInitialized = true; }
             }
             break;
 
@@ -322,7 +342,21 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
                 }
                 symbolTable.addSymbolToGlobalScope(syntaxTree);
                 hasReturn = false;
-                // printf("Func is: %s\n", syntaxTree->token->tokenstr);
+
+                /*  set funcSize depending on return type and number of params
+                 *   set memory offset for parameters
+                 */ 
+                paramNode = (syntaxTree->child[0] != NULL) ? syntaxTree->child[0] : NULL;
+                int paramOffSet = -1;
+                int funcSize = -2;
+                while (paramNode != NULL and paramNode->varKind == Parameter) {
+                    paramOffSet -= 1; 
+                    funcSize -= 1;
+                    paramNode->memOffset = paramOffSet;
+                    paramNode = paramNode->sibling;
+                }
+                localOffset = paramOffSet;
+                syntaxTree->memSize = funcSize;
             } 
             break;
 
@@ -347,8 +381,17 @@ void checkDeclKind(TreeNode* syntaxTree, bool isNewCompound) {
         if (syntaxTree->subkind.decl == FuncK) {
             if (!hasReturn and syntaxTree->expType != Void) {
                 printf("WARNING(%d): Expecting to return %s but function '%s' has no return statement.\n", syntaxTree->lineno, ExpTypeStr[syntaxTree->expType], syntaxTree->token->tokenstr);
-                numWarnings++;            }
+                numWarnings++;            
+            }
+            for (int i = 0; i < MAXCHILDREN; i++) {
+                if (syntaxTree->child[i] != NULL && syntaxTree->child[i]->subkind.stmt == CompoundK) {
+                    compoundMemory -= 2;
+                    syntaxTree->child[i]->memSize = compoundMemory;
+                    compoundMemory = 0;
+                }
+            }
         }
+
         // symbolTable.checkUnusedVariable();
         symbolTable.leave();
     }
@@ -373,9 +416,15 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
         case CompoundK:
             if (!functionDeclared) {
                 symbolTable.enter("Compound Statmenet");
-
                 scopeEntered = true;
                 isNewCompound = true;
+            }
+            else {
+                for (int i = 0; i < MAXCHILDREN; i++) {
+                    if (node->child[i] != NULL) {
+                        printSymbolTable(node->child[i], newScope, true);
+                    }
+                }
             }
             break;
 
@@ -487,11 +536,11 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
             break;
     }
 
-    for (int i = 0; i < MAXCHILDREN; i++){
+    for (int i = 0; i < MAXCHILDREN; i++){ 
         /*  Only search child if child is not null or current node is
          *  neither IfK, WhileK or ReturnK
          */
-        if (node->child[i] != NULL and (node->subkind.stmt != IfK and node->subkind.stmt != WhileK and node->subkind.stmt != ReturnK) ){
+        if (node->child[i] != NULL and (node->subkind.stmt != IfK and node->subkind.stmt != WhileK and node->subkind.stmt != ReturnK and node->subkind.stmt != CompoundK) ){
             printSymbolTable(node->child[i], newScope, isNewCompound);
         }
     }
@@ -505,7 +554,7 @@ void checkStmtKind(TreeNode* node, bool functionDeclared) {
 }
 
 
-TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
+TreeNode* checkExpKind(TreeNode* node, bool isLHS, bool dontExecuteConst) {
     if (!node) return NULL;
    
     if (node->subkind.stmt == IfK or node->subkind.stmt == WhileK) {
@@ -632,6 +681,7 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
                     } if ((std::string)tokenString=="chsign") {
                         TreeNode* copyNode = newExpNode(ConstantK, Integer, lhs->token);    // If valid 'sizeof' operator than return integer type node
                         copyNode->changedToInt = true;
+                        copyNode->isArray = false;
                         return copyNode;
                     }
                 } 
@@ -688,7 +738,22 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
 
             return lhs;
 
+        /*  CONSTANTS
+        */
         case ConstantK:
+            node->memSize = node->isArray ? (node->attr.arrSize + 1) : 1;
+
+            if (dontExecuteConst) {
+                node->isAlreadySeen = true;
+            }
+            else {
+                if (not node->isAlreadySeen and node->isArray) {
+                    globalOffset -= prevGlobalSize;
+                    node->memOffset = globalOffset;
+                    prevGlobalSize = node->memSize;
+                }
+            }
+            
             return node;
             break;
 
@@ -702,7 +767,6 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
 
             if(!symNode) {
                 if (strcmp(tokenString, "while") != 0 ) {
-                    // printf("here\n");
                     printf("ERROR(%d): Symbol '%s' is not declared.\n", node->token->linenum, tokenString);
                     numErrors++;
                 }
@@ -712,9 +776,16 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
             else if (symNode->subkind.decl == FuncK) {
                 printf("ERROR(%d): Cannot use function '%s' as a variable.\n", node->lineno, tokenString);
                 numErrors++;
-            }  
+            }
 
+            // assign variable properties to identifiers
+            node->memOffset  = symNode->memOffset;
+            node->memSize = symNode->memSize;
+            node->varKind = symNode->varKind;  
             node->expType = symNode->expType;
+            node->isArray = symNode->isArray;
+            node->isStatic = symNode->isStatic; 
+
             return symNode;
             break;
 
@@ -730,6 +801,8 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
             node->expType = lhs->expType;
 
             if (strcmp(tokenString, "=") == 0) {
+
+                if (rhs->isArray and !node->child[1]->child[1]) { node->isArray = true; }               
 
                 /* check if the rhs has already been initialized
                  */
@@ -845,24 +918,89 @@ TreeNode* checkExpKind(TreeNode* node, bool isLHS) {
     return NULL;
 }
 
-void checkInitialization(TreeNode* syntaxTree) {
+/*  Check if the declared variable have been properly initilized
+ *  if not throw out necessary errors.
+ */
+bool checkInitialization(TreeNode* syntaxTree) 
+{
     if (syntaxTree->child[0] != NULL) {
-        TreeNode* initNode = checkExpKind(syntaxTree->child[0]);
+        TreeNode* initNode = checkExpKind(syntaxTree->child[0], false, true);
         if (syntaxTree->isArray and (!initNode->isArray or syntaxTree->child[0]->child[1])) {
             printf("ERROR(%d): Initializer for variable '%s' requires both operands be arrays or not but variable is an array and rhs is not an array.\n", syntaxTree->lineno, syntaxTree->token->tokenstr);
             numErrors++;
+            return false;
         }
         else if (initNode->subkind.exp != ConstantK) {
             printf("ERROR(%d): Initializer for variable '%s' is not a constant expression.\n", syntaxTree->lineno, syntaxTree->token->tokenstr);
             numErrors++;
+            return false;
         }
         else if (initNode->expType != syntaxTree->expType) {
             printf("ERROR(%d): Initializer for variable '%s' of type %s is of type %s.\n", syntaxTree->lineno, syntaxTree->token->tokenstr, ExpTypeStr[syntaxTree->expType], ExpTypeStr[initNode->expType]);
             numErrors++;
+            return false;
         } 
         else {
             syntaxTree->isInitialized = true;
         }
+
+        //  do some memory management
+        if (syntaxTree->varKind == Global) {    // if global variable
+            if (syntaxTree->isArray) {      // if array
+                if (globalOffset == 0) globalOffset -= 1;  // storing array size
+                syntaxTree->child[0]->memOffset = globalOffset;
+
+                //  mark as already seen so that it does not gets execute twice
+                syntaxTree->child[0]->isAlreadySeen = true;
+
+                globalOffset -= (syntaxTree->child[0]->memSize);
+                syntaxTree->memOffset = globalOffset;
+
+                //  save current memSize
+                prevGlobalSize = syntaxTree->child[0]->memSize;
+            }
+            
+            if (syntaxTree->varKind == Local) {  // if not array
+                globalOffset -= prevGlobalSize;
+                syntaxTree->memOffset = globalOffset + 1;
+                prevGlobalSize = syntaxTree->memSize;
+            }
+        }
+
+        if (syntaxTree->varKind == Local) {
+            syntaxTree->memOffset = (localOffset -= 1);
+            syntaxTree->child[0]->memOffset = (localOffset -= 1);
+        }
+
+        return true;
+    }
+    else {  // if declared variable does not have left child
+        if (syntaxTree->varKind == Global or syntaxTree->varKind == LocalStatic) {
+            if (syntaxTree->isArray) { // array memory management are different to of non array
+                if (globalOffset == 0) globalOffset -= 1;
+                globalOffset -= prevGlobalSize;
+                syntaxTree->memOffset = globalOffset;
+                prevGlobalSize = syntaxTree->memSize;
+                if (syntaxTree->varKind==LocalStatic) printf("localStatic Offset of %s is: %d\n", syntaxTree->token->tokenstr,globalOffset);
+            } 
+            else {
+                globalOffset -= prevGlobalSize;
+                syntaxTree->memOffset = (prevGlobalSize > 1) ? (globalOffset) : globalOffset;
+                prevGlobalSize = 0;
+            }
+        }
+        else if (syntaxTree->varKind == Local) {
+            if (syntaxTree->isArray) {
+                localOffset -= 1;       // location where local array size is stored
+                syntaxTree->memOffset = (localOffset -= 1);     // location where array starts
+                localOffset -= (syntaxTree->memSize - 2);
+            }
+            else {
+                syntaxTree->memOffset = (localOffset -= 1);
+            }
+        }
+
+        return false;
     }
 }
 
@@ -1039,6 +1177,11 @@ void checkUnusedFunc() {
             }
         }
     }
+}
+
+void setVarKind(SymbolTable st, TreeNode* node) {
+    node->varKind = st.isGlobal() ? Global : Local;
+    node->memSize = node->isArray ? (node->attr.arrSize + 1) : 1;
 }
 
 /*  Helper Functions    
