@@ -27,6 +27,7 @@ extern FILE* yyin;
 extern TreeNode* savedTree;
 extern bool typeFlag;
 extern int numErrors;
+extern bool memFlag;
 // #endif  
 
 using namespace std;
@@ -63,7 +64,9 @@ string declString(TreeNode *node);
 string expString(TreeNode *node);
 string stmtString(TreeNode *node);
 
-string constValue(ExpType type, TreeNode* node);
+string varKind(VarKind varKind);
 string typeString(ExpType type);
+string getMemoryInfo(TreeNode* node);
+string constValue(ExpType type, TreeNode* node);
 
 #endif

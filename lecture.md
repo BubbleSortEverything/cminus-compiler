@@ -300,7 +300,8 @@ Too hard.
         4. now U turn off error reporting for tokens.  3 good tokens accepted.
 
 
-
+### HW6 continuum
+    * Keep working on string len.
 
 
 
