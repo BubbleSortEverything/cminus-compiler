@@ -1,69 +1,7 @@
-
-#ifndef _UTIL_H_
-#define _UTIL_H_
-
-#include "stdio.h"
-#include "globals.h"
-#include "scanType.h"
-#include "c-.tab.h"
-#include "ourgetopt.h"
-#include "symbolTable.h"
-#include "yyerror.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string>
+#ifndef UTILS_H
+#define UTILS_H
 #include <string.h>
-#include <iostream>
-#include <vector>
 
-// #ifdef CPLUSPLUS
-extern int yylex();
-extern void yyerror();
-extern int yyparse();
-extern int yydebug;
-extern FILE* yyin;
-extern TreeNode* savedTree;
-extern bool typeFlag;
-extern int numErrors;
-// #endif  
-
-using namespace std;
-
-
-TreeNode *newDeclNode(DeclKind kind, ExpType type,
-                      TokenData *token,
-                      TreeNode *c0=NULL,
-                      TreeNode *c1=NULL,
-                      TreeNode *c2=NULL);  // save TokenData block!!
-
-TreeNode *newStmtNode(StmtKind kind,
-                      TokenData *token,
-                      TreeNode *c0=NULL,
-                      TreeNode *c1=NULL,
-                      TreeNode *c2=NULL);
-
-TreeNode *newExpNode(ExpKind kind, ExpType type,
-                     TokenData *token,
-                     TreeNode *c0=NULL,
-                     TreeNode *c1=NULL,
-                     TreeNode *c2=NULL);
-
-TreeNode *addSibling(TreeNode *t, TreeNode *s);
-TreeNode *addChild(TreeNode *p, TreeNode *c);
-
-void setType(TreeNode *t, ExpType type, bool isStatic);
-
-// void printTree(TreeNode *tree, int nChild, int nSibling, bool isChild, bool isSibling, string formatStr);
-
-void printTree(TreeNode *node, string childIndent, int nSibling);
-
-string declString(TreeNode *node);
-string expString(TreeNode *node);
-string stmtString(TreeNode *node);
-
-string constValue(ExpType type, TreeNode* node);
-string typeString(ExpType type);
+size_t bstrcpy(char *dest, size_t size, const char *src);
 
 #endif

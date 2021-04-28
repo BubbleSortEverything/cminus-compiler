@@ -1,0 +1,19 @@
+WARNING(8): The variable 'load' seems not to be used.
+Var goad: type int [mem: Global  size: 1  loc: 0] [line: 4]
+.   Child: 0  Const 666 : type int [line: 4]
+Sibling: 1  Func load: returns type void [line: 6]
+.   Child: 1  Compound [line: 7]
+.   .   Child: 0  Var load: static type int [mem: Static  size: 1  loc: -1] [line: 8]
+.   .   Child: 1  Compound [line: 9]
+.   .   .   Child: 0  Var goad: static type int [mem: Static  size: 1  loc: -2] [line: 10]
+.   .   .   .   Child: 0  Const 777 : type int [line: 10]
+.   .   .   Child: 1  Call output: type void [line: 11]
+.   .   .   .   Child: 0  Id goad: static type int [mem: Static  size: 1  loc: -2] [line: 11]
+.   .   Sibling: 1  Call output: type void [line: 13]
+.   .   .   Child: 0  Id goad: type int [mem: Global  size: 1  loc: 0] [line: 13]
+.   .   Sibling: 2  Call outnl: type void [line: 14]
+Sibling: 2  Func main: returns type void [line: 17]
+.   Child: 1  Compound [line: 18]
+.   .   Child: 1  Call load: type void [line: 19]
+Number of warnings: 1
+Number of errors: 0

@@ -1,0 +1,17 @@
+Func main: returns type void [line: 2]
+.   Child: 1  Compound [line: 3]
+.   .   Child: 0  Var x: type bool [mem: Local  size: 1  loc: -2] [line: 4]
+.   .   Sibling: 1  Var y: type bool [mem: Local  size: 1  loc: -3] [line: 5]
+.   .   Child: 1  Assign = : type bool [line: 7]
+.   .   .   Child: 0  Id x: type bool [mem: Local  size: 1  loc: -2] [line: 7]
+.   .   .   Child: 1  Const true : type bool [line: 7]
+.   .   Sibling: 1  Assign = : type bool [line: 8]
+.   .   .   Child: 0  Id y: type bool [mem: Local  size: 1  loc: -3] [line: 8]
+.   .   .   Child: 1  Const false : type bool [line: 8]
+.   .   Sibling: 2  Call outputb: type void [line: 9]
+.   .   .   Child: 0  Op and : type bool [line: 9]
+.   .   .   .   Child: 0  Id x: type bool [mem: Local  size: 1  loc: -2] [line: 9]
+.   .   .   .   Child: 1  Id y: type bool [mem: Local  size: 1  loc: -3] [line: 9]
+.   .   Sibling: 3  Call outnl: type void [line: 10]
+Number of warnings: 0
+Number of errors: 0

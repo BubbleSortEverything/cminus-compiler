@@ -1,0 +1,35 @@
+WARNING(23): Variable aaa may be uninitialized when used here.
+WARNING(12): The variable 'bbb' seems not to be used.
+WARNING(13): The variable 'ccc' seems not to be used.
+WARNING(14): The variable 'ddd' seems not to be used.
+WARNING(9): The variable 'eee' seems not to be used.
+WARNING(9): The variable 'fff' seems not to be used.
+WARNING(9): The variable 'ggg' seems not to be used.
+WARNING(9): The variable 'hhh' seems not to be used.
+WARNING(16): The variable 'saaa' seems not to be used.
+WARNING(17): The variable 'sbbb' seems not to be used.
+WARNING(18): The variable 'sccc' seems not to be used.
+WARNING(19): The variable 'sddd' seems not to be used.
+Var aaa: type int [mem: Global  size: 1  loc: 0] [line: 2]
+Sibling: 1  Var bbb: type bool [mem: Global  size: 1  loc: -1] [line: 3]
+Sibling: 2  Var ccc: array of type int [mem: Global  size: 11  loc: -3] [line: 4]
+Sibling: 3  Var ddd: array of type bool [mem: Global  size: 11  loc: -14] [line: 5]
+Sibling: 4  Func main: returns type void [line: 7]
+Sibling: 5  Func dogs: returns type int [line: 9]
+.   Child: 0  Param eee: type int [mem: Param  size: 1  loc: -2] [line: 9]
+.   Sibling: 1  Param fff: type bool [mem: Param  size: 1  loc: -3] [line: 9]
+.   Sibling: 2  Param ggg: array of type int [mem: Param  size: 1  loc: -4] [line: 9]
+.   Sibling: 3  Param hhh: array of type bool [mem: Param  size: 1  loc: -5] [line: 9]
+.   Child: 1  Compound [line: 10]
+.   .   Child: 0  Var aaa: type int [mem: Local  size: 1  loc: -6] [line: 11]
+.   .   Sibling: 1  Var bbb: type bool [mem: Local  size: 1  loc: -7] [line: 12]
+.   .   Sibling: 2  Var ccc: array of type int [mem: Local  size: 11  loc: -9] [line: 13]
+.   .   Sibling: 3  Var ddd: array of type bool [mem: Local  size: 11  loc: -20] [line: 14]
+.   .   Sibling: 4  Var saaa: static type int [mem: Static  size: 1  loc: -24] [line: 16]
+.   .   Sibling: 5  Var sbbb: static type bool [mem: Static  size: 1  loc: -25] [line: 17]
+.   .   Sibling: 6  Var sccc: static array of type int [mem: Static  size: 11  loc: -27] [line: 18]
+.   .   Sibling: 7  Var sddd: static array of type bool [mem: Static  size: 11  loc: -38] [line: 19]
+.   .   Child: 1  Return [line: 23]
+.   .   .   Child: 0  Id aaa: type int [mem: Local  size: 1  loc: -6] [line: 23]
+Number of warnings: 12
+Number of errors: 0

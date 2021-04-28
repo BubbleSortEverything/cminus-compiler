@@ -1,11 +1,11 @@
 BIN  = c-
-CC   = g++ -std=c++14
-CFLAGS = -DCPLUSPLUS -g    # for use with C++ if file ext is .c
+CC   = g++
+CFLAGS = -std=c++14 -DCPLUSPLUS -g -O1    # for use with C++ if file ext is .c
 
-SRCS = $(BIN).y $(BIN).l util.c ourgetopt.c main.cpp symbolTable.cpp yyerror.cpp
-HDRS = scanType.h globals.h util.h ourgetopt.h symbolTable.h yyerror.h
-OBJS = lex.yy.o $(BIN).tab.o  main.o util.o ourgetopt.o symbolTable.o yyerror.o
-LIBS = -lm 
+SRCS = $(BIN).y $(BIN).l main.cpp util.cpp ourgetopt.c TokenTree.cpp symbolTable.cpp semantic.cpp yyerror.cpp emitcode_latest.cpp codegen.cpp
+HDRS = util.h ourgetopt.h TokenTree.h symbolTable.h semantic.h yyerror.h emitcode_latest.h codegen.h
+OBJS = lex.yy.o $(BIN).tab.o main.o util.o ourgetopt.o TokenTree.o symbolTable.o semantic.o yyerror.o emitcode_latest.o codegen.o
+LIBS = -lm
 EXEC = bin
 
 $(BIN): $(OBJS) $(HDRS)

@@ -1,200 +1,138 @@
 %{
-	
-
-	/*	Name: Oshan Karki			Assignment: 2
-		Course: Compiler Design		Spring 2021	
-	*/
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// must come before calc.tab.h because it refers to this datatype
-#include "scanType.h"   // shared token value struct
-#include "globals.h"    // defines a TreeNode
-#include "c-.tab.h"     // token defs (needs to know what a TreeNode is)
 
-; extern void yyerror(const char *msg);
+#include "c-.tab.h"
 
-char *lastToken=(char *)"";
-static int line=1;
-int numErrors = 0;
+#include "TokenTree.h"
 
-static int setValue(int linenum, int tokenClass, char *svalue)
-{
-    //printf("got to funct %d\n", tokenClass);
-    // create and handle default data storage
-    lastToken = svalue;
-    yylval.tokenData = new TokenData;
-    yylval.tokenData->tokenclass = tokenClass;
-    yylval.tokenData->linenum = linenum;
-    yylval.tokenData->tokenstr = strdup(svalue);
+int lineNum = 1;
+char *lastToken;
+extern int numErrors;
+extern int numWarnings;
 
-    // handle special conversions
-    switch (tokenClass) {
-
-    case BOOLCONST:
-        //printf("%c", svalue[0]);
-        if (svalue[0] == 't'){
-            yylval.tokenData->numValue = 1;
-        }
-        else{
-            yylval.tokenData->numValue = 0;
-        }
-
-        break;
-
-     case NUMCONST:
-        
-        yylval.tokenData->numValue = atoi(svalue);
-
-        break;
-
-     case CHARCONST:
-
-        if (svalue[1] == '\\'){
-
-                if (svalue[2] == 'n'){
-			char *temp = new char('\n');
-			yylval.tokenData->strValue = temp;
-                }
-                else if (svalue[2] == '0'){
-			char *temp = new char('\0');
-			yylval.tokenData->strValue = temp;
-                }
-                else{
-			char *temp = new char(svalue[2]);
-			yylval.tokenData->strValue = temp;
-                }
-
-        }
-
-        else{
-		char *temp = new char(svalue[1]);
-		yylval.tokenData->strValue = temp;
-        }
-      
-        break;
-
-
-     case STRINGCONST:
-          //printf("got str\n");
-          int input_length = strlen(svalue);
-          //printf("str length: %d\n", input_length);
-
-	  char *temp = new char;
-	  int temp_len = 0;
-
-	  for (int i = 1; i < input_length - 1; i++){
-		if (svalue[i] != '\\'){
-			temp[temp_len] = svalue[i];
-			temp_len++;
+char *stringProcess(char *string, int *newLen) {
+	char *returnStr = (char *) calloc(strlen(string), sizeof(char));
+	int i;
+	int j = 0;
+	for (i = 1; i < strlen(string) - 1; i++) {
+		if (string[i] == '\\') {
+			char escChar = string[i + 1];
+			switch (escChar) {
+				case '0':
+					returnStr[j++] = '\0';
+					break;
+				case 'n':
+					returnStr[j++] = '\n';
+					break;
+				default:
+					returnStr[j++] = escChar;
+					break;
+			}	
+			i++;
+		} else {
+			returnStr[j++] = string[i];
 		}
-		else{
+	}
+	
+	if (newLen != NULL) {
+		*newLen = j;
+	} 	
 
-		
-			if (svalue[i + 1] == 'n'){
-				temp[temp_len] = '\n';
-				i++;
-				temp_len++;
-			}
-			else if (svalue[i + 1] == '0'){
-				temp[temp_len] = '\0';
-				i++;
-				temp_len++;
-			}
-			else if (svalue[i + 1] == '\\'){
-				temp[temp_len] = '\\';
-				i++;
-				temp_len++;
-			}
-                        else{
-			        temp[temp_len] = svalue[i + 1];
-				temp_len++;
-				i++;
-			}
-		
-		}
-	   }
+	return returnStr;
+}
 
-	   yylval.tokenData->strValue = temp;
-	   break;
-		
-    
-    }
+int setValue(int line, int tokenClass, char *svalue) {
+	lastToken = svalue;
+	yylval.tree = new TokenTree();
+	yylval.tree->setExprType(ExprType::UNDEFINED);
+	yylval.tree->setTokenClass(tokenClass);
+	yylval.tree->setLineNum(line);
+    yylval.tree->setTokenString(svalue);
+	yylval.tree->setStringValue(svalue);
+    char *escSeq; // Storage for escaped sequence if needed
 
-    // return token class
-    return tokenClass;
+	switch (tokenClass) {
+		case ID:
+            yylval.tree->setStringValue(svalue);
+			break;
+		case NUMCONST:
+			yylval.tree->setNumValue(atoi(svalue));
+			break;
+		case CHARCONST:
+			escSeq = stringProcess(svalue, NULL);
+			if (strlen(escSeq) > 1) {
+				printf("WARNING(%d): character is %ld characters long and not a single character: '%s'.  The first char will be used.\n", lineNum, strlen(escSeq), svalue);
+				numWarnings++;
+			}
+			yylval.tree->setCharValue(escSeq[0]);
+			yylval.tree->setNumValue(1);
+            free(escSeq);
+			break;
+		case STRINGCONST:
+            int newLen;
+			escSeq = stringProcess(svalue, &newLen);
+            yylval.tree->setStringValue(escSeq, false);
+            yylval.tree->setNumValue(newLen); // Storing length of string in nvalue to avoid null values messing stuff up.
+			break;
+		case BOOLCONST:
+			if (strcmp("true", svalue) == 0) {
+				yylval.tree->setNumValue(1);
+			} else {
+				yylval.tree->setNumValue(0);
+			}
+			break;
+			
+	}
+	
+	return tokenClass;
 }
 
 %}
 
 %option noyywrap
-%option yylineno
 
 %%
-"int"                       { return setValue(line, INT, yytext); }
-"bool"                      { return setValue(line, BOOL, yytext); }
-"true"                      { return setValue(line, BOOLCONST, yytext); }
-"and"                       { return setValue(line, AND, yytext); }
-"or"                        { return setValue(line, OR, yytext); }
-"not"                       { return setValue(line, NOT, yytext); }
-"if"                        { return setValue(line, IF, yytext); }
-"then"                      { return setValue(line, THEN, yytext); }
-"to"                        { return setValue(line, TO, yytext); }
-"by"                        { return setValue(line, BY, yytext); }
-"elsif"                     { return setValue(line, ID, yytext); }
-"else"                      { return setValue(line, ELSE, yytext); }
-"while"                     { return setValue(line, WHILE, yytext); }
-"for"                       { return setValue(line, FOR, yytext); }
-"do"                        { return setValue(line, DO, yytext); }
-"break"                     { return setValue(line, BREAK, yytext); }
-"loop"                      { return setValue(line, ID, yytext); }
-".."                        { return setValue(line, RANGE, yytext); }
-"forever"                   { return setValue(line, ID, yytext); }
-"static"                    { return setValue(line, STATIC, yytext); }
-"return"                    { return setValue(line, RETURN, yytext); }
-"char"                      { return setValue(line, CHAR, yytext); }
-[0-9]+                      { return setValue(line, NUMCONST, yytext); }
-":<:"                       { return setValue(line, MIN, yytext); }
-":>:"                       { return setValue(line, MAX, yytext); }
-"false"                     { return setValue(line, BOOLCONST, yytext); }
-[a-zA-Z]+[a-zA-Z0-9]*       { return setValue(line, ID, yytext); }
-";"                         { return setValue(line, ';', yytext); }
-":"                         { return setValue(line, ':', yytext); }
-","                         { return setValue(line, ',', yytext); }
-"["                         { return setValue(line, '[', yytext); }
-"]"                         { return setValue(line, ']', yytext); }
-"("                         { return setValue(line, '(', yytext); }
-")"                         { return setValue(line, ')', yytext); }
-"{"                         { return setValue(line, '{', yytext); }
-"}"                         { return setValue(line, '}', yytext); }
-"="                         { return setValue(line, '=', yytext); }
-"<"                         { return setValue(line, '<', yytext); }
-">"                         { return setValue(line, '>', yytext); }
-"+"                         { return setValue(line, '+', yytext); }
-"-"                         { return setValue(line, '-', yytext); }
-"_"                         { return setValue(line, UNDEFINED, yytext); }
-"*"                         { return setValue(line, '*', yytext); }
-"/"                         { return setValue(line, '/', yytext); }
-"%"                         { return setValue(line, '%', yytext); }
-"?"                         { return setValue(line, '?', yytext); }
-"+="                        { return setValue(line, ADDASS, yytext); }
-"-="                        { return setValue(line, SUBASS, yytext); }
-"/="                        { return setValue(line, DIVASS, yytext); }
-"*="                        { return setValue(line, MULASS, yytext); }
-"<="                        { return setValue(line, LEQ, yytext); }
-">="                        { return setValue(line, GEQ, yytext); }
-"!="                        { return setValue(line, NEQ, yytext); }
-"=="                        { return setValue(line, EQ, yytext); }
-"--"                        { return setValue(line, DEC, yytext); }
-"++"                        { return setValue(line, INC, yytext); }                 
-'\\.'                       { return setValue(line, CHARCONST, yytext); }
-'[^\n\']'                   { return setValue(line, CHARCONST, yytext); }
-"\""(\\.|[^\\"\n])*"\""     { return setValue(line, STRINGCONST, yytext); }
-[ \t]                       ;  // white space
-"//".*                      ;  //comments
-\n                          { line++; }
-
-[ \" ]                      { printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++; }
-.                           { printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n",yylineno, yytext[0]); numErrors++; }
+\n							{ lineNum++;  } /* Increment line on new line */
+\/\/[^\n]* { } 				/* Ignore comments */
+static 						{ return setValue(lineNum, STATIC, yytext); }
+int  						{ return setValue(lineNum, INT, yytext); }
+bool 						{ return setValue(lineNum, BOOL, yytext); }
+char 						{ return setValue(lineNum, CHAR, yytext); }
+if 							{ return setValue(lineNum, IF, yytext); }
+else 						{ return setValue(lineNum, ELSE, yytext); }
+then                      	{ return setValue(lineNum, THEN, yytext); }
+while 						{ return setValue(lineNum, WHILE, yytext); }
+do 							{ return setValue(lineNum, DO, yytext); }
+for 						{ return setValue(lineNum, FOR, yytext); }
+to                        	{ return setValue(lineNum, TO, yytext); }
+return 						{ return setValue(lineNum, RETURN, yytext); }
+break 						{ return setValue(lineNum, BREAK, yytext); }
+and 						{ return setValue(lineNum, AND, yytext); }
+or 							{ return setValue(lineNum, OR, yytext); }
+not 						{ return setValue(lineNum, NOT, yytext); }
+true	 					{ return setValue(lineNum, BOOLCONST, yytext); }
+false	 					{ return setValue(lineNum, BOOLCONST, yytext); }
+":<:"                       { return setValue(lineNum, MIN, yytext); }
+":>:"                       { return setValue(lineNum, MAX, yytext); }
+== 							{ return setValue(lineNum, EQ, yytext); }
+\<= 						{ return setValue(lineNum, LEQ, yytext); }
+!= 							{ return setValue(lineNum, NEQ, yytext); }
+-= 							{ return setValue(lineNum, SUBASS, yytext); }
+>= 							{ return setValue(lineNum, GEQ, yytext); }
+\+= 						{ return setValue(lineNum, ADDASS, yytext); }
+\*= 						{ return setValue(lineNum, MULASS, yytext); }
+\/= 						{ return setValue(lineNum, DIVASS, yytext); }
+\-\- 						{ return setValue(lineNum, DEC, yytext); }
+\+\+ 						{ return setValue(lineNum, INC, yytext); }
+[<>=\*\-\?\+\/%\[\]!&|] 	{ return setValue(lineNum, yytext[0], yytext); } /* Single char operator */
+[A-Za-z\_][A-Za-z\_0-9]*  	{ return setValue(lineNum, ID, yytext); } /* Identifiers */
+[0-9]+          			{ return setValue(lineNum, NUMCONST, yytext); } /* Numeric constants */
+\'(\\.|[^\\'\n])*\'  		{ return setValue(lineNum, CHARCONST, yytext); } /* Character constants */
+\"(\\.|[^\\"\n])*\" 		{ return setValue(lineNum, STRINGCONST, yytext); } /* String constants */
+[{}\(\),;:] 				{ return setValue(lineNum, yytext[0], yytext); } /* Syntax */
+\'\' 						{ printf("ERROR(%d): Empty character ''. Characters ignored.\n", lineNum); numErrors++; }
+[^ \t] 						{ printf("ERROR(%d): Invalid or misplaced input character: '%c'. Character Ignored.\n", lineNum, yytext[0]); numErrors++; }
+[ \t] {}
 %%
-

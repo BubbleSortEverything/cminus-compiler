@@ -1,0 +1,19 @@
+WARNING(3): The variable 'll' seems not to be used.
+Func main: returns type void [line: 2]
+.   Child: 1  Compound [line: 2]
+.   .   Child: 0  Var kk: type int [mem: Local  size: 1  loc: -2] [line: 3]
+.   .   .   Child: 0  Op + : type int [line: 3]
+.   .   .   .   Child: 0  Op * : type int [line: 3]
+.   .   .   .   .   Child: 0  Const 4 : type int [line: 3]
+.   .   .   .   .   Child: 1  Const 5 : type int [line: 3]
+.   .   .   .   Child: 1  Op * : type int [line: 3]
+.   .   .   .   .   Child: 0  Const 3 : type int [line: 3]
+.   .   .   .   .   Child: 1  Const 2 : type int [line: 3]
+.   .   Sibling: 1  Var ll: type int [mem: Local  size: 1  loc: -3] [line: 3]
+.   .   .   Child: 0  Op - : type int [line: 3]
+.   .   .   .   Child: 0  Const 46 : type int [line: 3]
+.   .   Child: 1  Call output: type void [line: 4]
+.   .   .   Child: 0  Id kk: type int [mem: Local  size: 1  loc: -2] [line: 4]
+.   .   Sibling: 1  Compound [line: 5]
+Number of warnings: 1
+Number of errors: 0

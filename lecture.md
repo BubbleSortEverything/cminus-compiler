@@ -300,9 +300,12 @@ Too hard.
         4. now U turn off error reporting for tokens.  3 good tokens accepted.
 
 
+### HW6 continuum
+    * Keep working on string len.
 
-
-
+### HW7 continuum
+    * Fix segfault in file `e01.c-` on line 6, because of `true`
+    * Fix segfaults in different unit test files
 
 
 

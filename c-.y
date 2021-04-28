@@ -1,431 +1,602 @@
-%{ 
+%{
+    // INCLUDES
+    #include <stdlib.h>
+    #include <stdio.h>
+    #include <string.h>
 
-//#include "symbolTable.h"
-#include "util.h"
+    #include "yyerror.h"
 
-TreeNode *savedTree;    /* stores syntax tree */
-SymbolTable symbolTable;   /* symbol table */
+    #include "TokenTree.h"
 
-bool typeFlag = false;
+    // GLOBALS
+    extern TokenTree *syntaxTree;
 
-/*
-    void yyerror(const char *msg) {
-        printf("ERROR(PARSER): %s\n", msg);
-    }
-*/
-
-void yyerror(const char *msg);
-#define YYERROR_VERBOSE 1
-
-extern int yylineno;
-
+    // EXTERNAL STUFF
+    extern int yylex();
+    
 %}
 
+%code requires { #include "TokenTree.h" }
 
 %union {
-    ExpType type;            // for passing types.  typespec to pass up a type in decl like int or bool
-    TreeNode *treeNode;
-    TokenData *tokenData;
+    TokenTree *tree;
 }
 
-// token specifies the token classes from the scanner
-%token <tokenData> INT ID BOOL BY BOOLCONST NUMCONST MIN MAX ADDASS SUBASS DIVASS MULASS EQ LEQ GEQ NEQ 
-%token <tokenData> AND OR NOT IF THEN TO ELSIF ELSE WHILE FOR DO BREAK LOOP RANGE FOREVER STATIC RETURN 
-%token <tokenData> CHAR DEC INC CHARCONST STRINGCONST UNDEFINED ';' ',' '[' ']' '(' ')' '{' '}' '=' '<' '>' '+' '-' '*' '/' '%' '?' ':'
+// Non-terminals
+%type <tree> program
+%type <tree> declList
+%type <tree> decl
+%type <tree> varDecl
+%type <tree> scopedVarDecl
+%type <tree> varDeclList
+%type <tree> varDeclInit
+%type <tree> varDeclId
+%type <tree> typeSpec
+%type <tree> funDecl
+%type <tree> params
+%type <tree> paramList
+%type <tree> paramTypeList
+%type <tree> paramIdList
+%type <tree> paramId
+%type <tree> stmt
+%type <tree> simpleStmt
+%type <tree> openStmt
+%type <tree> closedStmt
+%type <tree> expStmt
+%type <tree> compoundStmt
+%type <tree> localDecls
+%type <tree> stmtList
+%type <tree> selectStmt
+%type <tree> closedSelStmt
+%type <tree> openIterStmt
+%type <tree> closedIterStmt
+%type <tree> returnStmt
+%type <tree> breakStmt
+%type <tree> exp
+%type <tree> simpleExp
+%type <tree> andExpr
+%type <tree> unaryRelExp
+%type <tree> relExp
+%type <tree> relop
+%type <tree> sumExp
+%type <tree> sumop
+%type <tree> mulExp
+%type <tree> mulOp
+%type <tree> unaryExp
+%type <tree> unaryop
+%type <tree> factor
+%type <tree> mutable
+%type <tree> immutable
+%type <tree> call
+%type <tree> args
+%type <tree> argList
+%type <tree> constant
+%type <tree> minmaxop
+%type <tree> minmaxExp
 
-//type specifies the token classes used only in the parser
-%type <treeNode> program declList decl varDeclaration varDeclList varDeclInitialize varDeclId typeSpecifier simpleExpression
-%type <treeNode> andExpression unaryRelExpression relExpression minmaxExp sumExpression mulExpression unaryExpression  
-%type <treeNode> constant relop sumop mulop unaryop expression call args argList scopedVarDeclaration 
-%type <treeNode> statement expressionStmt compoundStmt localDeclarations statementList paramList paramTypeList paramId paramIdList
-%type <treeNode> selectStmt iterStmt iterRange returnStmt breakStmt minmaxop factor mutable immutable funDeclaration params
-%type <treeNode> scopedTypeSpecifier matched unmatched
+// Operators
+%token <tree> ADDASS DEC DIVASS INC MULASS SUBASS
+%token <tree> EQ GEQ LEQ NEQ NOT AND OR MIN MAX
+%token <tree> '+' '-' '=' '|' '&' '!' '<' '>' '*' '/' '%' '?'
+
+// Keywords / Syntax
+%token <tree> BOOL BREAK CHAR ELSE FOR TO IF THEN INT RETURN STATIC WHILE DO
+%token <tree> ID
+%token <tree> BOOLCONST
+%token <tree> NUMCONST
+%token <tree> CHARCONST
+%token <tree> STRINGCONST
+%token <tree> ',' ':' '(' ')' ';' '[' ']' '{' '}'
 
 %%
-program
-    : declList                                      { savedTree = $1; }
-    ;
-
-declList
-    : declList decl                                 { $$ = addSibling($1, $2); } 
-    | decl                                          { $$ = $1; }
-    ;
-
-decl
-    : varDeclaration                                { $$ = $1; } 
-    | funDeclaration                                { $$ = $1; } 
-    | error                                         { $$ = NULL; }
-    ;
-
-varDeclaration
-    : typeSpecifier varDeclList ';'                 { setType($2, $1->expType, false); $$ = $2; yyerrok; } 
-    | error varDeclList ';'                         { $$ = NULL; yyerrok; } 
-    | typeSpecifier error ';'                       { $$ = NULL; yyerrok; yyerrok; }
-    ;
-
-typeSpecifier
-    : INT                                           { $$ = newExpNode(InitK, Integer, $1); } 
-    | BOOL                                          { $$ = newExpNode(InitK, Boolean, $1); } 
-    | CHAR                                          { $$ = newExpNode(InitK, Char, $1); }
-    ;
-
-varDeclList
-    : varDeclList ',' varDeclInitialize     { $$ = addSibling($1,$3); yyerrok; } 
-    | varDeclInitialize                     { $$ = $1; } 
-    | varDeclList ',' error                 { $$ = NULL; } 
-    | error                                 { $$ = NULL; }
-    ;
-
-varDeclInitialize
-    : varDeclId { $$ = $1; } 
-    | varDeclId ':' simpleExpression 
-    {
-        //$$ = newExpNode(InitK, UndefinedType, $2, $1, $3);
-        if ($$ != NULL) $$ = addChild($1, $3);
-    } 
-    | error ':' simpleExpression        { $$ = NULL; yyerrok; }
-    ;
-
-varDeclId
-    : ID                                { $$ = newDeclNode(VarK, UndefinedType, $1); } 
-    | ID '[' NUMCONST ']' 
-    {
-                                        /***** prolly need to save NUMCONST in the node for future reference *****/
-                                        $$ = newDeclNode(VarK, UndefinedType, $1);
-                                        $$->isArray = true;
-    } 
-    | ID '[' error                      { $$ = NULL; } 
-    | error ']'                         { $$ = NULL; yyerrok; }
-    ;
-
-scopedVarDeclaration
-    : scopedTypeSpecifier varDeclList 
-    { 
-        $$ = $2; 
-        setType($2, $1->expType, $1->isStatic); 
-        yyerrok; 
-    }
-    | scopedTypeSpecifier error ';'         { $$ = NULL; yyerrok; }
-    | error varDeclList ';'                 { $$ = NULL; yyerrok; }
-    ;
-
-/*
-scopedVarDeclaration
-    : STATIC typeSpecifier varDeclList 
-    { 
-        $$ = $3; 
-        setType($3, $2->expType, true); 
-        yyerrok; 
-    }
-    | typeSpecifier varDeclList ';'         { $$ = $2; setType($2, $1->expType, false); yyerrok; }
-    | STATIC typeSpecifier error ';'        { $$ = NULL; yyerrok; }
-    | typeSpecifier error ';'               { $$ = NULL; yyerrok; }
-    | error varDeclList ';'                 { $$ = NULL; yyerrok; }
-    ;
-*/
-
-
-scopedTypeSpecifier
-    : STATIC typeSpecifier                  { $2->isStatic = true; $$ = $2; } 
-    | typeSpecifier                         { $$ = $1; }
-    ;
-
-funDeclaration
-    : typeSpecifier ID '(' params ')' statement     { $$ = newDeclNode(FuncK, $1->expType, $2, $4, $6); } 
-    | ID '(' params ')' statement                   { $$ = newDeclNode(FuncK, Void, $1, $3, $5); } 
-    | typeSpecifier error                           { $$ = NULL; } 
-    | typeSpecifier ID '(' error                    { $$ = NULL; }
-    | typeSpecifier ID '(' params ')' error         { $$ = NULL; } 
-    | ID '(' error                                  { $$ = NULL; } 
-    | ID '(' params ')' error                       { $$ = NULL; }
-    ;
-
-params
-    : paramList { $$ = $1; } 
-    | { $$ = NULL; }
-    ;
-
-paramList
-    : paramList ';' paramTypeList       { $$ = addSibling($1, $3); } 
-    | paramTypeList                     { $$ = $1; } 
-    | paramList ';' error               { $$ = NULL; } 
-    | error                             { $$ = NULL; }
-    ;
-
-paramTypeList
-    : typeSpecifier paramIdList         { setType($2, $1->expType, false); $$ = $2; } 
-    | typeSpecifier error               { $$ = NULL; }
-    ;
-
-paramIdList
-    : paramIdList ',' paramId           { $$ = addSibling($1, $3); yyerrok; } 
-    | paramId                           { $$ = $1; } 
-    | paramIdList ',' error             { $$ = NULL; } 
-    | error                             { $$ = NULL; }
-    ;
-
-paramId
-    : ID                { $$ = newDeclNode(ParamK, UndefinedType, $1); } 
-    | ID '[' ']' 
-    { 
-                        $$ = newDeclNode(ParamK, UndefinedType, $1); 
-                        $$->isArray = true;
-    }
-    ;
-
-statement
-    : matched                                 { $$ = $1; }
-    | unmatched                               { $$ = $1; }
-    ;
-
-matched
-    : expressionStmt                          { $$ = $1; } 
-    | compoundStmt                            { $$ = $1; } 
-    | selectStmt                              { $$ = $1; } 
-    | iterStmt                                { $$ = $1; } 
-    | returnStmt                              { $$ = $1; } 
-    | breakStmt                               { $$ = $1; }
-    | IF error                                { $$ = NULL; }
-    | IF error ELSE matched                   { $$ = NULL; yyerrok; }
-    | IF error THEN matched ELSE matched      { $$ = NULL; yyerrok; }
-    | WHILE error DO matched                  { $$ = NULL; yyerrok; }
-    | WHILE error                             { $$ = NULL; }
-    | FOR ID '=' error DO matched             { $$ = NULL; yyerrok; }
-    | FOR error                               { $$ = NULL; }
-    ;
-
-unmatched 
-    : IF error THEN statement                           { $$ = NULL; yyerrok; }
-    | IF error THEN matched ELSE unmatched              { $$ = NULL; yyerrok; }
-    ;
-
-compoundStmt
-    : '{' localDeclarations statementList '}'   { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok; }
-    ;
-
-selectStmt
-    : IF simpleExpression THEN statement                { $$ = newStmtNode(IfK, $1, $2, $4); } 
-    | IF simpleExpression THEN statement ELSE statement { $$ = newStmtNode(IfK, $1, $2, $4, $6); }
-    ;
-
-iterStmt
-    : WHILE simpleExpression DO statement       { $$ = newStmtNode(WhileK, $1, $2, $4);} 
-    | FOR ID '=' iterRange DO statement         { 
-                                                    TreeNode *var = newDeclNode(VarK, Integer, $2); 
-                                                    $$ = newStmtNode(ForK, $1, var, $4, $6); 
+program         
+    : declList                                  { syntaxTree = $1; }
+    ;       
+        
+declList                
+    : declList decl                             { $$ = $1; if ($$ != NULL) $$->addSibling($2); }
+    | decl                                      { $$ = $1; }
+    ;       
+        
+decl                    
+    : varDecl                                   { $$ = $1; }
+    | funDecl                                   { $$ = $1; }
+    | error                                     { $$ = NULL; }
+    ;       
+        
+varDecl                 
+    : typeSpec varDeclList ';'                  { $$ = $2; $$->typeSiblings($1->getExprType()); yyerrok; }
+    | error varDeclList ';'                     { $$ = NULL; }
+    | typeSpec error ';'                        { $$ = NULL; yyerrok; }
+    ;       
+        
+scopedVarDecl           
+    : STATIC typeSpec varDeclList ';'           {
+                                                    $$ = $3;
+                                                    $$->typeSiblings($2->getExprType());
+                                                    $$->staticSiblings();
+                                                    yyerrok;
                                                 }
+    | typeSpec varDeclList ';'                  {
+                                                    $$ = $2;
+                                                    $$->typeSiblings($1->getExprType());
+                                                    yyerrok;
+                                                }
+    | error varDeclList ';'                     { $$ = NULL; yyerrok; }
+    ;       
+        
+varDeclList             
+    : varDeclList ',' varDeclInit               {
+                                                    $$ = $1;
+                                                    if ($$ != NULL) $$->addSibling($3);
+                                                    yyerrok;
+                                                }
+    | varDeclInit                               { $$ = $1; }
+    | varDeclList ',' error                     { $$ = NULL; }
+    | error                                     { $$ = NULL; }
+    ;       
+        
+varDeclInit             
+    : varDeclId                                 { $$ = $1; }
+    | varDeclId ':' simpleExp                   {
+                                                    $$ = $1;
+                                                    if ($$ != NULL) $$->children[0] = $3;
+                                                }
+    | error ':' simpleExp                       { $$ = NULL; yyerrok; }
+    | varDeclId ':' error                       { $$ = NULL; }
+    ;       
+        
+varDeclId               
+    : ID                                        {
+                                                    $$ = $1;
+                                                    $$->setDeclKind(DeclKind::VARIABLE);
+                                                }
+    | ID '[' NUMCONST ']'                       {
+                                                    $$ = $1;
+                                                    $$->setIsArray(true);
+                                                    $$->setMemorySize($3->getNumValue() + 1);
+                                                    $$->setDeclKind(DeclKind::VARIABLE);
+                                                }
+    | ID '[' error                              { $$ = NULL; }
+    | error ']'                                 { $$ = NULL; yyerrok; }
+    ;       
+        
+typeSpec                
+    : INT                                       { $$ = $1; $$->setExprType(ExprType::INT); }
+    | BOOL                                      { $$ = $1; $$->setExprType(ExprType::BOOL); }
+    | CHAR                                      { $$ = $1; $$->setExprType(ExprType::CHAR); }
+    ;       
+        
+funDecl                 
+    : typeSpec ID '(' params ')' stmt           {
+                                                    $$ = $2;
+                                                    $$->setDeclKind(DeclKind::FUNCTION);
+                                                    $$->setExprType($1->getExprType());
+                                                    $$->children[0] = $4;
+                                                    $$->children[1] = $6;
+                                                }
+    | ID '(' params ')' stmt                    {
+                                                    $$ = $1;
+                                                    $$->setDeclKind(DeclKind::FUNCTION);
+                                                    $$->setExprType(ExprType::VOID);
+                                                    $$->children[0] = $3;
+                                                    $$->children[1] = $5;
+                                                }
+    | typeSpec error                            { $$ = NULL; }
+    | typeSpec ID '(' error                     { $$ = NULL; }
+    | typeSpec ID '(' params ')' error          { $$ = NULL; }
+    | ID '(' error                              { $$ = NULL; }
+    | ID '(' params ')' error                   { $$ = NULL; }
     ;
 
-iterRange
-    : simpleExpression TO simpleExpression                      { $$ = newStmtNode(RangeK, $2, $1, $3); }
-    | simpleExpression TO simpleExpression BY simpleExpression  { $$ = newStmtNode(RangeK, $2, $1, $3, $5); }
-    | simpleExpression TO error                                 { $$ = NULL; }
-    | error BY error                                            { $$ = NULL; yyerrok; }
-    | simpleExpression TO simpleExpression BY error             { $$ = NULL; }
-    ; 
-
-returnStmt
-    : RETURN ';'                    { $$ = newStmtNode(ReturnK, $1); } 
-    | RETURN expression ';'         { $$ = newStmtNode(ReturnK, $1, $2); yyerrok; }
-    | RETURN error ';'              { $$ = NULL; yyerrok; }
+params          
+    : paramList                                 { $$ = $1; }
+    | %empty                                    { $$ = NULL; }
     ;
 
-breakStmt
-    : BREAK ';' { $$ = newStmtNode(BreakK, $1); }
+paramList       
+    : paramList ';' paramTypeList               { $$ = $1; if ($$ != NULL) $$->addSibling($3); }
+    | paramTypeList                             { $$ = $1; }
+    | paramList ';' error                       { $$ = NULL; }
+    | error                                     { $$ = NULL; }
     ;
 
-localDeclarations
-    : localDeclarations scopedVarDeclaration ';' { $$ = addSibling($1, $2); } 
-    | {  $$ = NULL; }
+paramTypeList   
+    : typeSpec paramIdList                      { $$ = $2; $$->typeSiblings($1->getExprType()); }
+    | typeSpec error                            { $$ = NULL; }
     ;
 
-statementList
-    : statementList statement 
-    { 
-        if ($2 == NULL) {
-            $$ = $1;
-        } else {
-            $$ = addSibling($1, $2);
-        }
-    } 
-    | { $$ = NULL; }
+paramIdList     
+    : paramIdList ',' paramId                   { $$ = $1; if ($$ != NULL) $$->addSibling($3); yyerrok; }
+    | paramId                                   { $$ = $1; }
+    | paramIdList ',' error                     { $$ = NULL; }
+    | error                                     { $$ = NULL; }
     ;
 
-expressionStmt
-    : expression ';'        { $$ = $1; }
-    | ';'                   { $$ = NULL; }
-    | error ';'             { $$ = NULL; yyerrok; }
+paramId         
+    : ID                                        { $$ = $1; $$->setDeclKind(DeclKind::PARAM); }
+    | ID '[' ']'                                { $$ = $1; $$->setDeclKind(DeclKind::PARAM); $$->setIsArray(true); }
     ;
 
-expression
-    : mutable '=' expression        { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
-    | mutable INC                   { $$ = newExpNode(AssignK, UndefinedType, $2, $1); } 
-    | mutable DEC                   { $$ = newExpNode(AssignK, UndefinedType, $2, $1); } 
-    | mutable ADDASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
-    | mutable SUBASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
-    | mutable MULASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
-    | mutable DIVASS expression     { $$ = newExpNode(AssignK, UndefinedType, $2, $1, $3); } 
-    | simpleExpression              { $$ = $1; }
-    | mutable '=' error             { $$ = NULL; }
-    | mutable ADDASS error          { $$ = NULL; }
-    | mutable SUBASS error          { $$ = NULL; }
-    | mutable MULASS error          { $$ = NULL; }
-    | mutable DIVASS error          { $$ = NULL; }
-    | error "=" expression          { $$ = NULL; yyerrok; }
-    | error ADDASS expression       { $$ = NULL; yyerrok; }
-    | error SUBASS expression       { $$ = NULL; yyerrok; }
-    | error MULASS expression       { $$ = NULL; yyerrok; }
-    | error DIVASS expression       { $$ = NULL; yyerrok; }
-    | error INC                     { $$ = NULL; yyerrok; }
-    | error DEC                     { $$ = NULL; yyerrok; }
+/* ---------- */
+//stmt
+//    :   matched         { $$ = $1; }
+//    |   unmatched       { $$ = $1; }
+//    ;
+
+//matched
+//    :   expStmt         { $$ = $1; }
+//    |   compoundStmt    { $$ = $1; }
+//    |   selectStmt      { $$ = $1; }
+//    |   iterStmt        { $$ = $1; }
+//    ;
+
+/* ---------- */
+
+
+stmt            : openStmt { $$ = $1; }
+                | closedStmt { $$ = $1; }
+                ;
+simpleStmt      : expStmt { $$ = $1; }
+                | compoundStmt { $$ = $1; }
+                | returnStmt { $$ = $1; }
+                | breakStmt { $$ = $1; }
+                ;
+openStmt        : selectStmt { $$ = $1; }
+                | openIterStmt { $$ = $1; }
+                ;
+closedStmt      : simpleStmt { $$ = $1; }
+                | closedSelStmt { $$ = $1; }
+                | closedIterStmt { $$ = $1; }
+                ;
+expStmt         : exp ';'   { $$ = $1; }
+                | ';'       { $$ = NULL; }
+                | error ';' { $$ = NULL; yyerrok; }
+                ;
+
+compoundStmt    : '{' localDecls stmtList '}'   { $$ = $1; $$->setStmtKind(StmtKind::COMPOUND);
+                                                    $$->children[0] = $2;
+                                                    $$->children[1] = $3;
+                                                    yyerrok;
+                                                }
+                ;
+
+localDecls      : localDecls scopedVarDecl  {
+                                                if ($1 == NULL) {
+                                                    $$ = $2;
+                                                } else {
+                                                    $$ = $1;
+                                                    $$->addSibling($2);
+                                                }
+                                            }
+                | %empty { $$ = NULL; }
+                ;
+stmtList        : stmtList stmt {
+                                    if ($1 == NULL) {
+                                        $$ = $2;
+                                    } else {
+                                        $$ = $1;
+                                        $$->addSibling($2);
+                                    }
+                                }
+                | %empty { $$ = NULL; }
+                ;
+selectStmt     
+    : IF simpleExp THEN stmt                        {
+                                                        $$ = $1;
+                                                        $$->setStmtKind(StmtKind::SELECTION);
+                                                        $$->children[0] = $2;
+                                                        $$->children[1] = $4;
+                                                    }
+    | IF simpleExp THEN stmt ELSE stmt              {
+                                                        $$ = $1;
+                                                        $$->setStmtKind(StmtKind::SELECTION);
+                                                        $$->children[0] = $2;
+                                                        $$->children[1] = $4;
+                                                        $$->children[2] = $6;
+                                                    }                                                 
     ;
 
-simpleExpression
-    : simpleExpression OR andExpression     { $2->tokenstr = "or"; $$ = newExpNode(OpK, UndefinedType, $2, $1, $3); } 
-    | andExpression                         { $$ = $1; }
-    | simpleExpression OR error             { $$ = NULL; }
+closedSelStmt   : IF '(' simpleExp ')' closedStmt ELSE closedStmt   {
+                                                                        $$ = $1;
+                                                                        $$->setStmtKind(StmtKind::SELECTION);
+                                                                        $$->children[0] = $3;
+                                                                        $$->children[1] = $5;
+                                                                        $$->children[2] = $7;
+                                                                    }
+                | IF error  { $$ = NULL; }
+                | IF error ELSE closedStmt  { $$ = NULL; yyerrok; }
+                | IF error ')' closedStmt ELSE closedStmt   { $$ = NULL; yyerrok; }
+                ;
+openIterStmt    : WHILE '(' simpleExp ')' openStmt  {
+                                                        $$ = $1;
+                                                        $$->setStmtKind(StmtKind::WHILE);
+                                                        $$->children[0] = $3;
+                                                        $$->children[1] = $5;
+                                                    }
+                | FOR '(' ID TO ID ')' openStmt {
+                                                    $$ = $1;
+                                                    $3->setExprType(ExprType::UNDEFINED);
+                                                    $3->setDeclKind(DeclKind::VARIABLE);
+                                                    $5->setExprKind(ExprKind::ID);
+                                                    $$->setStmtKind(StmtKind::FOR);
+                                                    $$->children[0] = $3;
+                                                    $$->children[1] = $5;
+                                                    $$->children[2] = $7;                                                
+                                                }
+                ;
+closedIterStmt  
+    : WHILE simpleExp DO stmt                   {
+                                                    $$ = $1;
+                                                    $$->setStmtKind(StmtKind::WHILE);
+                                                    $$->children[0] = $2;
+                                                    $$->children[1] = $4;
+                                                }
+    | FOR '(' ID TO ID ')' closedStmt           {
+                                                    $$ = $1;
+                                                    $3->setExprType(ExprType::UNDEFINED);
+                                                    $3->setDeclKind(DeclKind::VARIABLE);
+                                                    $5->setExprKind(ExprKind::ID);
+                                                    $$->setStmtKind(StmtKind::FOR);
+                                                    $$->children[0] = $3;
+                                                    $$->children[1] = $5;
+                                                    $$->children[2] = $7;                                                
+                                                }
+    | WHILE error ')' closedStmt                { $$ = NULL; yyerrok; }
+    | WHILE error                               { $$ = NULL; }
+    | FOR error ')' closedStmt                  { $$ = NULL; yyerrok; }
+    | FOR error                                 { $$ = NULL; }
     ;
 
-/*
-assignop
-    : sumop         { $$ = $1; }
-    | mulop         { $$ = $1; }
-    | minmaxop      { $$ = $1; }
-    | relop         { $$ = $1; }
-    ;
-*/
+/* ---- */
 
-andExpression
-    : andExpression AND unaryRelExpression 
+//iterRange
+//    : simpleExp TO simpleExp                    {
+//                                                    $$ = $2;
+//                                                    $2->setStmtKind(StmtKind::RANGE)
+//                                                    $2->children[0] = $1;
+//                                                    $2->children[1] = $3;
+//                                                }
+//    ;
+
+/* ---- */
+
+returnStmt              : RETURN ';'    {
+                                    $$ = $1;
+                                    $$->setStmtKind(StmtKind::RETURN);
+                                }
+                | RETURN exp ';'    {
+                                        $$ = $1;
+                                        $$->setStmtKind(StmtKind::RETURN);
+                                        $$->children[0] = $2;
+                                        yyerrok;
+                                    }
+                ;
+breakStmt       : BREAK ';' {
+                                $$ = $1;
+                                $$->setStmtKind(StmtKind::BREAK);
+                            }
+                ;
+
+// Expressions
+exp             : mutable '=' exp   {
+                                        $$ = $2;
+                                        $$->setExprKind(ExprKind::ASSIGN);
+                                        $$->children[0] = $1;
+                                        $$->children[0]->cancelCheckInit(true);
+                                        $$->children[1] = $3;
+                                    }
+                | mutable ADDASS exp    {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::ASSIGN);
+                                            $$->children[0] = $1;
+                                            $$->children[0]->cancelCheckInit(true);
+                                            $$->children[1] = $3;
+                                        }
+                | mutable SUBASS exp    {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::ASSIGN);
+                                            $$->children[0] = $1;
+                                            $$->children[0]->cancelCheckInit(true);
+                                            $$->children[1] = $3;
+                                        }
+                | mutable MULASS exp    {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::ASSIGN);
+                                            $$->children[0] = $1;
+                                            $$->children[0]->cancelCheckInit(true);
+                                            $$->children[1] = $3;
+                                        }
+                | mutable DIVASS exp    {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::ASSIGN);
+                                            $$->children[0] = $1;
+                                            $$->children[0]->cancelCheckInit(true);
+                                            $$->children[1] = $3;
+                                        }
+                | mutable INC   {
+                                    $$ = $2;
+                                    $$->setExprKind(ExprKind::ASSIGN);
+                                    $$->children[0] = $1;
+                                }
+                | mutable DEC   {
+                                    $$ = $2;
+                                    $$->setExprKind(ExprKind::ASSIGN);
+                                    $$->children[0] = $1;
+                                }
+                | simpleExp { $$ = $1; }
+                | error '=' error   { $$ = NULL; }
+                | error ADDASS error    { $$ = NULL; }
+                | error SUBASS error    { $$ = NULL; }
+                | error MULASS error    { $$ = NULL; }
+                | error DIVASS error    { $$ = NULL; }
+                | error INC { $$ = NULL; yyerrok; }
+                | error DEC { $$ = NULL; yyerrok; }
+                ;
+simpleExp       : simpleExp OR andExpr {
+                                            $2->setTokenString("|");
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::OP);
+                                            $$->children[0] = $1;
+                                            $$->children[1] = $3;
+                                        }
+                | andExpr { $$ = $1; }
+                | simpleExp '|' error   { $$ = NULL; }
+                ;
+andExpr         : andExpr AND unaryRelExp   {
+                                                $2->setTokenString("&");
+                                                $$ = $2;
+                                                $$->setExprKind(ExprKind::OP);
+                                                $$->children[0] = $1;
+                                                $$->children[1] = $3;
+                                            }
+                | unaryRelExp { $$ = $1; }
+                | andExpr '&' error { $$ = NULL; }
+                ;
+unaryRelExp     : NOT unaryRelExp   {
+                                        $1->setTokenString("!");
+                                        $$ = $1;
+                                        $$->setExprKind(ExprKind::OP);
+                                        $$->children[0] = $2;
+                                    }
+                | relExp { $$ = $1; }
+                | NOT error {
+                                $1->setTokenString("!"); 
+                                $$ = NULL; 
+                            }
+                ;
+relExp          : minmaxExp relop minmaxExp   
+                                        {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::OP);
+                                            $$->children[0] = $1;
+                                            $$->children[1] = $3;
+                                        }
+                | minmaxExp { $$ = $1; }
+                | minmaxExp relop error    { $$ = NULL; }
+                ;
+
+minmaxExp
+    : minmaxExp minmaxop sumExp   
     {
-                                        $2->tokenstr = "and";
-                                        $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
-    } 
-    | unaryRelExpression                { $$ = $1; }
-    | andExpression AND error           { $$ = NULL; }
-    ;
-
-unaryRelExpression
-    : NOT unaryRelExpression  
-    {
-                            $1->tokenstr = "not";
-                            $$ = newExpNode(OpK, UndefinedType, $1, $2);
-    } 
-    | relExpression         { $$ = $1; }
-    | NOT error             { $$ = NULL; }
-    ;
-
-relExpression:
-    minmaxExp relop minmaxExp   { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
-    | minmaxExp                 { $$ = $1; }
-    | minmaxExp relop error     { $$ = NULL; }
-    ;
-
-minmaxExp:
-    minmaxExp minmaxop sumExpression {
-        $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3);
-    } |
-    sumExpression { $$ = $1; };
-
-sumExpression
-    : sumExpression sumop mulExpression   { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
-    | mulExpression                     { $$ = $1; } 
-    | sumExpression sumop error         { $$ = NULL; }
-    ;
-
-mulExpression
-    : mulExpression mulop unaryExpression     { $$ = newExpNode(OpK, UndefinedType, $2->token, $1, $3); } 
-    | unaryExpression                       { $$ = $1; }
-    | mulExpression mulop error             { $$ = NULL; }
-    ;
-
-minmaxop:
-    MAX { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    MIN { $$ = newExpNode(OpK, UndefinedType, $1); };
-
-relop: 
-    '<' { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    '>' { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    LEQ { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    GEQ { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    NEQ { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    EQ { $$ = newExpNode(OpK, UndefinedType, $1); }
-    ;
-
-sumop: 
-    '+' { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    '-' { $$ = newExpNode(OpK, UndefinedType, $1); } ;
-
-mulop: 
-    '/' { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    '*' { $$ = newExpNode(OpK, UndefinedType, $1); } |
-    '%' { $$ = newExpNode(OpK, UndefinedType, $1); } ;
-
-unaryExpression
-    : unaryop unaryExpression       { $$ = newExpNode(OpK, UndefinedType, $1->token, $2); } 
-    | factor                        { $$ = $1; } 
-    | unaryop error                 { $$ = NULL; }
-    ; 
-
-unaryop
-    : '-' 
-    {
-            $1->tokenstr = "chsign";
-            $$ = newExpNode(OpK, UndefinedType, $1); 
-    } 
-    | '*' 
-    { 
-            $1->tokenstr = "sizeof";
-            $$ = newExpNode(OpK, UndefinedType, $1); 
-    } 
-    | '?'   { $$ = newExpNode(OpK, UndefinedType, $1); }
-    ;
-
-factor: 
-    mutable { $$ = $1; } | 
-    immutable { $$ = $1; } ;
-
-mutable
-    : ID { $$ = newExpNode(IdK, UndefinedType, $1); } 
-    | mutable '[' expression ']' 
-    {
-        $$ = newExpNode(OpK, UndefinedType, $2, $1, $3);
-        $$->isArray = true;
+            $$ = $2;
+            $$->setExprKind(ExprKind::OP);
+            $$->children[0] = $1;
+            $$->children[1] = $3;  
     }
+    | sumExp        { $$ = $1; }
     ;
 
-immutable: 
-    '(' expression ')'              { $$ = $2; yyerrok; } 
-    | call                          { $$ = $1; } 
-    | constant                      { $$ = $1; }
-    | '(' error                     { $$ = NULL; }
+minmaxop
+    : MAX         { $$ = $1; }
+    | MIN         { $$ = $1; }
     ;
 
-call
-    : ID '(' args ')'           { $$ = newExpNode(CallK, UndefinedType, $1, $3); }
-    | error '('                 { $$ = NULL; yyerrok; }
-    ;
-
-args
-    : argList       { $$ = $1; } 
-    | { $$ = NULL; }
-    ;
-
-
-argList
-    : argList ',' expression        { $$ = addSibling($1, $3); yyerrok; } 
-    | expression                    { $$ = $1; }
-    | argList ',' error             { $$=NULL; }
-    ;
-
-constant    
-    : NUMCONST          { $$ = newExpNode(ConstantK, Integer, $1); } 
-    | BOOLCONST         { $$ = newExpNode(ConstantK, Boolean, $1); } 
-    | CHARCONST         { $$ = newExpNode(ConstantK, Char, $1); } 
-    | STRINGCONST 
-    {
-                        $$ = newExpNode(ConstantK, Char, $1);
-                        $$->isArray = true;
-    }
-    ;
+relop           : LEQ { $$ = $1; }
+                | '<' { $$ = $1; }
+                | '>' { $$ = $1; }
+                | GEQ { $$ = $1; }
+                | EQ { $$ = $1; }
+                | NEQ  { $$ = $1; }
+                ;
+sumExp          : sumExp sumop mulExp   {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::OP);
+                                            $$->children[0] = $1;
+                                            $$->children[1] = $3;
+                                        }
+                | mulExp { $$ = $1; }
+                | sumExp sumop error    { $$ = NULL; }
+                ;
+sumop           : '+' { $$ = $1; }
+                | '-' { $$ = $1; }
+                ;
+mulExp          : mulExp mulOp unaryExp {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::OP);
+                                            $$->children[0] = $1;
+                                            $$->children[1] = $3;
+                                        }
+                | unaryExp { $$ = $1; }
+                | mulExp mulOp error    { $$ = NULL; }
+                ;
+mulOp           : '*' { $$ = $1; }
+                | '/' { $$ = $1; }
+                | '%' { $$ = $1; }
+                ;
+unaryExp        : unaryop unaryExp  {
+                                        $$ = $1;
+                                        $$->setExprKind(ExprKind::OP);
+                                        $$->children[0] = $2;
+                                    }
+                | factor { $$ = $1; }
+                | unaryop error { $$ = NULL; }
+                ;
+unaryop         : '-' { $$ = $1; }
+                | '*' { $$ = $1; }
+                | '?' { $$ = $1; }
+                ;
+factor          : immutable { $$ = $1; }
+                | mutable { $$ = $1; }
+                ;
+mutable         : ID    { 
+                            $$ = $1;
+                            $$->setExprKind(ExprKind::ID);
+                            $$->setExprName($$->getStringValue());
+                        }
+                | mutable '[' exp ']'   {
+                                            $$ = $2;
+                                            $$->setExprKind(ExprKind::OP);
+                                            $$->children[0] = $1;
+                                            $$->children[1] = $3;
+                                        }
+                ;
+immutable       : '(' exp ')' { $$ = $2; yyerrok; }
+                | call { $$ = $1; }
+                | constant { $$ = $1; }
+                | '(' error { $$ = NULL; }
+                | error ')' { $$ = NULL; yyerrok; }
+                ;
+call            : ID '(' args ')'   {
+                                        $$ = $1;
+                                        $$->setExprKind(ExprKind::CALL);
+                                        $$->setExprName($1->getStringValue());
+                                        $$->children[0] = $3;
+                                    }
+                | error '(' { $$ = NULL; yyerrok; }
+                ;
+args            : argList { $$ = $1; }
+                | %empty { $$ = NULL; }
+                ;
+argList         : argList ',' exp   {
+                                        $$ = $1;
+                                        if ($$ != NULL) $$->addSibling($3);
+                                        yyerrok;
+                                    }
+                | exp { $$ = $1; }
+                | argList ',' error { $$ = NULL; }
+                ;
+constant        : NUMCONST  {
+                                $$ = $1;
+                                $$->setExprKind(ExprKind::CONSTANT);
+                                $$->setExprType(ExprType::INT);
+                            }
+                | CHARCONST {
+                                $$ = $1;
+                                $$->setExprKind(ExprKind::CONSTANT);
+                                $$->setExprType(ExprType::CHAR);
+                            }
+                | STRINGCONST   {
+                                    $$ = $1;
+                                    $$->setExprKind(ExprKind::CONSTANT);
+                                    $$->setExprType(ExprType::CHAR);
+                                    $$->setMemorySize($$->getNumValue() + 1);
+                                    $$->setIsArray(true);
+                                }
+                | BOOLCONST {
+                                $$ = $1;
+                                $$->setExprKind(ExprKind::CONSTANT);
+                                $$->setExprType(ExprType::BOOL);
+                            }
+                ;
 %%

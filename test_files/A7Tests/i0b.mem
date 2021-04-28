@@ -1,0 +1,10 @@
+WARNING(5): Variable rr may be uninitialized when used here.
+Func main: returns type void [line: 2]
+.   Child: 1  Compound [line: 2]
+.   .   Child: 1  Compound [line: 3]
+.   .   .   Child: 0  Var rr: array of type int [mem: Local  size: 21  loc: -3] [line: 4]
+.   .   .   Child: 1  Call output: type void [line: 5]
+.   .   .   .   Child: 0  Op * : type int [line: 5]
+.   .   .   .   .   Child: 0  Id rr: array of type int [mem: Local  size: 21  loc: -3] [line: 5]
+Number of warnings: 1
+Number of errors: 0

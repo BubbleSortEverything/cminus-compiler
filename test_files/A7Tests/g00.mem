@@ -1,0 +1,11 @@
+Func cat: returns type void [line: 2]
+.   Child: 0  Param z: type int [mem: Param  size: 1  loc: -2] [line: 2]
+.   Child: 1  Compound [line: 3]
+.   .   Child: 1  Call output: type void [line: 4]
+.   .   .   Child: 0  Id z: type int [mem: Param  size: 1  loc: -2] [line: 4]
+Sibling: 1  Func main: returns type void [line: 7]
+.   Child: 1  Compound [line: 8]
+.   .   Child: 1  Call cat: type void [line: 9]
+.   .   .   Child: 0  Const 637 : type int [line: 9]
+Number of warnings: 0
+Number of errors: 0

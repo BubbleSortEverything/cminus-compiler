@@ -1,0 +1,4 @@
+Func main: returns type void [line: 2]
+.   Child: 1  Compound [line: 3]
+Number of warnings: 0
+Number of errors: 0
