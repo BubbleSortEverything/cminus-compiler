@@ -1,4 +1,4 @@
-WARNING(8): Variable cat may be uninitialized when used here.
+WARNING(8): Variable 'cat' may be uninitialized when used here.
 Func main: returns type void [line: 3]
 .   Child: 1  Compound [line: 4]
 .   .   Child: 0  Var cat: array of type int [mem: Local  size: 11  loc: -3] [line: 5]

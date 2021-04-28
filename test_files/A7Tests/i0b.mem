@@ -1,4 +1,4 @@
-WARNING(5): Variable rr may be uninitialized when used here.
+WARNING(5): Variable 'rr' may be uninitialized when used here.
 Func main: returns type void [line: 2]
 .   Child: 1  Compound [line: 2]
 .   .   Child: 1  Compound [line: 3]

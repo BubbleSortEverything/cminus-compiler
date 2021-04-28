@@ -261,16 +261,17 @@ compoundStmt    : '{' localDecls stmtList '}'   { $$ = $1; $$->setStmtKind(StmtK
                                                 }
                 ;
 
-localDecls      : localDecls scopedVarDecl  {
-                                                if ($1 == NULL) {
-                                                    $$ = $2;
-                                                } else {
-                                                    $$ = $1;
-                                                    $$->addSibling($2);
+localDecls      : localDecls scopedVarDecl      {
+                                                    if ($1 == NULL) {
+                                                        $$ = $2;
+                                                    } else {
+                                                        $$ = $1;
+                                                        $$->addSibling($2);
+                                                    }
                                                 }
-                                            }
                 | %empty { $$ = NULL; }
                 ;
+
 stmtList        : stmtList stmt {
                                     if ($1 == NULL) {
                                         $$ = $2;
@@ -361,242 +362,247 @@ closedIterStmt
 
 /* ---- */
 
-returnStmt              : RETURN ';'    {
-                                    $$ = $1;
-                                    $$->setStmtKind(StmtKind::RETURN);
-                                }
-                | RETURN exp ';'    {
-                                        $$ = $1;
-                                        $$->setStmtKind(StmtKind::RETURN);
-                                        $$->children[0] = $2;
-                                        yyerrok;
-                                    }
-                ;
-breakStmt       : BREAK ';' {
-                                $$ = $1;
-                                $$->setStmtKind(StmtKind::BREAK);
-                            }
-                ;
+returnStmt              
+    : RETURN ';'                                { $$ = $1; $$->setStmtKind(StmtKind::RETURN); }
+    | RETURN exp ';'                            {
+                                                    $$ = $1;
+                                                    $$->setStmtKind(StmtKind::RETURN);
+                                                    $$->children[0] = $2;
+                                                    yyerrok;
+                                                }
+    | RETURN error ';'                          { $$ = NULL; yyerrok; }   
+    ;
 
-// Expressions
-exp             : mutable '=' exp   {
-                                        $$ = $2;
-                                        $$->setExprKind(ExprKind::ASSIGN);
-                                        $$->children[0] = $1;
-                                        $$->children[0]->cancelCheckInit(true);
-                                        $$->children[1] = $3;
-                                    }
-                | mutable ADDASS exp    {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::ASSIGN);
-                                            $$->children[0] = $1;
-                                            $$->children[0]->cancelCheckInit(true);
-                                            $$->children[1] = $3;
-                                        }
-                | mutable SUBASS exp    {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::ASSIGN);
-                                            $$->children[0] = $1;
-                                            $$->children[0]->cancelCheckInit(true);
-                                            $$->children[1] = $3;
-                                        }
-                | mutable MULASS exp    {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::ASSIGN);
-                                            $$->children[0] = $1;
-                                            $$->children[0]->cancelCheckInit(true);
-                                            $$->children[1] = $3;
-                                        }
-                | mutable DIVASS exp    {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::ASSIGN);
-                                            $$->children[0] = $1;
-                                            $$->children[0]->cancelCheckInit(true);
-                                            $$->children[1] = $3;
-                                        }
-                | mutable INC   {
-                                    $$ = $2;
-                                    $$->setExprKind(ExprKind::ASSIGN);
-                                    $$->children[0] = $1;
-                                }
-                | mutable DEC   {
-                                    $$ = $2;
-                                    $$->setExprKind(ExprKind::ASSIGN);
-                                    $$->children[0] = $1;
-                                }
-                | simpleExp { $$ = $1; }
-                | error '=' error   { $$ = NULL; }
-                | error ADDASS error    { $$ = NULL; }
-                | error SUBASS error    { $$ = NULL; }
-                | error MULASS error    { $$ = NULL; }
-                | error DIVASS error    { $$ = NULL; }
-                | error INC { $$ = NULL; yyerrok; }
-                | error DEC { $$ = NULL; yyerrok; }
-                ;
-simpleExp       : simpleExp OR andExpr {
-                                            $2->setTokenString("|");
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::OP);
-                                            $$->children[0] = $1;
-                                            $$->children[1] = $3;
-                                        }
-                | andExpr { $$ = $1; }
-                | simpleExp '|' error   { $$ = NULL; }
-                ;
-andExpr         : andExpr AND unaryRelExp   {
-                                                $2->setTokenString("&");
-                                                $$ = $2;
-                                                $$->setExprKind(ExprKind::OP);
-                                                $$->children[0] = $1;
-                                                $$->children[1] = $3;
-                                            }
-                | unaryRelExp { $$ = $1; }
-                | andExpr '&' error { $$ = NULL; }
-                ;
-unaryRelExp     : NOT unaryRelExp   {
-                                        $1->setTokenString("!");
-                                        $$ = $1;
-                                        $$->setExprKind(ExprKind::OP);
-                                        $$->children[0] = $2;
-                                    }
-                | relExp { $$ = $1; }
-                | NOT error {
-                                $1->setTokenString("!"); 
-                                $$ = NULL; 
-                            }
-                ;
-relExp          : minmaxExp relop minmaxExp   
-                                        {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::OP);
-                                            $$->children[0] = $1;
-                                            $$->children[1] = $3;
-                                        }
-                | minmaxExp { $$ = $1; }
-                | minmaxExp relop error    { $$ = NULL; }
-                ;
+breakStmt       
+    : BREAK ';'                                 { $$ = $1; $$->setStmtKind(StmtKind::BREAK); }
+    ;
+
+exp            
+    : mutable '=' exp                           {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                    $$->children[0]->cancelCheckInit(true);
+                                                    $$->children[1] = $3;
+                                                }
+    | mutable ADDASS exp                        {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                    $$->children[0]->cancelCheckInit(true);
+                                                    $$->children[1] = $3;
+                                                }
+    | mutable SUBASS exp                        {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                    $$->children[0]->cancelCheckInit(true);
+                                                    $$->children[1] = $3;
+                                                }
+    | mutable MULASS exp                        {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                    $$->children[0]->cancelCheckInit(true);
+                                                    $$->children[1] = $3;
+                                                }
+    | mutable DIVASS exp                        {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                    $$->children[0]->cancelCheckInit(true);
+                                                    $$->children[1] = $3;
+                                                }
+    | mutable INC                               {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                }
+    | mutable DEC                               {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->children[0] = $1;
+                                                }
+    | simpleExp                                 { $$ = $1; }
+    | error '=' error                           { $$ = NULL; }
+    | error ADDASS error                        { $$ = NULL; }
+    | error SUBASS error                        { $$ = NULL; }
+    | error MULASS error                        { $$ = NULL; }
+    | error DIVASS error                        { $$ = NULL; }
+    | error INC                                 { $$ = NULL; yyerrok; }
+    | error DEC                                 { $$ = NULL; yyerrok; }
+    ;
+
+simpleExp       
+    : simpleExp OR andExpr                      {
+                                                    $2->setTokenString("|");
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    | andExpr                                   { $$ = $1; }
+    | simpleExp OR error                        { $2->setTokenString("|"); $$ = NULL; }
+    ;
+
+andExpr         
+    : andExpr AND unaryRelExp                   {
+                                                    $2->setTokenString("&");
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    | unaryRelExp                               { $$ = $1; }
+    | andExpr AND error                         { $2->setTokenString("&"); $$ = NULL; }
+    ;           
+
+unaryRelExp     
+    : NOT unaryRelExp                           {
+                                                    $1->setTokenString("!");
+                                                    $$ = $1;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $2;
+                                                }
+    | relExp                                    { $$ = $1; }
+    | NOT error                                 { $1->setTokenString("!"); $$ = NULL; }
+    ;
+
+relExp          
+    : minmaxExp relop minmaxExp                 {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    | minmaxExp                                 { $$ = $1; }
+    | minmaxExp relop error                     { $$ = NULL; }
+    ;
 
 minmaxExp
-    : minmaxExp minmaxop sumExp   
-    {
-            $$ = $2;
-            $$->setExprKind(ExprKind::OP);
-            $$->children[0] = $1;
-            $$->children[1] = $3;  
-    }
-    | sumExp        { $$ = $1; }
+    : minmaxExp minmaxop sumExp                 {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;  
+                                                }
+    | sumExp                                    { $$ = $1; }
     ;
 
 minmaxop
-    : MAX         { $$ = $1; }
-    | MIN         { $$ = $1; }
+    : MAX                                       { $$ = $1; }
+    | MIN                                       { $$ = $1; }
     ;
 
-relop           : LEQ { $$ = $1; }
-                | '<' { $$ = $1; }
-                | '>' { $$ = $1; }
-                | GEQ { $$ = $1; }
-                | EQ { $$ = $1; }
-                | NEQ  { $$ = $1; }
-                ;
-sumExp          : sumExp sumop mulExp   {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::OP);
-                                            $$->children[0] = $1;
-                                            $$->children[1] = $3;
-                                        }
-                | mulExp { $$ = $1; }
-                | sumExp sumop error    { $$ = NULL; }
-                ;
-sumop           : '+' { $$ = $1; }
-                | '-' { $$ = $1; }
-                ;
-mulExp          : mulExp mulOp unaryExp {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::OP);
-                                            $$->children[0] = $1;
-                                            $$->children[1] = $3;
-                                        }
-                | unaryExp { $$ = $1; }
-                | mulExp mulOp error    { $$ = NULL; }
-                ;
-mulOp           : '*' { $$ = $1; }
-                | '/' { $$ = $1; }
-                | '%' { $$ = $1; }
-                ;
-unaryExp        : unaryop unaryExp  {
-                                        $$ = $1;
-                                        $$->setExprKind(ExprKind::OP);
-                                        $$->children[0] = $2;
-                                    }
-                | factor { $$ = $1; }
-                | unaryop error { $$ = NULL; }
-                ;
-unaryop         : '-' { $$ = $1; }
-                | '*' { $$ = $1; }
-                | '?' { $$ = $1; }
-                ;
-factor          : immutable { $$ = $1; }
-                | mutable { $$ = $1; }
-                ;
-mutable         : ID    { 
-                            $$ = $1;
-                            $$->setExprKind(ExprKind::ID);
-                            $$->setExprName($$->getStringValue());
-                        }
-                | mutable '[' exp ']'   {
-                                            $$ = $2;
-                                            $$->setExprKind(ExprKind::OP);
-                                            $$->children[0] = $1;
-                                            $$->children[1] = $3;
-                                        }
-                ;
-immutable       : '(' exp ')' { $$ = $2; yyerrok; }
-                | call { $$ = $1; }
-                | constant { $$ = $1; }
-                | '(' error { $$ = NULL; }
-                | error ')' { $$ = NULL; yyerrok; }
-                ;
-call            : ID '(' args ')'   {
-                                        $$ = $1;
-                                        $$->setExprKind(ExprKind::CALL);
-                                        $$->setExprName($1->getStringValue());
-                                        $$->children[0] = $3;
-                                    }
-                | error '(' { $$ = NULL; yyerrok; }
-                ;
-args            : argList { $$ = $1; }
-                | %empty { $$ = NULL; }
-                ;
-argList         : argList ',' exp   {
-                                        $$ = $1;
-                                        if ($$ != NULL) $$->addSibling($3);
-                                        yyerrok;
-                                    }
-                | exp { $$ = $1; }
-                | argList ',' error { $$ = NULL; }
-                ;
-constant        : NUMCONST  {
-                                $$ = $1;
-                                $$->setExprKind(ExprKind::CONSTANT);
-                                $$->setExprType(ExprType::INT);
-                            }
-                | CHARCONST {
-                                $$ = $1;
-                                $$->setExprKind(ExprKind::CONSTANT);
-                                $$->setExprType(ExprType::CHAR);
-                            }
-                | STRINGCONST   {
-                                    $$ = $1;
-                                    $$->setExprKind(ExprKind::CONSTANT);
-                                    $$->setExprType(ExprType::CHAR);
-                                    $$->setMemorySize($$->getNumValue() + 1);
-                                    $$->setIsArray(true);
-                                }
-                | BOOLCONST {
-                                $$ = $1;
-                                $$->setExprKind(ExprKind::CONSTANT);
-                                $$->setExprType(ExprType::BOOL);
-                            }
-                ;
+relop           
+    : LEQ                                       { $$ = $1; }
+    | '<'                                       { $$ = $1; }
+    | '>'                                       { $$ = $1; }
+    | GEQ                                       { $$ = $1; }
+    | EQ                                        { $$ = $1; }
+    | NEQ                                       { $$ = $1; }
+    ;
+
+sumExp          
+    : sumExp sumop mulExp                       {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    | mulExp                                    { $$ = $1; }
+    | sumExp sumop error                        { $$ = NULL; }
+    ;
+
+sumop           
+    : '+'                                       { $$ = $1; }
+    | '-'                                       { $$ = $1; }
+    ;
+
+mulExp          
+    : mulExp mulOp unaryExp                     {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    | unaryExp                                  { $$ = $1; }
+    | mulExp mulOp error                        { $$ = NULL; }
+    ;
+
+mulOp           
+    : '*'                                       { $$ = $1; }
+    | '/'                                       { $$ = $1; }
+    | '%'                                       { $$ = $1; }
+    ;
+
+unaryExp        
+    : unaryop unaryExp                          {
+                                                    $$ = $1;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $2;
+                                                }
+    | factor                                    { $$ = $1; }
+    | unaryop error                             { $$ = NULL; }
+    ;
+
+unaryop         
+    : '-'                                       { $$ = $1; }
+    | '*'                                       { $$ = $1; }
+    | '?'                                       { $$ = $1; }
+    ;
+
+factor          
+    : immutable                                 { $$ = $1; }
+    | mutable                                   { $$ = $1; }
+    ;
+
+mutable         
+    : ID                                        { 
+                                                    $$ = $1;
+                                                    $$->setExprKind(ExprKind::ID);
+                                                    $$->setExprName($$->getStringValue());
+                                                }
+    | mutable '[' exp ']'                       {
+                                                    $$ = $2;
+                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    ;
+
+immutable       
+    : '(' exp ')'                               { $$ = $2; yyerrok; }
+    | call                                      { $$ = $1; }
+    | constant                                  { $$ = $1; }
+    | '(' error                                 { $$ = NULL; }
+    ;
+
+call            
+    : ID '(' args ')'                           {
+                                                    $$ = $1;
+                                                    $$->setExprKind(ExprKind::CALL);
+                                                    $$->setExprName($1->getStringValue());
+                                                    $$->children[0] = $3;
+                                                }
+    | error '('                                 { $$ = NULL; yyerrok; }
+    ;
+
+args            
+    : argList                                   { $$ = $1; }
+    | %empty                                    { $$ = NULL; }
+    ;
+
+argList         
+    : argList ',' exp                           { $$ = $1; if ($$ != NULL) $$->addSibling($3); yyerrok; }
+    | exp                                       { $$ = $1; }
+    | argList ',' error                         { $$ = NULL; }
+    ;
+
+constant        
+    : NUMCONST                                  { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::INT); }
+    | CHARCONST                                 { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::CHAR); }
+    | STRINGCONST                               { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::CHAR); $$->setMemorySize($$->getNumValue() + 1); $$->setIsArray(true); }
+    | BOOLCONST                                 { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::BOOL); }
+    ;
 %%

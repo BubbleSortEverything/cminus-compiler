@@ -338,7 +338,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
                         tree->setMemoryType(res->getMemoryType());
                         if (tree->shouldCheckInit() and res->shouldCheckInit() and !res->isInitialized() and res->parent != NULL) {
                             warn(tree);
-                            printf("Variable %s may be uninitialized when used here.\n", tree->getStringValue());
+                            printf("Variable '%s' may be uninitialized when used here.\n", tree->getStringValue());
                             res->cancelCheckInit(false);
                         }
                     } else {

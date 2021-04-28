@@ -1,4 +1,4 @@
-WARNING(23): Variable aaa may be uninitialized when used here.
+WARNING(23): Variable 'aaa' may be uninitialized when used here.
 WARNING(12): The variable 'bbb' seems not to be used.
 WARNING(13): The variable 'ccc' seems not to be used.
 WARNING(14): The variable 'ddd' seems not to be used.

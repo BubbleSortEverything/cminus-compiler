@@ -1,4 +1,4 @@
-WARNING(21): Variable k may be uninitialized when used here.
+WARNING(21): Variable 'k' may be uninitialized when used here.
 Func factorial: returns type int [line: 3]
 .   Child: 0  Param n: type int [mem: Param  size: 1  loc: -2] [line: 3]
 .   Sibling: 1  Param k: array of type int [mem: Param  size: 1  loc: -3] [line: 3]
