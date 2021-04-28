@@ -107,6 +107,7 @@ while 						{ return setValue(lineNum, WHILE, yytext); }
 do 							{ return setValue(lineNum, DO, yytext); }
 for 						{ return setValue(lineNum, FOR, yytext); }
 to                        	{ return setValue(lineNum, TO, yytext); }
+by                          { return setValue(lineNum, BY, yytext); }
 return 						{ return setValue(lineNum, RETURN, yytext); }
 break 						{ return setValue(lineNum, BREAK, yytext); }
 and 						{ return setValue(lineNum, AND, yytext); }

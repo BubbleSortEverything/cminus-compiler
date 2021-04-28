@@ -39,17 +39,17 @@
 %type <tree> paramIdList
 %type <tree> paramId
 %type <tree> stmt
-%type <tree> simpleStmt
-%type <tree> openStmt
-%type <tree> closedStmt
+//%type <tree> simpleStmt
+//%type <tree> openStmt
+//%type <tree> closedStmt
 %type <tree> expStmt
 %type <tree> compoundStmt
 %type <tree> localDecls
 %type <tree> stmtList
 %type <tree> selectStmt
-%type <tree> closedSelStmt
-%type <tree> openIterStmt
-%type <tree> closedIterStmt
+//%type <tree> closedSelStmt
+//%type <tree> openIterStmt
+//%type <tree> closedIterStmt
 %type <tree> returnStmt
 %type <tree> breakStmt
 %type <tree> exp
@@ -73,14 +73,16 @@
 %type <tree> constant
 %type <tree> minmaxop
 %type <tree> minmaxExp
+%type <tree> iterStmt
+%type <tree> iterRange
+%type <tree> matched
+%type <tree> unmatched
 
-// Operators
+// token specifies the token classes from the scanner
 %token <tree> ADDASS DEC DIVASS INC MULASS SUBASS
 %token <tree> EQ GEQ LEQ NEQ NOT AND OR MIN MAX
 %token <tree> '+' '-' '=' '|' '&' '!' '<' '>' '*' '/' '%' '?'
-
-// Keywords / Syntax
-%token <tree> BOOL BREAK CHAR ELSE FOR TO IF THEN INT RETURN STATIC WHILE DO
+%token <tree> BOOL BREAK CHAR ELSE FOR TO BY IF THEN INT RETURN STATIC WHILE DO
 %token <tree> ID
 %token <tree> BOOLCONST
 %token <tree> NUMCONST
@@ -149,13 +151,13 @@ varDeclInit
 varDeclId               
     : ID                                        {
                                                     $$ = $1;
-                                                    $$->setDeclKind(DeclKind::VARIABLE);
+                                                    $$->setDeclKind(DeclKind::VarK);
                                                 }
     | ID '[' NUMCONST ']'                       {
                                                     $$ = $1;
                                                     $$->setIsArray(true);
                                                     $$->setMemorySize($3->getNumValue() + 1);
-                                                    $$->setDeclKind(DeclKind::VARIABLE);
+                                                    $$->setDeclKind(DeclKind::VarK);
                                                 }
     | ID '[' error                              { $$ = NULL; }
     | error ']'                                 { $$ = NULL; yyerrok; }
@@ -170,14 +172,14 @@ typeSpec
 funDecl                 
     : typeSpec ID '(' params ')' stmt           {
                                                     $$ = $2;
-                                                    $$->setDeclKind(DeclKind::FUNCTION);
+                                                    $$->setDeclKind(DeclKind::FuncK);
                                                     $$->setExprType($1->getExprType());
                                                     $$->children[0] = $4;
                                                     $$->children[1] = $6;
                                                 }
     | ID '(' params ')' stmt                    {
                                                     $$ = $1;
-                                                    $$->setDeclKind(DeclKind::FUNCTION);
+                                                    $$->setDeclKind(DeclKind::FuncK);
                                                     $$->setExprType(ExprType::VOID);
                                                     $$->children[0] = $3;
                                                     $$->children[1] = $5;
@@ -214,47 +216,61 @@ paramIdList
     ;
 
 paramId         
-    : ID                                        { $$ = $1; $$->setDeclKind(DeclKind::PARAM); }
-    | ID '[' ']'                                { $$ = $1; $$->setDeclKind(DeclKind::PARAM); $$->setIsArray(true); }
+    : ID                                        { $$ = $1; $$->setDeclKind(DeclKind::ParamK); }
+    | ID '[' ']'                                { $$ = $1; $$->setDeclKind(DeclKind::ParamK); $$->setIsArray(true); }
     ;
 
 /* ---------- */
-//stmt
-//    :   matched         { $$ = $1; }
-//    |   unmatched       { $$ = $1; }
-//    ;
+stmt
+    : matched                                 { $$ = $1; }
+    | unmatched                               { $$ = $1; }
+    ;
 
-//matched
-//    :   expStmt         { $$ = $1; }
-//    |   compoundStmt    { $$ = $1; }
-//    |   selectStmt      { $$ = $1; }
-//    |   iterStmt        { $$ = $1; }
-//    ;
+matched
+    : expStmt                                   { $$ = $1; }
+    | compoundStmt                              { $$ = $1; }
+    | selectStmt                                { $$ = $1; }
+    | iterStmt                                  { $$ = $1; }
+    | returnStmt                                { $$ = $1; }
+    | breakStmt                                 { $$ = $1; }
+    | IF error                                  { $$ = NULL; }
+    | IF error ELSE matched                     { $$ = NULL; yyerrok; }
+    | IF error THEN matched ELSE matched        { $$ = NULL; yyerrok; }
+    | WHILE error DO matched                    { $$ = NULL; yyerrok; }
+    | WHILE error                               { $$ = NULL; }
+    | FOR ID '=' error DO matched               { $$ = NULL; yyerrok; }
+    | FOR error                                 { $$ = NULL; }
+    ;
+
+unmatched 
+    : IF error THEN stmt                        { $$ = NULL; yyerrok; }
+    | IF error THEN matched ELSE unmatched      { $$ = NULL; yyerrok; }
+    ;
 
 /* ---------- */
 
 
-stmt            : openStmt { $$ = $1; }
-                | closedStmt { $$ = $1; }
-                ;
-simpleStmt      : expStmt { $$ = $1; }
-                | compoundStmt { $$ = $1; }
-                | returnStmt { $$ = $1; }
-                | breakStmt { $$ = $1; }
-                ;
-openStmt        : selectStmt { $$ = $1; }
-                | openIterStmt { $$ = $1; }
-                ;
-closedStmt      : simpleStmt { $$ = $1; }
-                | closedSelStmt { $$ = $1; }
-                | closedIterStmt { $$ = $1; }
-                ;
+//stmt            : openStmt { $$ = $1; }
+//                | closedStmt { $$ = $1; }
+//                ;
+//simpleStmt      : expStmt { $$ = $1; }
+//                | compoundStmt { $$ = $1; }
+//                | returnStmt { $$ = $1; }
+//                | breakStmt { $$ = $1; }
+//                ;
+//openStmt        : selectStmt { $$ = $1; }
+//                | openIterStmt { $$ = $1; }
+//                ;
+//closedStmt      : simpleStmt { $$ = $1; }
+//                | closedSelStmt { $$ = $1; }
+//                | closedIterStmt { $$ = $1; }
+//                ;
 expStmt         : exp ';'   { $$ = $1; }
                 | ';'       { $$ = NULL; }
                 | error ';' { $$ = NULL; yyerrok; }
                 ;
 
-compoundStmt    : '{' localDecls stmtList '}'   { $$ = $1; $$->setStmtKind(StmtKind::COMPOUND);
+compoundStmt    : '{' localDecls stmtList '}'   { $$ = $1; $$->setStmtKind(StmtKind::CompoundK);
                                                     $$->children[0] = $2;
                                                     $$->children[1] = $3;
                                                     yyerrok;
@@ -285,88 +301,118 @@ stmtList        : stmtList stmt {
 selectStmt     
     : IF simpleExp THEN stmt                        {
                                                         $$ = $1;
-                                                        $$->setStmtKind(StmtKind::SELECTION);
+                                                        $$->setStmtKind(StmtKind::IfK);
                                                         $$->children[0] = $2;
                                                         $$->children[1] = $4;
                                                     }
     | IF simpleExp THEN stmt ELSE stmt              {
                                                         $$ = $1;
-                                                        $$->setStmtKind(StmtKind::SELECTION);
+                                                        $$->setStmtKind(StmtKind::IfK);
                                                         $$->children[0] = $2;
                                                         $$->children[1] = $4;
                                                         $$->children[2] = $6;
                                                     }                                                 
     ;
 
-closedSelStmt   : IF '(' simpleExp ')' closedStmt ELSE closedStmt   {
-                                                                        $$ = $1;
-                                                                        $$->setStmtKind(StmtKind::SELECTION);
-                                                                        $$->children[0] = $3;
-                                                                        $$->children[1] = $5;
-                                                                        $$->children[2] = $7;
-                                                                    }
-                | IF error  { $$ = NULL; }
-                | IF error ELSE closedStmt  { $$ = NULL; yyerrok; }
-                | IF error ')' closedStmt ELSE closedStmt   { $$ = NULL; yyerrok; }
-                ;
-openIterStmt    : WHILE '(' simpleExp ')' openStmt  {
-                                                        $$ = $1;
-                                                        $$->setStmtKind(StmtKind::WHILE);
-                                                        $$->children[0] = $3;
-                                                        $$->children[1] = $5;
-                                                    }
-                | FOR '(' ID TO ID ')' openStmt {
-                                                    $$ = $1;
-                                                    $3->setExprType(ExprType::UNDEFINED);
-                                                    $3->setDeclKind(DeclKind::VARIABLE);
-                                                    $5->setExprKind(ExprKind::ID);
-                                                    $$->setStmtKind(StmtKind::FOR);
-                                                    $$->children[0] = $3;
-                                                    $$->children[1] = $5;
-                                                    $$->children[2] = $7;                                                
-                                                }
-                ;
-closedIterStmt  
-    : WHILE simpleExp DO stmt                   {
-                                                    $$ = $1;
-                                                    $$->setStmtKind(StmtKind::WHILE);
-                                                    $$->children[0] = $2;
-                                                    $$->children[1] = $4;
-                                                }
-    | FOR '(' ID TO ID ')' closedStmt           {
-                                                    $$ = $1;
-                                                    $3->setExprType(ExprType::UNDEFINED);
-                                                    $3->setDeclKind(DeclKind::VARIABLE);
-                                                    $5->setExprKind(ExprKind::ID);
-                                                    $$->setStmtKind(StmtKind::FOR);
-                                                    $$->children[0] = $3;
-                                                    $$->children[1] = $5;
-                                                    $$->children[2] = $7;                                                
-                                                }
-    | WHILE error ')' closedStmt                { $$ = NULL; yyerrok; }
-    | WHILE error                               { $$ = NULL; }
-    | FOR error ')' closedStmt                  { $$ = NULL; yyerrok; }
-    | FOR error                                 { $$ = NULL; }
-    ;
-
-/* ---- */
-
-//iterRange
-//    : simpleExp TO simpleExp                    {
-//                                                    $$ = $2;
-//                                                    $2->setStmtKind(StmtKind::RANGE)
-//                                                    $2->children[0] = $1;
-//                                                    $2->children[1] = $3;
+//closedSelStmt   : IF '(' simpleExp ')' closedStmt ELSE closedStmt   {
+//                                                                        $$ = $1;
+//                                                                        $$->setStmtKind(StmtKind::IfK);
+//                                                                        $$->children[0] = $3;
+//                                                                        $$->children[1] = $5;
+//                                                                        $$->children[2] = $7;
+//                                                                    }
+//                | IF error  { $$ = NULL; }
+//                | IF error ELSE closedStmt  { $$ = NULL; yyerrok; }
+//                | IF error ')' closedStmt ELSE closedStmt   { $$ = NULL; yyerrok; }
+//                ;
+//openIterStmt    : WHILE '(' simpleExp ')' openStmt  {
+//                                                        $$ = $1;
+//                                                        $$->setStmtKind(StmtKind::WhileK);
+//                                                        $$->children[0] = $3;
+//                                                        $$->children[1] = $5;
+//                                                    }
+//                | FOR '(' ID TO ID ')' openStmt {
+//                                                    $$ = $1;
+//                                                    $3->setExprType(ExprType::UNDEFINED);
+//                                                    $3->setDeclKind(DeclKind::VarK);
+//                                                    $5->setExprKind(ExprKind::IdK);
+//                                                    $$->setStmtKind(StmtKind::ForK);
+//                                                    $$->children[0] = $3;
+//                                                    $$->children[1] = $5;
+//                                                    $$->children[2] = $7;                                                
 //                                                }
+//                ;
+//closedIterStmt  
+//    : WHILE simpleExp DO stmt                   {
+//                                                    $$ = $1;
+//                                                    $$->setStmtKind(StmtKind::WhileK);
+//                                                    $$->children[0] = $2;
+//                                                    $$->children[1] = $4;
+//                                                }
+//    | FOR '(' ID TO ID ')' closedStmt           {
+//                                                    $$ = $1;
+//                                                    $3->setExprType(ExprType::UNDEFINED);
+//                                                    $3->setDeclKind(DeclKind::VarK);
+//                                                    $5->setExprKind(ExprKind::IdK);
+//                                                    $$->setStmtKind(StmtKind::ForK);
+//                                                    $$->children[0] = $3;
+//                                                    $$->children[1] = $5;
+//                                                    $$->children[2] = $7;                                                
+//                                                }
+//    | WHILE error ')' closedStmt                { $$ = NULL; yyerrok; }
+//    | WHILE error                               { $$ = NULL; }
+//    | FOR error ')' closedStmt                  { $$ = NULL; yyerrok; }
+//    | FOR error                                 { $$ = NULL; }
 //    ;
 
 /* ---- */
 
+iterStmt
+    : WHILE simpleExp DO stmt                   { 
+                                                    $$ = $1;
+                                                    $$->setStmtKind(StmtKind::WhileK);
+                                                    $$->children[0] = $2;
+                                                    $$->children[1] = $4;
+                                                } 
+    | FOR ID '=' iterRange DO stmt              { 
+                                                    $$ = $1;
+                                                    $2->setExprType(ExprType::UNDEFINED);
+                                                    $2->setDeclKind(DeclKind::VarK);
+                                                    $$->setStmtKind(StmtKind::ForK);
+                                                    $$->children[0] = $2;
+                                                    $$->children[1] = $4;
+                                                    $$->children[2] = $6;
+                                                }
+    ;
+
+iterRange
+    : simpleExp TO simpleExp                    {
+                                                    $$ = $2;
+                                                    $2->setExprType(ExprType::UNDEFINED);
+                                                    $$->setStmtKind(StmtKind::RangeK);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                }
+    | simpleExp TO simpleExp BY simpleExp       {
+                                                    $$ = $2;
+                                                    $2->setExprType(ExprType::UNDEFINED);
+                                                    $$->setStmtKind(StmtKind::RangeK);
+                                                    $$->children[0] = $1;
+                                                    $$->children[1] = $3;
+                                                    $$->children[2] = $5;
+                                                }
+    | simpleExp TO error                        { $$ = NULL; }
+    | error BY error                            { $$ = NULL; yyerrok; }
+    | simpleExp TO simpleExp BY error           { $$ = NULL; }
+    ;
+
+/* ---- */
+
 returnStmt              
-    : RETURN ';'                                { $$ = $1; $$->setStmtKind(StmtKind::RETURN); }
+    : RETURN ';'                                { $$ = $1; $$->setStmtKind(StmtKind::ReturnK); }
     | RETURN exp ';'                            {
                                                     $$ = $1;
-                                                    $$->setStmtKind(StmtKind::RETURN);
+                                                    $$->setStmtKind(StmtKind::ReturnK);
                                                     $$->children[0] = $2;
                                                     yyerrok;
                                                 }
@@ -374,55 +420,47 @@ returnStmt
     ;
 
 breakStmt       
-    : BREAK ';'                                 { $$ = $1; $$->setStmtKind(StmtKind::BREAK); }
+    : BREAK ';'                                 { $$ = $1; $$->setStmtKind(StmtKind::BreakK); }
     ;
 
 exp            
     : mutable '=' exp                           {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->setExprKind(ExprKind::AssignK);
                                                     $$->children[0] = $1;
                                                     $$->children[0]->cancelCheckInit(true);
                                                     $$->children[1] = $3;
                                                 }
     | mutable ADDASS exp                        {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->setExprKind(ExprKind::AssignK);
                                                     $$->children[0] = $1;
                                                     $$->children[0]->cancelCheckInit(true);
                                                     $$->children[1] = $3;
                                                 }
     | mutable SUBASS exp                        {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->setExprKind(ExprKind::AssignK);
                                                     $$->children[0] = $1;
                                                     $$->children[0]->cancelCheckInit(true);
                                                     $$->children[1] = $3;
                                                 }
     | mutable MULASS exp                        {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->setExprKind(ExprKind::AssignK);
                                                     $$->children[0] = $1;
                                                     $$->children[0]->cancelCheckInit(true);
                                                     $$->children[1] = $3;
                                                 }
     | mutable DIVASS exp                        {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
+                                                    $$->setExprKind(ExprKind::AssignK);
                                                     $$->children[0] = $1;
                                                     $$->children[0]->cancelCheckInit(true);
                                                     $$->children[1] = $3;
                                                 }
-    | mutable INC                               {
-                                                    $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
-                                                    $$->children[0] = $1;
-                                                }
-    | mutable DEC                               {
-                                                    $$ = $2;
-                                                    $$->setExprKind(ExprKind::ASSIGN);
-                                                    $$->children[0] = $1;
-                                                }
+    | mutable INC                               { $$ = $2; $$->setExprKind(ExprKind::AssignK); $$->children[0] = $1; }
+    | mutable DEC                               { $$ = $2; $$->setExprKind(ExprKind::AssignK); $$->children[0] = $1; }
     | simpleExp                                 { $$ = $1; }
     | error '=' error                           { $$ = NULL; }
     | error ADDASS error                        { $$ = NULL; }
@@ -437,7 +475,7 @@ simpleExp
     : simpleExp OR andExpr                      {
                                                     $2->setTokenString("|");
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
@@ -449,7 +487,7 @@ andExpr
     : andExpr AND unaryRelExp                   {
                                                     $2->setTokenString("&");
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
@@ -461,7 +499,7 @@ unaryRelExp
     : NOT unaryRelExp                           {
                                                     $1->setTokenString("!");
                                                     $$ = $1;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $2;
                                                 }
     | relExp                                    { $$ = $1; }
@@ -471,7 +509,7 @@ unaryRelExp
 relExp          
     : minmaxExp relop minmaxExp                 {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
@@ -482,7 +520,7 @@ relExp
 minmaxExp
     : minmaxExp minmaxop sumExp                 {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;  
                                                 }
@@ -506,7 +544,7 @@ relop
 sumExp          
     : sumExp sumop mulExp                       {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
@@ -522,7 +560,7 @@ sumop
 mulExp          
     : mulExp mulOp unaryExp                     {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
@@ -539,7 +577,7 @@ mulOp
 unaryExp        
     : unaryop unaryExp                          {
                                                     $$ = $1;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $2;
                                                 }
     | factor                                    { $$ = $1; }
@@ -560,12 +598,12 @@ factor
 mutable         
     : ID                                        { 
                                                     $$ = $1;
-                                                    $$->setExprKind(ExprKind::ID);
+                                                    $$->setExprKind(ExprKind::IdK);
                                                     $$->setExprName($$->getStringValue());
                                                 }
     | mutable '[' exp ']'                       {
                                                     $$ = $2;
-                                                    $$->setExprKind(ExprKind::OP);
+                                                    $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
@@ -581,7 +619,7 @@ immutable
 call            
     : ID '(' args ')'                           {
                                                     $$ = $1;
-                                                    $$->setExprKind(ExprKind::CALL);
+                                                    $$->setExprKind(ExprKind::CallK);
                                                     $$->setExprName($1->getStringValue());
                                                     $$->children[0] = $3;
                                                 }
@@ -600,9 +638,9 @@ argList
     ;
 
 constant        
-    : NUMCONST                                  { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::INT); }
-    | CHARCONST                                 { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::CHAR); }
-    | STRINGCONST                               { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::CHAR); $$->setMemorySize($$->getNumValue() + 1); $$->setIsArray(true); }
-    | BOOLCONST                                 { $$ = $1; $$->setExprKind(ExprKind::CONSTANT); $$->setExprType(ExprType::BOOL); }
+    : NUMCONST                                  { $$ = $1; $$->setExprKind(ExprKind::ConstantK); $$->setExprType(ExprType::INT); }
+    | CHARCONST                                 { $$ = $1; $$->setExprKind(ExprKind::ConstantK); $$->setExprType(ExprType::CHAR); }
+    | STRINGCONST                               { $$ = $1; $$->setExprKind(ExprKind::ConstantK); $$->setExprType(ExprType::CHAR); $$->setMemorySize($$->getNumValue() + 1); $$->setIsArray(true); }
+    | BOOLCONST                                 { $$ = $1; $$->setExprKind(ExprKind::ConstantK); $$->setExprType(ExprType::BOOL); }
     ;
 %%

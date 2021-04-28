@@ -84,7 +84,7 @@ void TokenTree::_setParent() {
 
 void TokenTree::_setFunction() {
     TokenTree *topParent = getTopParent();
-    if (topParent->getDeclKind() == DeclKind::FUNCTION) { // All top parents must be declarations!
+    if (topParent->getDeclKind() == DeclKind::FuncK) { // All top parents must be declarations!
         function = topParent;
     }
 
@@ -149,36 +149,36 @@ NodeKind TokenTree::getNodeKind() {
 }
 
 void TokenTree::setDeclKind(DeclKind dk) {
-    this->nodeKind = NodeKind::DECLARATION;
+    this->nodeKind = NodeKind::DeclK;
     this->subKind.declKind = dk;
 }
 
 DeclKind TokenTree::getDeclKind() {
-    if (this->nodeKind != NodeKind::DECLARATION) {
+    if (this->nodeKind != NodeKind::DeclK) {
         throw std::runtime_error("subKind is not declaration!");
     }
     return subKind.declKind;
 }
 
 void TokenTree::setExprKind(ExprKind ek) {
-    this->nodeKind = NodeKind::EXPRESSION;
+    this->nodeKind = NodeKind::ExpK;
     this->subKind.exprKind = ek;
 }
 
 ExprKind TokenTree::getExprKind() {
-    if (this->nodeKind != NodeKind::EXPRESSION) {
+    if (this->nodeKind != NodeKind::ExpK) {
         throw std::runtime_error("subKind is not expression!");
     }
     return subKind.exprKind;
 }
 
 void TokenTree::setStmtKind(StmtKind sk) {
-    this->nodeKind = NodeKind::STATEMENT;
+    this->nodeKind = NodeKind::StmtK;
     this->subKind.stmtKind = sk;
 }
 
 StmtKind TokenTree::getStmtKind() {
-    if (this->nodeKind != NodeKind::STATEMENT) {
+    if (this->nodeKind != NodeKind::StmtK) {
         throw std::runtime_error("subKind is not statement!");
     }
     return subKind.stmtKind;
@@ -274,7 +274,7 @@ bool TokenTree::shouldCheckInit() {
 }
 
 void TokenTree::setIsUsed(bool b) {
-    if (this->getNodeKind() != NodeKind::DECLARATION) {
+    if (this->getNodeKind() != NodeKind::DeclK) {
         throw std::runtime_error("Cannot set isUsed on node that is not a declaration.");
     }
     _isUsed = b;
@@ -285,10 +285,10 @@ bool TokenTree::isUsed() {
 }
 
 void TokenTree::setIsInitialized(bool b) {
-    if (this->getNodeKind() != NodeKind::DECLARATION) {
+    if (this->getNodeKind() != NodeKind::DeclK) {
         throw std::runtime_error("Cannot set isInitialized on node that is not declaration.");
     }
-    if (this->getDeclKind() == DeclKind::FUNCTION) {
+    if (this->getDeclKind() == DeclKind::FuncK) {
         throw std::runtime_error("Cannot set isInitialized on node that is a function.");
     }
     _isInitialized = b;
@@ -299,7 +299,7 @@ bool TokenTree::isInitialized() {
 }
 
 void TokenTree::setHasReturn(bool b) {
-    if (this->getNodeKind() != NodeKind::DECLARATION or this->getDeclKind() != DeclKind::FUNCTION) {
+    if (this->getNodeKind() != NodeKind::DeclK or this->getDeclKind() != DeclKind::FuncK) {
         throw std::runtime_error("Can only set 'hasReturn' on function declaration.");
     }
     _hasReturn = b;
@@ -307,21 +307,21 @@ void TokenTree::setHasReturn(bool b) {
 
 bool TokenTree::hasReturn() {
     
-    if (this->getNodeKind() != NodeKind::DECLARATION or this->getDeclKind() != DeclKind::FUNCTION) {
+    if (this->getNodeKind() != NodeKind::DeclK or this->getDeclKind() != DeclKind::FuncK) {
         throw std::runtime_error("Value of 'hasReturn' is only valid on function declaration.");
     }
     return _hasReturn;
 }
 
 bool TokenTree::isConstantExpression() {
-    if (this->getNodeKind() != NodeKind::EXPRESSION) {
+    if (this->getNodeKind() != NodeKind::ExpK) {
         throw std::runtime_error("Cannot only call 'isConstantExpression' on an expression.");
     }
-    if (this->getExprKind() == ExprKind::CONSTANT) {
+    if (this->getExprKind() == ExprKind::ConstantK) {
         return true;
-    } else if (this->getExprKind() == ExprKind::ID or this->getExprKind() == ExprKind::CALL or this->getExprKind() == ExprKind::ASSIGN) {
+    } else if (this->getExprKind() == ExprKind::IdK or this->getExprKind() == ExprKind::CallK or this->getExprKind() == ExprKind::AssignK) {
         return false;
-    } else { // ExprKind::OP
+    } else { // ExprKind::OpK
         bool allChildrenAreConst = true;
         for (int i = 0; i < MAX_CHILDREN; i++) {
             TokenTree *child = this->children[i];
@@ -502,7 +502,7 @@ void TokenTree::printLine() {
 void TokenTree::printMemory() {
     if (this->getMemoryType() == MemoryType::UNDEFINED) return;
     printf("[mem: %s  ", getMemoryTypeString());
-    if (!(this->getNodeKind() == NodeKind::DECLARATION and this->getDeclKind() == DeclKind::FUNCTION)) {
+    if (!(this->getNodeKind() == NodeKind::DeclK and this->getDeclKind() == DeclKind::FuncK)) {
         printf("size: %d  ", getMemorySize());
     }
     printf("loc: %d] ", getMemoryOffset());
@@ -578,7 +578,7 @@ void TokenTree::copyMemoryInfo(TokenTree *tree) {
 
 int TokenTree::_calculateMemoryOfChildren() {
     int sum = 0;
-    if (this->getNodeKind() == NodeKind::DECLARATION and this->getDeclKind() != DeclKind::FUNCTION and !this->isInGlobalMemory()) {
+    if (this->getNodeKind() == NodeKind::DeclK and this->getDeclKind() != DeclKind::FuncK and !this->isInGlobalMemory()) {
         sum += getMemorySize();
     }
 

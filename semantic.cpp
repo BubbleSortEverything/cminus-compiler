@@ -233,10 +233,10 @@ bool compoundShouldEnterScope(TokenTree *parent) {
     if (parent == NULL) {
         return true;
     }
-    if (parent->getNodeKind() == NodeKind::DECLARATION and parent->getDeclKind() == DeclKind::FUNCTION) {
+    if (parent->getNodeKind() == NodeKind::DeclK and parent->getDeclKind() == DeclKind::FuncK) {
         return false;
     }
-    if (parent->getNodeKind() == NodeKind::STATEMENT and parent->getStmtKind() == StmtKind::FOR) {
+    if (parent->getNodeKind() == NodeKind::StmtK and parent->getStmtKind() == StmtKind::ForK) {
         return false;
     }
     return true;
@@ -247,7 +247,7 @@ bool compoundShouldEnterScope(TokenTree *parent) {
  * Also handles some error checking for symbols.
  */
 void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffset) {
-    if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::EXPRESSION and tree->parent->getExprKind() == ExprKind::CALL) {
+    if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
         TokenTree *res = (TokenTree *) symbolTable->lookup(tree->parent->getStringValue());
         if (res != NULL) {
             int counter = 1;
@@ -266,9 +266,9 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
     }
     switch (tree->getNodeKind()) {
         case 0: {
-            if (tree->getDeclKind() != DeclKind::VARIABLE) {
+            if (tree->getDeclKind() != DeclKind::VarK) {
                 bool defined = !symbolTable->insert(tree->getStringValue(), tree);
-                if (tree->getDeclKind() == DeclKind::FUNCTION) {
+                if (tree->getDeclKind() == DeclKind::FuncK) {
                     symbolTable->enter("Function: " + std::string(tree->getStringValue()));
                     *enteredScope = true;
                     localOffset = -2;
@@ -309,7 +309,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
                         printf("Function '%s' is not declared.\n", tree->getStringValue());
                     } else {
                         tree->setExprType(res->getExprType());
-                        if (res->getDeclKind() != DeclKind::FUNCTION) {
+                        if (res->getDeclKind() != DeclKind::FuncK) {
                             err(tree);
                             printf("'%s' is a simple variable and cannot be called.\n", tree->getStringValue());
                             tree->setExprType(ExprType::UNDEFINED);
@@ -326,10 +326,10 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
                 }
                 case 3: {
                     TokenTree *res = (TokenTree *) symbolTable->lookup(tree->getStringValue());
-                    if (res == NULL or (res->getDeclKind() == DeclKind::VARIABLE and tree->hasParent(res, true))) {
+                    if (res == NULL or (res->getDeclKind() == DeclKind::VarK and tree->hasParent(res, true))) {
                         err(tree);
                         printf("Variable '%s' is not declared.\n", tree->getStringValue());
-                    } else if (res->getDeclKind() != DeclKind::FUNCTION) {
+                    } else if (res->getDeclKind() != DeclKind::FuncK) {
                         res->setIsUsed(true);
                         tree->copyMemoryInfo(res);
                         tree->setExprType(res->getExprType());
@@ -379,7 +379,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
                     bool foundLoop = false;
                     while (visitor->parent != NULL) {
                         TokenTree *parent = visitor->parent;
-                        if (parent->getNodeKind() == NodeKind::STATEMENT and (parent->getStmtKind() == StmtKind::WHILE or parent->getStmtKind() == StmtKind::FOR)) {
+                        if (parent->getNodeKind() == NodeKind::StmtK and (parent->getStmtKind() == StmtKind::WhileK or parent->getStmtKind() == StmtKind::ForK)) {
                             foundLoop = true;
                             break;
                         }
@@ -541,12 +541,12 @@ void afterChildren(TokenTree *tree) {
                             }
                         }
                         TokenTree *res;
-                        if (lhs->getExprKind() == ExprKind::ID) {
+                        if (lhs->getExprKind() == ExprKind::IdK) {
                             res = (TokenTree *) symbolTable->lookup(lhs->getStringValue());
                         } else {
                             res = (TokenTree *) symbolTable->lookup(lhs->children[0]->getStringValue());
                         }
-                        if (res == NULL or res->getDeclKind() == DeclKind::FUNCTION) break;
+                        if (res == NULL or res->getDeclKind() == DeclKind::FuncK) break;
                         res->setIsInitialized(true);
                     }
                     break;
@@ -623,7 +623,7 @@ void afterChildren(TokenTree *tree) {
      * This requires us to catch each input to a call before moving on to
      * siblings if we want to output errors in the correct order.
      */
-    if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::EXPRESSION and tree->parent->getExprKind() == ExprKind::CALL) {
+    if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
         TokenTree *res = (TokenTree *) symbolTable->lookup(tree->parent->getStringValue());
         if (res != NULL) {
             int counter = 1;
@@ -654,7 +654,7 @@ void afterChildren(TokenTree *tree) {
 void checkUsage(std::string, void *node) {
     TokenTree *tree = (TokenTree *) node;
     NodeKind nk = tree->getNodeKind();
-    if (nk == NodeKind::DECLARATION and tree->getDeclKind() != DeclKind::FUNCTION) {
+    if (nk == NodeKind::DeclK and tree->getDeclKind() != DeclKind::FuncK) {
         if (!tree->isUsed()) {
             warn(tree);
             printf("The variable '%s' seems not to be used.\n", tree->getStringValue());
@@ -706,14 +706,14 @@ void buildSymbolTable(TokenTree *tree) {
 
 void buildIORoutines() {
     TokenTree *outnl = new TokenTree();
-    outnl->setDeclKind(DeclKind::FUNCTION);
+    outnl->setDeclKind(DeclKind::FuncK);
     outnl->setLineNum(-1);
     outnl->setTokenString((char *) "outnl");
     outnl->setStringValue((char *) "outnl");
     outnl->setExprType(ExprType::VOID);
 
     TokenTree *inputc = new TokenTree();
-    inputc->setDeclKind(DeclKind::FUNCTION);
+    inputc->setDeclKind(DeclKind::FuncK);
     inputc->setLineNum(-1);
     inputc->setTokenString((char *) "inputc");
     inputc->setStringValue((char *) "inputc");
@@ -722,7 +722,7 @@ void buildIORoutines() {
     inputc->addSibling(outnl);
 
     TokenTree *inputb = new TokenTree();
-    inputb->setDeclKind(DeclKind::FUNCTION);
+    inputb->setDeclKind(DeclKind::FuncK);
     inputb->setLineNum(-1);
     inputb->setTokenString((char *) "inputb");
     inputb->setStringValue((char *) "inputb");
@@ -731,7 +731,7 @@ void buildIORoutines() {
     inputb->addSibling(inputc);
 
     TokenTree *input = new TokenTree();
-    input->setDeclKind(DeclKind::FUNCTION);
+    input->setDeclKind(DeclKind::FuncK);
     input->setLineNum(-1);
     input->setTokenString((char *) "input");
     input->setStringValue((char *) "input");
@@ -740,7 +740,7 @@ void buildIORoutines() {
     input->addSibling(inputb);
 
     TokenTree *charDummy = new TokenTree();
-    charDummy->setDeclKind(DeclKind::PARAM);
+    charDummy->setDeclKind(DeclKind::ParamK);
     charDummy->setLineNum(-1);
     charDummy->setTokenString((char *) "*dummy*");
     charDummy->setStringValue((char *) "*dummy*");
@@ -749,7 +749,7 @@ void buildIORoutines() {
     charDummy->setIsUsed(true);
 
     TokenTree *outputc = new TokenTree();
-    outputc->setDeclKind(DeclKind::FUNCTION);
+    outputc->setDeclKind(DeclKind::FuncK);
     outputc->setLineNum(-1);
     outputc->setTokenString((char *) "outputc");
     outputc->setStringValue((char *) "outputc");
@@ -758,7 +758,7 @@ void buildIORoutines() {
     outputc->addSibling(input);
 
     TokenTree *boolDummy = new TokenTree();
-    boolDummy->setDeclKind(DeclKind::PARAM);
+    boolDummy->setDeclKind(DeclKind::ParamK);
     boolDummy->setLineNum(-1);
     boolDummy->setTokenString((char *) "*dummy*");
     boolDummy->setStringValue((char *) "*dummy*");
@@ -767,7 +767,7 @@ void buildIORoutines() {
     boolDummy->setIsUsed(true);
 
     TokenTree *outputb = new TokenTree();
-    outputb->setDeclKind(DeclKind::FUNCTION);
+    outputb->setDeclKind(DeclKind::FuncK);
     outputb->setLineNum(-1);
     outputb->setTokenString((char *) "outputb");
     outputb->setStringValue((char *) "outputb");
@@ -776,7 +776,7 @@ void buildIORoutines() {
     outputb->addSibling(outputc);
 
     TokenTree *intDummy = new TokenTree();
-    intDummy->setDeclKind(DeclKind::PARAM);
+    intDummy->setDeclKind(DeclKind::ParamK);
     intDummy->setLineNum(-1);
     intDummy->setTokenString((char *) "*dummy*");
     intDummy->setStringValue((char *) "*dummy*");
@@ -785,7 +785,7 @@ void buildIORoutines() {
     intDummy->setIsUsed(true);
 
     TokenTree *output = new TokenTree();
-    output->setDeclKind(DeclKind::FUNCTION);
+    output->setDeclKind(DeclKind::FuncK);
     output->setLineNum(-1);
     output->setTokenString((char *) "output");
     output->setStringValue((char *) "output");
@@ -800,7 +800,7 @@ void buildSymbolTable() {
     buildIORoutines();
     buildSymbolTable(syntaxTree);
     TokenTree *main = (TokenTree *) symbolTable->lookupGlobal("main");
-    if (main == NULL || main->getDeclKind() != DeclKind::FUNCTION) {
+    if (main == NULL || main->getDeclKind() != DeclKind::FuncK) {
         printf("ERROR(LINKER): Procedure main is not declared.\n");
         numErrors++;
     }

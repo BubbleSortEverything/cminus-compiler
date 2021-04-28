@@ -181,7 +181,7 @@ void handleUnimplemented(TokenTree *tree) {
 
 void handleArrayAccessCG(TokenTree *tree) {
     
-    if (tree->parent->getNodeKind() == NodeKind::EXPRESSION and tree->parent->getExprKind() == ExprKind::ASSIGN and tree->parent->children[0] == tree) {
+    if (tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::AssignK and tree->parent->children[0] == tree) {
         emitRM((char *) "ST", 3, tOffset, FP, (char *) "Push array index onto temp stack");
         tOffset--;
     } else {
@@ -263,7 +263,7 @@ void initGlobal(TokenTree *tree) {
             initGlobal(tree->children[i]);
         }
     }
-    if (tree->getNodeKind() == NodeKind::DECLARATION and tree->getDeclKind() == DeclKind::VARIABLE and tree->isInGlobalMemory()) {
+    if (tree->getNodeKind() == NodeKind::DeclK and tree->getDeclKind() == DeclKind::VarK and tree->isInGlobalMemory()) {
         if (tree->isArray()) {
             char *line;
             asprintf(&line, "Load size of %s into AC", tree->getStringValue());
@@ -297,7 +297,7 @@ void processBreaks(TokenTree *whileParent, int lastLine, TokenTree *tree) {
     if (tree == NULL) {
         return;
     }
-    if (tree->getNodeKind() == NodeKind::STATEMENT and tree->getStmtKind() == StmtKind::BREAK) {
+    if (tree->getNodeKind() == NodeKind::StmtK and tree->getStmtKind() == StmtKind::BreakK) {
         if (tree->hasLastLine()) {
             emitNewLoc(tree->getLastLine());
             tree->setHasLastLine(false);
@@ -573,7 +573,7 @@ void afterChildrenCodeGen(TokenTree *tree) {
                         }
                         free(line);
                     } else {
-                        if (!(tree->parent->getNodeKind() == NodeKind::EXPRESSION and tree->parent->getExprKind() == ExprKind::ASSIGN and tree->parent->children[0] == tree)) { // Dont load if on left hand side
+                        if (!(tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::AssignK and tree->parent->children[0] == tree)) { // Dont load if on left hand side
                             asprintf(&line, "Load variable %s into accumulator", tree->getStringValue());
                             emitRM((char *) "LD", AC, tree->getMemoryOffset(), tRegister, line);
                             free(line);
@@ -589,7 +589,7 @@ void afterChildrenCodeGen(TokenTree *tree) {
                 case 0: {
                     int tRegister = FP;
                     bool mathAndAssign = strlen(tree->getTokenString()) > 1;
-                    if (tree->children[0]->getNodeKind() == NodeKind::EXPRESSION and tree->children[0]->getExprKind() == ExprKind::OP) { // Array handling monstrosity
+                    if (tree->children[0]->getNodeKind() == NodeKind::ExpK and tree->children[0]->getExprKind() == ExprKind::OpK) { // Array handling monstrosity
                         TokenTree *arr = tree->children[0]->children[0];
                         if (arr->isInGlobalMemory()) tRegister = GP;
                         tOffset++;
@@ -631,7 +631,7 @@ void afterChildrenCodeGen(TokenTree *tree) {
                     }
                 }
             }
-            if (tree->parent->getNodeKind() == NodeKind::EXPRESSION and tree->parent->getExprKind() == ExprKind::CALL) {
+            if (tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
                 emitRM((char *) "ST", AC, fOffset, 1, (char *) "Push parameter onto new frame");
                 fOffset--;
             }

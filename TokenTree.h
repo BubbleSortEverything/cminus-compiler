@@ -7,11 +7,24 @@
 /*  token classification
  *  node kinds, exp kinds, exp types, and variable kinds
  */
-enum class NodeKind { DECLARATION=0, EXPRESSION=1, STATEMENT=2 };
-enum class DeclKind { VARIABLE=0, FUNCTION=1, PARAM=2 };
-enum class ExprKind { ASSIGN=0, CALL=1, CONSTANT=2, ID=3, OP=4 };
-enum class StmtKind { BREAK=0, COMPOUND=1, FOR=2, WHILE=3, RETURN=4, SELECTION=5, RANGE=6 };
+
+// Kinds of Statements
+//typedef enum {DeclK, StmtK, ExpK} NodeKind;
+enum class NodeKind { DeclK=0, ExpK=1, StmtK=2 };
+
+// Subkinds of Declarations
+enum class DeclKind { VarK=0, FuncK=1, ParamK=2 };
+
+// Subkinds of Statements
+enum class StmtKind { BreakK=0, CompoundK=1, ForK=2, WhileK=3, ReturnK=4, IfK=5, RangeK=6 };
+
+// Subkinds of Expressions
+enum class ExprKind { AssignK=0, CallK=1, ConstantK=2, IdK=3, OpK=4 };
+
+// ExpType is used for type checking (Void means no type or value, UndefinedType means undefined)
 enum class ExprType { INT=0, BOOL=1, CHAR=2, VOID=3, UNDEFINED=4 };
+
+// MemoryType is used for checking type of memeory during memory management
 enum class MemoryType { GLOBAL=0, LOCAL=1, LOCAL_STATIC=2, PARAM=3, UNDEFINED=4 };
 
 /*  tree node structure
