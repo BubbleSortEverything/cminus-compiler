@@ -71,7 +71,7 @@
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
  40:     LD  3,-2(1)	Load base address of array z 
- 41:    LDC  3,3(6)	Load type int constant 
+ 41:    LDC  3,3(6)	Load of type int constant 
  42:     LD  5,-2(1)	Load base address of array z into AC2 
  43:    SUB  5,5,3	Compute offset for array 
  44:     LD  3,0(5)	Load array element z from AC into loc from AC2 
@@ -94,9 +94,9 @@
  54:    LDC  3,10(6)	Load size of z into AC 
  55:     ST  3,-2(1)	Store size of z in data memory 
  56:    LDA  3,-3(1)	Load base address of array z 
- 57:    LDC  3,3(6)	Load type int constant 
+ 57:    LDC  3,3(6)	Load of type int constant 
  58:     ST  3,-13(1)	Push array index onto temp stack 
- 59:    LDC  3,445(6)	Load type int constant 
+ 59:    LDC  3,445(6)	Load of type int constant 
  60:     LD  4,-13(1)	Pop array index into AC1 
  61:    LDA  5,-3(1)	Load base address of array z into AC2 
  62:    SUB  5,5,4	Compute offset for array 

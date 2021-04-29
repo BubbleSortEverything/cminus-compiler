@@ -72,9 +72,9 @@
 * COMPOUND
 * CALL outputb
  40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,88(6)	Load type char constant 
+ 41:    LDC  3,88(6)	Load of type char constant 
  42:     ST  3,-5(1)	Push left side onto temp variable stack 
- 43:    LDC  3,89(6)	Load type char constant 
+ 43:    LDC  3,89(6)	Load of type char constant 
  44:     LD  4,-5(1)	Pop left hand side into AC1 
  45:    TLT  3,4,3	Less than < operation store in AC 
  46:     ST  3,-4(1)	Push parameter onto new frame 
@@ -86,9 +86,9 @@
 * END CALL outputb
 * CALL outputb
  51:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 52:    LDC  3,88(6)	Load type char constant 
+ 52:    LDC  3,88(6)	Load of type char constant 
  53:     ST  3,-5(1)	Push left side onto temp variable stack 
- 54:    LDC  3,89(6)	Load type char constant 
+ 54:    LDC  3,89(6)	Load of type char constant 
  55:     LD  4,-5(1)	Pop left hand side into AC1 
  56:    TGT  3,4,3	Greather than > operation store in AC 
  57:     ST  3,-4(1)	Push parameter onto new frame 
@@ -100,9 +100,9 @@
 * END CALL outputb
 * CALL outputb
  62:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 63:    LDC  3,88(6)	Load type char constant 
+ 63:    LDC  3,88(6)	Load of type char constant 
  64:     ST  3,-5(1)	Push left side onto temp variable stack 
- 65:    LDC  3,89(6)	Load type char constant 
+ 65:    LDC  3,89(6)	Load of type char constant 
  66:     LD  4,-5(1)	Pop left hand side into AC1 
  67:    TEQ  3,4,3	== Equality Operation 
  68:     ST  3,-4(1)	Push parameter onto new frame 
@@ -114,9 +114,9 @@
 * END CALL outputb
 * CALL outputb
  73:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 74:    LDC  3,88(6)	Load type char constant 
+ 74:    LDC  3,88(6)	Load of type char constant 
  75:     ST  3,-5(1)	Push left side onto temp variable stack 
- 76:    LDC  3,89(6)	Load type char constant 
+ 76:    LDC  3,89(6)	Load of type char constant 
  77:     LD  4,-5(1)	Pop left hand side into AC1 
  78:    TNE  3,4,3	!= Equality Operation 
  79:     ST  3,-4(1)	Push parameter onto new frame 
@@ -128,9 +128,9 @@
 * END CALL outputb
 * CALL outputb
  84:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 85:    LDC  3,88(6)	Load type char constant 
+ 85:    LDC  3,88(6)	Load of type char constant 
  86:     ST  3,-5(1)	Push left side onto temp variable stack 
- 87:    LDC  3,89(6)	Load type char constant 
+ 87:    LDC  3,89(6)	Load of type char constant 
  88:     LD  4,-5(1)	Pop left hand side into AC1 
  89:    TGE  3,4,3	GEQ >- operation store in AC 
  90:     ST  3,-4(1)	Push parameter onto new frame 
@@ -142,9 +142,9 @@
 * END CALL outputb
 * CALL outputb
  95:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 96:    LDC  3,88(6)	Load type char constant 
+ 96:    LDC  3,88(6)	Load of type char constant 
  97:     ST  3,-5(1)	Push left side onto temp variable stack 
- 98:    LDC  3,89(6)	Load type char constant 
+ 98:    LDC  3,89(6)	Load of type char constant 
  99:     LD  4,-5(1)	Pop left hand side into AC1 
 100:    TLE  3,4,3	LEQ <= operation store in AC 
 101:     ST  3,-4(1)	Push parameter onto new frame 
@@ -156,9 +156,9 @@
 * END CALL outputb
 * CALL outputb
 106:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-107:    LDC  3,89(6)	Load type char constant 
+107:    LDC  3,89(6)	Load of type char constant 
 108:     ST  3,-5(1)	Push left side onto temp variable stack 
-109:    LDC  3,89(6)	Load type char constant 
+109:    LDC  3,89(6)	Load of type char constant 
 110:     LD  4,-5(1)	Pop left hand side into AC1 
 111:    TEQ  3,4,3	== Equality Operation 
 112:     ST  3,-4(1)	Push parameter onto new frame 
@@ -170,9 +170,9 @@
 * END CALL outputb
 * CALL outputb
 117:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-118:    LDC  3,89(6)	Load type char constant 
+118:    LDC  3,89(6)	Load of type char constant 
 119:     ST  3,-5(1)	Push left side onto temp variable stack 
-120:    LDC  3,89(6)	Load type char constant 
+120:    LDC  3,89(6)	Load of type char constant 
 121:     LD  4,-5(1)	Pop left hand side into AC1 
 122:    TNE  3,4,3	!= Equality Operation 
 123:     ST  3,-4(1)	Push parameter onto new frame 
@@ -184,9 +184,9 @@
 * END CALL outputb
 * CALL outputb
 128:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-129:    LDC  3,89(6)	Load type char constant 
+129:    LDC  3,89(6)	Load of type char constant 
 130:     ST  3,-5(1)	Push left side onto temp variable stack 
-131:    LDC  3,89(6)	Load type char constant 
+131:    LDC  3,89(6)	Load of type char constant 
 132:     LD  4,-5(1)	Pop left hand side into AC1 
 133:    TGE  3,4,3	GEQ >- operation store in AC 
 134:     ST  3,-4(1)	Push parameter onto new frame 
@@ -198,9 +198,9 @@
 * END CALL outputb
 * CALL outputb
 139:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-140:    LDC  3,89(6)	Load type char constant 
+140:    LDC  3,89(6)	Load of type char constant 
 141:     ST  3,-5(1)	Push left side onto temp variable stack 
-142:    LDC  3,89(6)	Load type char constant 
+142:    LDC  3,89(6)	Load of type char constant 
 143:     LD  4,-5(1)	Pop left hand side into AC1 
 144:    TLE  3,4,3	LEQ <= operation store in AC 
 145:     ST  3,-4(1)	Push parameter onto new frame 

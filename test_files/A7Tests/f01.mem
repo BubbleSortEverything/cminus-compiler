@@ -1,7 +1,8 @@
-Func cat: returns type void [line: 2]
+Func: cat returns of type void [line: 2]
 .   Child: 1  Compound [line: 3]
-Sibling: 1  Func main: returns type void [line: 6]
+Sibling: 1  Func: main returns of type void [line: 6]
 .   Child: 1  Compound [line: 7]
-.   .   Child: 1  Call cat: type void [line: 8]
+.   .   Child: 1  Call: cat of type void [line: 8]
+Offset for end of global space: 0
 Number of warnings: 0
 Number of errors: 0

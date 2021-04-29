@@ -73,11 +73,11 @@
 * BEGIN IF BLOCK
  40:     LD  3,-2(1)	Load variable n into accumulator 
  41:     ST  3,-3(1)	Push left side onto temp variable stack 
- 42:    LDC  3,2(6)	Load type int constant 
+ 42:    LDC  3,2(6)	Load of type int constant 
  43:     LD  4,-3(1)	Pop left hand side into AC1 
  44:    TLT  3,4,3	Less than < operation store in AC 
 * IF JUMP TO ELSE
- 46:    LDC  3,1(6)	Load type int constant 
+ 46:    LDC  3,1(6)	Load of type int constant 
  47:    LDA  2,0(3)	Copy accumulator to return register 
  48:     LD  3,-1(1)	Load return address 
  49:     LD  1,0(1)	Adjust fp 
@@ -90,7 +90,7 @@
  54:     ST  1,-4(1)	Store fp in ghost frame for factorial 
  55:     LD  3,-2(1)	Load variable n into accumulator 
  56:     ST  3,-7(1)	Push left side onto temp variable stack 
- 57:    LDC  3,1(6)	Load type int constant 
+ 57:    LDC  3,1(6)	Load of type int constant 
  58:     LD  4,-7(1)	Pop left hand side into AC1 
  59:    SUB  3,4,3	- Subtraction Operation 
  60:     ST  3,-6(1)	Push parameter onto new frame 
@@ -120,7 +120,7 @@
 * FUNCTION main
  75:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 76:    LDC  3,10(6)	Load type int constant 
+ 76:    LDC  3,10(6)	Load of type int constant 
  77:     ST  3,-2(1)	Assigning variable n in Local 
 * CALL factorial
  78:     ST  1,-3(1)	Store fp in ghost frame for factorial 

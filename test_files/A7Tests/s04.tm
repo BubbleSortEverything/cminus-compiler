@@ -73,7 +73,7 @@
 * BEGIN IF BLOCK
  40:     LD  3,-2(1)	Load variable d into accumulator 
  41:     ST  3,-3(1)	Push left side onto temp variable stack 
- 42:    LDC  3,0(6)	Load type int constant 
+ 42:    LDC  3,0(6)	Load of type int constant 
  43:     LD  4,-3(1)	Pop left hand side into AC1 
  44:    TEQ  3,4,3	== Equality Operation 
 * IF JUMP TO ELSE
@@ -90,7 +90,7 @@
 * IF JUMP TO END
  45:    JZR  3,8(7)	IF JMP TO ELSE 
  54:     LD  3,-2(1)	Load variable d into accumulator 
- 55:     ST  3,-1(0)	Assigning variable s in Static 
+ 55:     ST  3,-1(0)	Assigning variable s in LocalStatic 
  53:    LDA  7,2(7)	JUMP TO END 
 * END IF
 * END COMPOUND
@@ -108,7 +108,7 @@
 * BEGIN IF BLOCK
  61:     LD  3,-2(1)	Load variable c into accumulator 
  62:     ST  3,-3(1)	Push left side onto temp variable stack 
- 63:    LDC  3,0(6)	Load type int constant 
+ 63:    LDC  3,0(6)	Load of type int constant 
  64:     LD  4,-3(1)	Pop left hand side into AC1 
  65:    TEQ  3,4,3	== Equality Operation 
 * IF JUMP TO ELSE
@@ -125,7 +125,7 @@
 * IF JUMP TO END
  66:    JZR  3,8(7)	IF JMP TO ELSE 
  75:     LD  3,-2(1)	Load variable c into accumulator 
- 76:     ST  3,-2(0)	Assigning variable s in Static 
+ 76:     ST  3,-2(0)	Assigning variable s in LocalStatic 
  74:    LDA  7,2(7)	JUMP TO END 
 * END IF
 * END COMPOUND
@@ -140,11 +140,11 @@
 * FUNCTION main
  81:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 82:    LDC  3,333(6)	Load type int constant 
+ 82:    LDC  3,333(6)	Load of type int constant 
  83:     ST  3,0(0)	Assigning variable s in Global 
 * CALL dog
  84:     ST  1,-2(1)	Store fp in ghost frame for dog 
- 85:    LDC  3,111(6)	Load type int constant 
+ 85:    LDC  3,111(6)	Load of type int constant 
  86:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  87:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -154,7 +154,7 @@
 * END CALL dog
 * CALL cat
  91:     ST  1,-2(1)	Store fp in ghost frame for cat 
- 92:    LDC  3,222(6)	Load type int constant 
+ 92:    LDC  3,222(6)	Load of type int constant 
  93:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  94:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -164,7 +164,7 @@
 * END CALL cat
 * CALL dog
  98:     ST  1,-2(1)	Store fp in ghost frame for dog 
- 99:    LDC  3,0(6)	Load type int constant 
+ 99:    LDC  3,0(6)	Load of type int constant 
 100:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 101:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -174,7 +174,7 @@
 * END CALL dog
 * CALL cat
 105:     ST  1,-2(1)	Store fp in ghost frame for cat 
-106:    LDC  3,0(6)	Load type int constant 
+106:    LDC  3,0(6)	Load of type int constant 
 107:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 108:    LDA  1,-2(1)	Move the fp to the new frame 

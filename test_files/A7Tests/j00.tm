@@ -143,12 +143,12 @@
 * COMPOUND
  90:    LDC  3,10(6)	Load size of h into AC 
  91:     ST  3,-3(1)	Store size of h in data memory 
- 92:    LDC  3,1(6)	Load type int constant 
+ 92:    LDC  3,1(6)	Load of type int constant 
  93:     ST  3,-2(1)	Assigning variable i in Local 
 * Beginning WHILE statement
  94:     LD  3,-2(1)	Load variable i into accumulator 
  95:     ST  3,-14(1)	Push left side onto temp variable stack 
- 96:    LDC  3,10(6)	Load type int constant 
+ 96:    LDC  3,10(6)	Load of type int constant 
  97:     LD  4,-14(1)	Pop left hand side into AC1 
  98:    TLT  3,4,3	Less than < operation store in AC 
 100:    LDA  3,-4(1)	Load base address of array h 
@@ -181,7 +181,7 @@
 * CALL output
 125:     ST  1,-14(1)	Store fp in ghost frame for output 
 126:    LDA  3,-1(0)	Load base address of array g 
-127:    LDC  3,6(6)	Load type int constant 
+127:    LDC  3,6(6)	Load of type int constant 
 128:    LDA  5,-1(0)	Load base address of array g into AC2 
 129:    SUB  5,5,3	Compute offset for array 
 130:     LD  3,0(5)	Load array element g from AC into loc from AC2 
@@ -195,7 +195,7 @@
 * CALL output
 136:     ST  1,-14(1)	Store fp in ghost frame for output 
 137:    LDA  3,-4(1)	Load base address of array h 
-138:    LDC  3,6(6)	Load type int constant 
+138:    LDC  3,6(6)	Load of type int constant 
 139:    LDA  5,-4(1)	Load base address of array h into AC2 
 140:    SUB  5,5,3	Compute offset for array 
 141:     LD  3,0(5)	Load array element h from AC into loc from AC2 
@@ -209,7 +209,7 @@
 * CALL output
 147:     ST  1,-14(1)	Store fp in ghost frame for output 
 148:    LDA  3,-12(0)	Load base address of array s 
-149:    LDC  3,6(6)	Load type int constant 
+149:    LDC  3,6(6)	Load of type int constant 
 150:    LDA  5,-12(0)	Load base address of array s into AC2 
 151:    SUB  5,5,3	Compute offset for array 
 152:     LD  3,0(5)	Load array element s from AC into loc from AC2 
@@ -234,7 +234,7 @@
 164:     ST  1,-17(1)	Store fp in ghost frame for cat 
 165:    LDA  3,-1(0)	Load base address of array g 
 166:     ST  3,-19(1)	Push parameter onto new frame 
-167:    LDC  3,6(6)	Load type int constant 
+167:    LDC  3,6(6)	Load of type int constant 
 168:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 169:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -255,7 +255,7 @@
 179:     ST  1,-17(1)	Store fp in ghost frame for cat 
 180:    LDA  3,-4(1)	Load base address of array h 
 181:     ST  3,-19(1)	Push parameter onto new frame 
-182:    LDC  3,6(6)	Load type int constant 
+182:    LDC  3,6(6)	Load of type int constant 
 183:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 184:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -276,7 +276,7 @@
 194:     ST  1,-17(1)	Store fp in ghost frame for cat 
 195:    LDA  3,-12(0)	Load base address of array s 
 196:     ST  3,-19(1)	Push parameter onto new frame 
-197:    LDC  3,6(6)	Load type int constant 
+197:    LDC  3,6(6)	Load of type int constant 
 198:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 199:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -305,7 +305,7 @@
 214:     ST  1,-17(1)	Store fp in ghost frame for dog 
 215:    LDA  3,-1(0)	Load base address of array g 
 216:     ST  3,-19(1)	Push parameter onto new frame 
-217:    LDC  3,6(6)	Load type int constant 
+217:    LDC  3,6(6)	Load of type int constant 
 218:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 219:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -326,7 +326,7 @@
 229:     ST  1,-17(1)	Store fp in ghost frame for dog 
 230:    LDA  3,-4(1)	Load base address of array h 
 231:     ST  3,-19(1)	Push parameter onto new frame 
-232:    LDC  3,6(6)	Load type int constant 
+232:    LDC  3,6(6)	Load of type int constant 
 233:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 234:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -347,7 +347,7 @@
 244:     ST  1,-17(1)	Store fp in ghost frame for dog 
 245:    LDA  3,-12(0)	Load base address of array s 
 246:     ST  3,-19(1)	Push parameter onto new frame 
-247:    LDC  3,6(6)	Load type int constant 
+247:    LDC  3,6(6)	Load of type int constant 
 248:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 249:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -376,7 +376,7 @@
 264:     ST  1,-17(1)	Store fp in ghost frame for fox 
 265:    LDA  3,-1(0)	Load base address of array g 
 266:     ST  3,-19(1)	Push parameter onto new frame 
-267:    LDC  3,6(6)	Load type int constant 
+267:    LDC  3,6(6)	Load of type int constant 
 268:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 269:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -397,7 +397,7 @@
 279:     ST  1,-17(1)	Store fp in ghost frame for fox 
 280:    LDA  3,-4(1)	Load base address of array h 
 281:     ST  3,-19(1)	Push parameter onto new frame 
-282:    LDC  3,6(6)	Load type int constant 
+282:    LDC  3,6(6)	Load of type int constant 
 283:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 284:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -418,7 +418,7 @@
 294:     ST  1,-17(1)	Store fp in ghost frame for fox 
 295:    LDA  3,-12(0)	Load base address of array s 
 296:     ST  3,-19(1)	Push parameter onto new frame 
-297:    LDC  3,6(6)	Load type int constant 
+297:    LDC  3,6(6)	Load of type int constant 
 298:     ST  3,-20(1)	Push parameter onto new frame 
 * Begin call
 299:    LDA  1,-17(1)	Move the fp to the new frame 

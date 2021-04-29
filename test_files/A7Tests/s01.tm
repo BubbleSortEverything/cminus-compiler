@@ -71,9 +71,9 @@
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
  40:     LD  3,-1(0)	Load variable y into accumulator 
- 41:     ST  3,0(0)	Assigning variable x in Static 
+ 41:     ST  3,0(0)	Assigning variable x in LocalStatic 
  42:     LD  3,-2(1)	Load variable z into accumulator 
- 43:     ST  3,-1(0)	Assigning variable y in Static 
+ 43:     ST  3,-1(0)	Assigning variable y in LocalStatic 
  44:     LD  3,0(0)	Load variable x into accumulator 
  45:    LDA  2,0(3)	Copy accumulator to return register 
  46:     LD  3,-1(1)	Load return address 
@@ -95,7 +95,7 @@
  54:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL save
  55:     ST  1,-5(1)	Store fp in ghost frame for save 
- 56:    LDC  3,1(6)	Load type int constant 
+ 56:    LDC  3,1(6)	Load of type int constant 
  57:     ST  3,-7(1)	Push parameter onto new frame 
 * Begin call
  58:    LDA  1,-5(1)	Move the fp to the new frame 
@@ -114,7 +114,7 @@
  67:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL save
  68:     ST  1,-5(1)	Store fp in ghost frame for save 
- 69:    LDC  3,2(6)	Load type int constant 
+ 69:    LDC  3,2(6)	Load of type int constant 
  70:     ST  3,-7(1)	Push parameter onto new frame 
 * Begin call
  71:    LDA  1,-5(1)	Move the fp to the new frame 
@@ -133,7 +133,7 @@
  80:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL save
  81:     ST  1,-5(1)	Store fp in ghost frame for save 
- 82:    LDC  3,3(6)	Load type int constant 
+ 82:    LDC  3,3(6)	Load of type int constant 
  83:     ST  3,-7(1)	Push parameter onto new frame 
 * Begin call
  84:    LDA  1,-5(1)	Move the fp to the new frame 
@@ -152,7 +152,7 @@
  93:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL save
  94:     ST  1,-5(1)	Store fp in ghost frame for save 
- 95:    LDC  3,4(6)	Load type int constant 
+ 95:    LDC  3,4(6)	Load of type int constant 
  96:     ST  3,-7(1)	Push parameter onto new frame 
 * Begin call
  97:    LDA  1,-5(1)	Move the fp to the new frame 
@@ -167,7 +167,7 @@
 104:    JMP  7,-99(7)	Call function 
 105:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL output
-106:    LDC  3,0(6)	Load type int constant 
+106:    LDC  3,0(6)	Load of type int constant 
 107:    LDA  2,0(3)	Copy accumulator to return register 
 108:     LD  3,-1(1)	Load return address 
 109:     LD  1,0(1)	Adjust fp 

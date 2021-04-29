@@ -76,7 +76,7 @@
 * CALL output
  42:     ST  1,-13(1)	Store fp in ghost frame for output 
  43:    LDA  3,-3(1)	Load base address of array xx 
- 44:    LDC  3,1(6)	Load type int constant 
+ 44:    LDC  3,1(6)	Load of type int constant 
  45:    NEG  3,3,0	- Change Sign Operation 
  46:    LDA  5,-3(1)	Load base address of array xx into AC2 
  47:    SUB  5,5,3	Compute offset for array 

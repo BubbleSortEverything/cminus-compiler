@@ -73,11 +73,11 @@
  40:    LDC  3,22(6)	Load size of b into AC 
  41:     ST  3,-2(1)	Store size of b in data memory 
  42:    LDA  3,-13(0)	Load base address of array c 
- 43:    LDC  3,22(6)	Load type int constant 
+ 43:    LDC  3,22(6)	Load of type int constant 
  44:    LDA  5,-13(0)	Load base address of array c into AC2 
  45:    SUB  5,5,3	Compute offset for array 
  46:     LD  3,0(5)	Load array element c from AC into loc from AC2 
- 47:    LDC  3,999(6)	Load type int constant 
+ 47:    LDC  3,999(6)	Load of type int constant 
 * CALL output
  48:     ST  1,-25(1)	Store fp in ghost frame for output 
  49:    LDA  3,-1(0)	Load base address of array a 

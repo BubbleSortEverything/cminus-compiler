@@ -72,9 +72,9 @@
 * COMPOUND
 * CALL outputb
  40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,0(6)	Load type bool constant 
+ 41:    LDC  3,0(6)	Load of type bool constant 
  42:     ST  3,-5(1)	Push left side onto temp variable stack 
- 43:    LDC  3,0(6)	Load type bool constant 
+ 43:    LDC  3,0(6)	Load of type bool constant 
  44:     LD  4,-5(1)	Pop left hand side into AC1 
  45:     OR  3,4,3	OR operation store in AC 
  46:     ST  3,-4(1)	Push parameter onto new frame 
@@ -86,9 +86,9 @@
 * END CALL outputb
 * CALL outputb
  51:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 52:    LDC  3,0(6)	Load type bool constant 
+ 52:    LDC  3,0(6)	Load of type bool constant 
  53:     ST  3,-5(1)	Push left side onto temp variable stack 
- 54:    LDC  3,1(6)	Load type bool constant 
+ 54:    LDC  3,1(6)	Load of type bool constant 
  55:     LD  4,-5(1)	Pop left hand side into AC1 
  56:     OR  3,4,3	OR operation store in AC 
  57:     ST  3,-4(1)	Push parameter onto new frame 
@@ -100,9 +100,9 @@
 * END CALL outputb
 * CALL outputb
  62:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 63:    LDC  3,1(6)	Load type bool constant 
+ 63:    LDC  3,1(6)	Load of type bool constant 
  64:     ST  3,-5(1)	Push left side onto temp variable stack 
- 65:    LDC  3,0(6)	Load type bool constant 
+ 65:    LDC  3,0(6)	Load of type bool constant 
  66:     LD  4,-5(1)	Pop left hand side into AC1 
  67:     OR  3,4,3	OR operation store in AC 
  68:     ST  3,-4(1)	Push parameter onto new frame 
@@ -114,9 +114,9 @@
 * END CALL outputb
 * CALL outputb
  73:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 74:    LDC  3,1(6)	Load type bool constant 
+ 74:    LDC  3,1(6)	Load of type bool constant 
  75:     ST  3,-5(1)	Push left side onto temp variable stack 
- 76:    LDC  3,1(6)	Load type bool constant 
+ 76:    LDC  3,1(6)	Load of type bool constant 
  77:     LD  4,-5(1)	Pop left hand side into AC1 
  78:     OR  3,4,3	OR operation store in AC 
  79:     ST  3,-4(1)	Push parameter onto new frame 
@@ -136,9 +136,9 @@
 * END CALL outnl
 * CALL outputb
  89:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 90:    LDC  3,0(6)	Load type bool constant 
+ 90:    LDC  3,0(6)	Load of type bool constant 
  91:     ST  3,-5(1)	Push left side onto temp variable stack 
- 92:    LDC  3,0(6)	Load type bool constant 
+ 92:    LDC  3,0(6)	Load of type bool constant 
  93:     LD  4,-5(1)	Pop left hand side into AC1 
  94:    AND  3,4,3	AND operation store in AC 
  95:     ST  3,-4(1)	Push parameter onto new frame 
@@ -150,9 +150,9 @@
 * END CALL outputb
 * CALL outputb
 100:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-101:    LDC  3,0(6)	Load type bool constant 
+101:    LDC  3,0(6)	Load of type bool constant 
 102:     ST  3,-5(1)	Push left side onto temp variable stack 
-103:    LDC  3,1(6)	Load type bool constant 
+103:    LDC  3,1(6)	Load of type bool constant 
 104:     LD  4,-5(1)	Pop left hand side into AC1 
 105:    AND  3,4,3	AND operation store in AC 
 106:     ST  3,-4(1)	Push parameter onto new frame 
@@ -164,9 +164,9 @@
 * END CALL outputb
 * CALL outputb
 111:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-112:    LDC  3,1(6)	Load type bool constant 
+112:    LDC  3,1(6)	Load of type bool constant 
 113:     ST  3,-5(1)	Push left side onto temp variable stack 
-114:    LDC  3,0(6)	Load type bool constant 
+114:    LDC  3,0(6)	Load of type bool constant 
 115:     LD  4,-5(1)	Pop left hand side into AC1 
 116:    AND  3,4,3	AND operation store in AC 
 117:     ST  3,-4(1)	Push parameter onto new frame 
@@ -178,9 +178,9 @@
 * END CALL outputb
 * CALL outputb
 122:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-123:    LDC  3,1(6)	Load type bool constant 
+123:    LDC  3,1(6)	Load of type bool constant 
 124:     ST  3,-5(1)	Push left side onto temp variable stack 
-125:    LDC  3,1(6)	Load type bool constant 
+125:    LDC  3,1(6)	Load of type bool constant 
 126:     LD  4,-5(1)	Pop left hand side into AC1 
 127:    AND  3,4,3	AND operation store in AC 
 128:     ST  3,-4(1)	Push parameter onto new frame 
@@ -200,7 +200,7 @@
 * END CALL outnl
 * CALL outputb
 138:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-139:    LDC  3,0(6)	Load type bool constant 
+139:    LDC  3,0(6)	Load of type bool constant 
 140:    LDC  4,1(6)	Load 1 into AC1 for not operation 
 141:    TNE  3,4,3	Not ! operation store in AC 
 142:     ST  3,-4(1)	Push parameter onto new frame 
@@ -212,7 +212,7 @@
 * END CALL outputb
 * CALL outputb
 147:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-148:    LDC  3,1(6)	Load type bool constant 
+148:    LDC  3,1(6)	Load of type bool constant 
 149:    LDC  4,1(6)	Load 1 into AC1 for not operation 
 150:    TNE  3,4,3	Not ! operation store in AC 
 151:     ST  3,-4(1)	Push parameter onto new frame 

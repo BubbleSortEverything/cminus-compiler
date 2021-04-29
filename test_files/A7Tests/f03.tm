@@ -72,7 +72,7 @@
 * COMPOUND
 * CALL output
  40:     ST  1,-2(1)	Store fp in ghost frame for output 
- 41:    LDC  3,42(6)	Load type int constant 
+ 41:    LDC  3,42(6)	Load of type int constant 
  42:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  43:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -106,7 +106,7 @@
 * END CALL cat
 * CALL output
  61:     ST  1,-2(1)	Store fp in ghost frame for output 
- 62:    LDC  3,43(6)	Load type int constant 
+ 62:    LDC  3,43(6)	Load of type int constant 
  63:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  64:    LDA  1,-2(1)	Move the fp to the new frame 

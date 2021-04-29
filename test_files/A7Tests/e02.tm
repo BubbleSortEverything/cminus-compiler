@@ -70,12 +70,12 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type int constant 
+ 40:    LDC  3,0(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable x in Local 
 * Beginning WHILE statement
  42:     LD  3,-2(1)	Load variable x into accumulator 
  43:     ST  3,-3(1)	Push left side onto temp variable stack 
- 44:    LDC  3,10(6)	Load type int constant 
+ 44:    LDC  3,10(6)	Load of type int constant 
  45:     LD  4,-3(1)	Pop left hand side into AC1 
  46:    TLT  3,4,3	Less than < operation store in AC 
 * COMPOUND
@@ -91,7 +91,7 @@
 * END CALL output
  55:     LD  3,-2(1)	Load variable x into accumulator 
  56:     ST  3,-3(1)	Push left side onto temp variable stack 
- 57:    LDC  3,1(6)	Load type int constant 
+ 57:    LDC  3,1(6)	Load of type int constant 
  58:     LD  4,-3(1)	Pop left hand side into AC1 
  59:    ADD  3,4,3	+ Operation 
  60:     ST  3,-2(1)	Assigning variable x in Local 
@@ -99,12 +99,12 @@
  61:    JMP  7,-20(7)	Go to L1 
  47:    JZR  3,14(7)	JMP if condition is false 
 * End WHILE statement
- 62:    LDC  3,30(6)	Load type int constant 
+ 62:    LDC  3,30(6)	Load of type int constant 
  63:     ST  3,-2(1)	Assigning variable x in Local 
 * Beginning WHILE statement
  64:     LD  3,-2(1)	Load variable x into accumulator 
  65:     ST  3,-3(1)	Push left side onto temp variable stack 
- 66:    LDC  3,10(6)	Load type int constant 
+ 66:    LDC  3,10(6)	Load of type int constant 
  67:     LD  4,-3(1)	Pop left hand side into AC1 
  68:    TLT  3,4,3	Less than < operation store in AC 
 * COMPOUND
@@ -120,7 +120,7 @@
 * END CALL output
  77:     LD  3,-2(1)	Load variable x into accumulator 
  78:     ST  3,-3(1)	Push left side onto temp variable stack 
- 79:    LDC  3,1(6)	Load type int constant 
+ 79:    LDC  3,1(6)	Load of type int constant 
  80:     LD  4,-3(1)	Pop left hand side into AC1 
  81:    ADD  3,4,3	+ Operation 
  82:     ST  3,-2(1)	Assigning variable x in Local 

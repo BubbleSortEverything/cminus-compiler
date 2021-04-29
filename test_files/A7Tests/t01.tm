@@ -73,7 +73,7 @@
 * BEGIN IF BLOCK
  40:     LD  3,-2(1)	Load variable n into accumulator 
  41:     ST  3,-4(1)	Push left side onto temp variable stack 
- 42:    LDC  3,2(6)	Load type int constant 
+ 42:    LDC  3,2(6)	Load of type int constant 
  43:     LD  4,-4(1)	Pop left hand side into AC1 
  44:    TLT  3,4,3	Less than < operation store in AC 
 * IF JUMP TO ELSE
@@ -81,7 +81,7 @@
  46:     LD  3,-3(1)	Load base address of array k 
  47:     LD  3,-2(1)	Load variable n into accumulator 
  48:     ST  3,-4(1)	Push array index onto temp stack 
- 49:    LDC  3,1(6)	Load type int constant 
+ 49:    LDC  3,1(6)	Load of type int constant 
  50:     LD  4,-4(1)	Pop array index into AC1 
  51:     LD  5,-3(1)	Load base address of array k into AC2 
  52:    SUB  5,5,4	Compute offset for array 
@@ -99,7 +99,7 @@
  60:     ST  1,-6(1)	Store fp in ghost frame for factorial 
  61:     LD  3,-2(1)	Load variable n into accumulator 
  62:     ST  3,-10(1)	Push left side onto temp variable stack 
- 63:    LDC  3,1(6)	Load type int constant 
+ 63:    LDC  3,1(6)	Load of type int constant 
  64:     LD  4,-10(1)	Pop left hand side into AC1 
  65:    SUB  3,4,3	- Subtraction Operation 
  66:     ST  3,-8(1)	Push parameter onto new frame 
@@ -143,7 +143,7 @@
 * COMPOUND
  93:    LDC  3,20(6)	Load size of k into AC 
  94:     ST  3,-3(1)	Store size of k in data memory 
- 95:    LDC  3,10(6)	Load type int constant 
+ 95:    LDC  3,10(6)	Load of type int constant 
  96:     ST  3,-2(1)	Assigning variable n in Local 
 * CALL factorial
  97:     ST  1,-24(1)	Store fp in ghost frame for factorial 

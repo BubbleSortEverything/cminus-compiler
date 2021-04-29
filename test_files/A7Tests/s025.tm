@@ -70,11 +70,11 @@
 * FUNCTION sum
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type int constant 
+ 40:    LDC  3,0(6)	Load of type int constant 
  41:     LD  3,-2(1)	Load variable x into accumulator 
  42:     LD  4,-1(0)	Load lhs variable 
  43:    ADD  3,4,3	+= operation 
- 44:     ST  3,-1(0)	Assigning variable runningSum in Static 
+ 44:     ST  3,-1(0)	Assigning variable runningSum in LocalStatic 
  45:     LD  3,-1(0)	Load variable runningSum into accumulator 
  46:    LDA  2,0(3)	Copy accumulator to return register 
  47:     LD  3,-1(1)	Load return address 
@@ -92,7 +92,7 @@
 * FUNCTION main
  54:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 55:    LDC  3,7000(6)	Load type int constant 
+ 55:    LDC  3,7000(6)	Load of type int constant 
  56:     ST  3,0(0)	Assigning variable runningSum in Global 
 * CALL output
  57:     ST  1,-2(1)	Store fp in ghost frame for output 
@@ -106,7 +106,7 @@
 * END CALL output
 * CALL sum
  64:     ST  1,-2(1)	Store fp in ghost frame for sum 
- 65:    LDC  3,666(6)	Load type int constant 
+ 65:    LDC  3,666(6)	Load of type int constant 
  66:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  67:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -116,7 +116,7 @@
 * END CALL sum
 * CALL sum
  71:     ST  1,-2(1)	Store fp in ghost frame for sum 
- 72:    LDC  3,3(6)	Load type int constant 
+ 72:    LDC  3,3(6)	Load of type int constant 
  73:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  74:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -128,7 +128,7 @@
  78:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL sum
  79:     ST  1,-5(1)	Store fp in ghost frame for sum 
- 80:    LDC  3,0(6)	Load type int constant 
+ 80:    LDC  3,0(6)	Load of type int constant 
  81:     ST  3,-7(1)	Push parameter onto new frame 
 * Begin call
  82:    LDA  1,-5(1)	Move the fp to the new frame 
@@ -166,8 +166,8 @@
 102:    LDA  1,-2(0)	set first frame at end of globals 
 103:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
-104:    LDC  3,0(6)	Load type int constant 
-105:     ST  3,-1(0)	Assigning variable runningSum in Static 
+104:    LDC  3,0(6)	Load of type int constant 
+105:     ST  3,-1(0)	Assigning variable runningSum in LocalStatic 
 * END INIT GLOBALS AND STATICS
 106:    LDA  3,1(7)	Return address in ac 
 107:    JMP  7,-54(7)	Jump to main 

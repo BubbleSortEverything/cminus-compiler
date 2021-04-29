@@ -91,7 +91,7 @@
 * BEGIN IF BLOCK
  52:     LD  3,-2(1)	Load variable x into accumulator 
  53:     ST  3,-3(1)	Push left side onto temp variable stack 
- 54:    LDC  3,0(6)	Load type int constant 
+ 54:    LDC  3,0(6)	Load of type int constant 
  55:     LD  4,-3(1)	Pop left hand side into AC1 
  56:    TGT  3,4,3	Greather than > operation store in AC 
 * IF JUMP TO ELSE
@@ -99,7 +99,7 @@
  58:     ST  1,-3(1)	Store fp in ghost frame for cat 
  59:     LD  3,-2(1)	Load variable x into accumulator 
  60:     ST  3,-6(1)	Push left side onto temp variable stack 
- 61:    LDC  3,1(6)	Load type int constant 
+ 61:    LDC  3,1(6)	Load of type int constant 
  62:     LD  4,-6(1)	Pop left hand side into AC1 
  63:    SUB  3,4,3	- Subtraction Operation 
  64:     ST  3,-5(1)	Push parameter onto new frame 
@@ -130,7 +130,7 @@
  78:     ST  3,-1(1)	Store return address 
 * CALL cat
  79:     ST  1,-2(1)	Store fp in ghost frame for cat 
- 80:    LDC  3,10(6)	Load type int constant 
+ 80:    LDC  3,10(6)	Load of type int constant 
  81:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  82:    LDA  1,-2(1)	Move the fp to the new frame 

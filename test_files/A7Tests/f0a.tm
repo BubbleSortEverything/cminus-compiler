@@ -70,7 +70,7 @@
 * FUNCTION cat
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,93(6)	Load type int constant 
+ 40:    LDC  3,93(6)	Load of type int constant 
  41:    LDA  2,0(3)	Copy accumulator to return register 
  42:     LD  3,-1(1)	Load return address 
  43:     LD  1,0(1)	Adjust fp 

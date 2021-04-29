@@ -70,7 +70,7 @@
 * FUNCTION outputs
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type int constant 
+ 40:    LDC  3,0(6)	Load of type int constant 
  41:     ST  3,-3(1)	Assigning variable i in Local 
 * Beginning WHILE statement
  42:     LD  3,-3(1)	Load variable i into accumulator 
@@ -88,7 +88,7 @@
  53:    SUB  5,5,3	Compute offset for array 
  54:     LD  3,0(5)	Load array element s from AC into loc from AC2 
  55:     ST  3,-4(1)	Push left side onto temp variable stack 
- 56:    LDC  3,0(6)	Load type char constant 
+ 56:    LDC  3,0(6)	Load of type char constant 
  57:     LD  4,-4(1)	Pop left hand side into AC1 
  58:    TEQ  3,4,3	== Equality Operation 
 * IF JUMP TO ELSE
@@ -130,15 +130,15 @@
 * FUNCTION main
  81:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 82:    LDC  3,0(6)	Load type char constant 
+ 82:    LDC  3,0(6)	Load of type char constant 
  83:    LDC  3,9(6)	Load size of a into AC 
  84:     ST  3,-2(1)	Store size of a in data memory 
  85:     ST  3,-3(1)	Assigning variable a in Local 
- 86:    LDC  3,0(6)	Load type char constant 
+ 86:    LDC  3,0(6)	Load of type char constant 
  87:    LDC  3,3(6)	Load size of b into AC 
  88:     ST  3,-12(1)	Store size of b in data memory 
  89:     ST  3,-13(1)	Assigning variable b in Local 
- 90:    LDC  3,0(6)	Load type char constant 
+ 90:    LDC  3,0(6)	Load of type char constant 
  91:    LDC  3,5(6)	Load size of h into AC 
  92:     ST  3,-16(1)	Store size of h in data memory 
  93:     ST  3,-17(1)	Assigning variable h in Local 

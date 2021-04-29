@@ -72,7 +72,7 @@
 * COMPOUND
 * CALL outputc
  40:     ST  1,-2(1)	Store fp in ghost frame for outputc 
- 41:    LDC  3,89(6)	Load type char constant 
+ 41:    LDC  3,89(6)	Load of type char constant 
  42:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  43:    LDA  1,-2(1)	Move the fp to the new frame 

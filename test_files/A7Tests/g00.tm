@@ -94,7 +94,7 @@
 * COMPOUND
 * CALL cat
  52:     ST  1,-2(1)	Store fp in ghost frame for cat 
- 53:    LDC  3,637(6)	Load type int constant 
+ 53:    LDC  3,637(6)	Load of type int constant 
  54:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  55:    LDA  1,-2(1)	Move the fp to the new frame 

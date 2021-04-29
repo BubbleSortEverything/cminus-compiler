@@ -70,12 +70,12 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type int constant 
+ 40:    LDC  3,0(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable x in Local 
 * Beginning WHILE statement
  42:     LD  3,-2(1)	Load variable x into accumulator 
  43:     ST  3,-3(1)	Push left side onto temp variable stack 
- 44:    LDC  3,8(6)	Load type int constant 
+ 44:    LDC  3,8(6)	Load of type int constant 
  45:     LD  4,-3(1)	Pop left hand side into AC1 
  46:    TLT  3,4,3	Less than < operation store in AC 
 * COMPOUND
@@ -92,13 +92,13 @@
 * BEGIN IF BLOCK
  55:     LD  3,-2(1)	Load variable x into accumulator 
  56:     ST  3,-3(1)	Push left side onto temp variable stack 
- 57:    LDC  3,1(6)	Load type int constant 
+ 57:    LDC  3,1(6)	Load of type int constant 
  58:     LD  4,-3(1)	Pop left hand side into AC1 
  59:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
  61:     ST  1,-3(1)	Store fp in ghost frame for outputc 
- 62:    LDC  3,65(6)	Load type char constant 
+ 62:    LDC  3,65(6)	Load of type char constant 
  63:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  64:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -111,13 +111,13 @@
 * BEGIN IF BLOCK
  69:     LD  3,-2(1)	Load variable x into accumulator 
  70:     ST  3,-3(1)	Push left side onto temp variable stack 
- 71:    LDC  3,2(6)	Load type int constant 
+ 71:    LDC  3,2(6)	Load of type int constant 
  72:     LD  4,-3(1)	Pop left hand side into AC1 
  73:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
  75:     ST  1,-3(1)	Store fp in ghost frame for outputc 
- 76:    LDC  3,66(6)	Load type char constant 
+ 76:    LDC  3,66(6)	Load of type char constant 
  77:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  78:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -130,13 +130,13 @@
 * BEGIN IF BLOCK
  83:     LD  3,-2(1)	Load variable x into accumulator 
  84:     ST  3,-3(1)	Push left side onto temp variable stack 
- 85:    LDC  3,3(6)	Load type int constant 
+ 85:    LDC  3,3(6)	Load of type int constant 
  86:     LD  4,-3(1)	Pop left hand side into AC1 
  87:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
  89:     ST  1,-3(1)	Store fp in ghost frame for outputc 
- 90:    LDC  3,67(6)	Load type char constant 
+ 90:    LDC  3,67(6)	Load of type char constant 
  91:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  92:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -149,13 +149,13 @@
 * BEGIN IF BLOCK
  97:     LD  3,-2(1)	Load variable x into accumulator 
  98:     ST  3,-3(1)	Push left side onto temp variable stack 
- 99:    LDC  3,4(6)	Load type int constant 
+ 99:    LDC  3,4(6)	Load of type int constant 
 100:     LD  4,-3(1)	Pop left hand side into AC1 
 101:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
 103:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-104:    LDC  3,68(6)	Load type char constant 
+104:    LDC  3,68(6)	Load of type char constant 
 105:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 106:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -167,7 +167,7 @@
 102:    JZR  3,8(7)	IF JMP TO ELSE 
 * CALL outputc
 111:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-112:    LDC  3,69(6)	Load type char constant 
+112:    LDC  3,69(6)	Load of type char constant 
 113:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 114:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -204,13 +204,13 @@
 * BEGIN IF BLOCK
 130:     LD  3,-2(1)	Load variable x into accumulator 
 131:     ST  3,-3(1)	Push left side onto temp variable stack 
-132:    LDC  3,1(6)	Load type int constant 
+132:    LDC  3,1(6)	Load of type int constant 
 133:     LD  4,-3(1)	Pop left hand side into AC1 
 134:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
 136:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-137:    LDC  3,65(6)	Load type char constant 
+137:    LDC  3,65(6)	Load of type char constant 
 138:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 139:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -223,13 +223,13 @@
 * BEGIN IF BLOCK
 144:     LD  3,-2(1)	Load variable x into accumulator 
 145:     ST  3,-3(1)	Push left side onto temp variable stack 
-146:    LDC  3,2(6)	Load type int constant 
+146:    LDC  3,2(6)	Load of type int constant 
 147:     LD  4,-3(1)	Pop left hand side into AC1 
 148:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
 150:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-151:    LDC  3,66(6)	Load type char constant 
+151:    LDC  3,66(6)	Load of type char constant 
 152:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 153:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -242,13 +242,13 @@
 * BEGIN IF BLOCK
 158:     LD  3,-2(1)	Load variable x into accumulator 
 159:     ST  3,-3(1)	Push left side onto temp variable stack 
-160:    LDC  3,3(6)	Load type int constant 
+160:    LDC  3,3(6)	Load of type int constant 
 161:     LD  4,-3(1)	Pop left hand side into AC1 
 162:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
 164:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-165:    LDC  3,67(6)	Load type char constant 
+165:    LDC  3,67(6)	Load of type char constant 
 166:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 167:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -261,13 +261,13 @@
 * BEGIN IF BLOCK
 172:     LD  3,-2(1)	Load variable x into accumulator 
 173:     ST  3,-3(1)	Push left side onto temp variable stack 
-174:    LDC  3,4(6)	Load type int constant 
+174:    LDC  3,4(6)	Load of type int constant 
 175:     LD  4,-3(1)	Pop left hand side into AC1 
 176:    TLE  3,4,3	LEQ <= operation store in AC 
 * IF JUMP TO ELSE
 * CALL outputc
 178:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-179:    LDC  3,68(6)	Load type char constant 
+179:    LDC  3,68(6)	Load of type char constant 
 180:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 181:    LDA  1,-3(1)	Move the fp to the new frame 
@@ -279,7 +279,7 @@
 177:    JZR  3,8(7)	IF JMP TO ELSE 
 * CALL outputc
 186:     ST  1,-3(1)	Store fp in ghost frame for outputc 
-187:    LDC  3,69(6)	Load type char constant 
+187:    LDC  3,69(6)	Load of type char constant 
 188:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
 189:    LDA  1,-3(1)	Move the fp to the new frame 

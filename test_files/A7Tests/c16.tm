@@ -70,14 +70,14 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,1(6)	Load type int constant 
+ 40:    LDC  3,1(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable z in Local 
- 42:    LDC  3,2(6)	Load type int constant 
+ 42:    LDC  3,2(6)	Load of type int constant 
  43:     ST  3,-3(1)	Assigning variable zz in Local 
  44:    LDA  3,-1(0)	Load base address of array x 
  45:     LD  3,-3(1)	Load variable zz into accumulator 
  46:     ST  3,-4(1)	Push array index onto temp stack 
- 47:    LDC  3,73(6)	Load type int constant 
+ 47:    LDC  3,73(6)	Load of type int constant 
  48:     LD  4,-4(1)	Pop array index into AC1 
  49:    LDA  5,-1(0)	Load base address of array x into AC2 
  50:    SUB  5,5,4	Compute offset for array 
@@ -85,7 +85,7 @@
  52:    LDA  3,-5(0)	Load base address of array y 
  53:     LD  3,-2(1)	Load variable z into accumulator 
  54:     ST  3,-4(1)	Push array index onto temp stack 
- 55:    LDC  3,211(6)	Load type int constant 
+ 55:    LDC  3,211(6)	Load of type int constant 
  56:     LD  4,-4(1)	Pop array index into AC1 
  57:    LDA  5,-5(0)	Load base address of array y into AC2 
  58:    SUB  5,5,4	Compute offset for array 
@@ -93,9 +93,9 @@
 * CALL output
  60:     ST  1,-4(1)	Store fp in ghost frame for output 
  61:    LDA  3,-1(0)	Load base address of array x 
- 62:    LDC  3,33(6)	Load type int constant 
+ 62:    LDC  3,33(6)	Load of type int constant 
  63:     ST  3,-7(1)	Push left side onto temp variable stack 
- 64:    LDC  3,31(6)	Load type int constant 
+ 64:    LDC  3,31(6)	Load of type int constant 
  65:     LD  4,-7(1)	Pop left hand side into AC1 
  66:    SUB  3,4,3	- Subtraction Operation 
  67:    LDA  5,-1(0)	Load base address of array x into AC2 
@@ -103,11 +103,11 @@
  69:     LD  3,0(5)	Load array element x from AC into loc from AC2 
  70:     ST  3,-7(1)	Push left side onto temp variable stack 
  71:    LDA  3,-5(0)	Load base address of array y 
- 72:    LDC  3,9123(6)	Load type int constant 
+ 72:    LDC  3,9123(6)	Load of type int constant 
  73:     ST  3,-8(1)	Push left side onto temp variable stack 
- 74:    LDC  3,9100(6)	Load type int constant 
+ 74:    LDC  3,9100(6)	Load of type int constant 
  75:     ST  3,-9(1)	Push left side onto temp variable stack 
- 76:    LDC  3,23(6)	Load type int constant 
+ 76:    LDC  3,23(6)	Load of type int constant 
  77:     LD  4,-9(1)	Pop left hand side into AC1 
  78:    ADD  3,4,3	+ Operation 
  79:     LD  4,-8(1)	Pop left hand side into AC1 

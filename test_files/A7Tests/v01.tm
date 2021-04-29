@@ -70,11 +70,11 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type char constant 
+ 40:    LDC  3,0(6)	Load of type char constant 
  41:    LDC  3,4(6)	Load size of a into AC 
  42:     ST  3,-2(1)	Store size of a in data memory 
  43:     ST  3,-3(1)	Assigning variable a in Local 
- 44:    LDC  3,0(6)	Load type char constant 
+ 44:    LDC  3,0(6)	Load of type char constant 
  45:    LDC  3,4(6)	Load size of b into AC 
  46:     ST  3,-7(1)	Store size of b in data memory 
  47:     ST  3,-8(1)	Assigning variable b in Local 
@@ -83,7 +83,7 @@
 * CALL outputc
  50:     ST  1,-17(1)	Store fp in ghost frame for outputc 
  51:    LDA  3,-3(1)	Load base address of array a 
- 52:    LDC  3,0(6)	Load type int constant 
+ 52:    LDC  3,0(6)	Load of type int constant 
  53:    LDA  5,-3(1)	Load base address of array a into AC2 
  54:    SUB  5,5,3	Compute offset for array 
  55:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -97,7 +97,7 @@
 * CALL outputc
  61:     ST  1,-17(1)	Store fp in ghost frame for outputc 
  62:    LDA  3,-3(1)	Load base address of array a 
- 63:    LDC  3,1(6)	Load type int constant 
+ 63:    LDC  3,1(6)	Load of type int constant 
  64:    LDA  5,-3(1)	Load base address of array a into AC2 
  65:    SUB  5,5,3	Compute offset for array 
  66:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -111,7 +111,7 @@
 * CALL outputc
  72:     ST  1,-17(1)	Store fp in ghost frame for outputc 
  73:    LDA  3,-3(1)	Load base address of array a 
- 74:    LDC  3,2(6)	Load type int constant 
+ 74:    LDC  3,2(6)	Load of type int constant 
  75:    LDA  5,-3(1)	Load base address of array a into AC2 
  76:    SUB  5,5,3	Compute offset for array 
  77:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -125,7 +125,7 @@
 * CALL outputc
  83:     ST  1,-17(1)	Store fp in ghost frame for outputc 
  84:    LDA  3,-3(1)	Load base address of array a 
- 85:    LDC  3,3(6)	Load type int constant 
+ 85:    LDC  3,3(6)	Load of type int constant 
  86:    LDA  5,-3(1)	Load base address of array a into AC2 
  87:    SUB  5,5,3	Compute offset for array 
  88:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -138,7 +138,7 @@
 * END CALL outputc
 * CALL outputc
  94:     ST  1,-17(1)	Store fp in ghost frame for outputc 
- 95:    LDC  3,32(6)	Load type char constant 
+ 95:    LDC  3,32(6)	Load of type char constant 
  96:     ST  3,-19(1)	Push parameter onto new frame 
 * Begin call
  97:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -149,7 +149,7 @@
 * CALL outputc
 101:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 102:    LDA  3,-8(1)	Load base address of array b 
-103:    LDC  3,0(6)	Load type int constant 
+103:    LDC  3,0(6)	Load of type int constant 
 104:    LDA  5,-8(1)	Load base address of array b into AC2 
 105:    SUB  5,5,3	Compute offset for array 
 106:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -163,7 +163,7 @@
 * CALL outputc
 112:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 113:    LDA  3,-8(1)	Load base address of array b 
-114:    LDC  3,1(6)	Load type int constant 
+114:    LDC  3,1(6)	Load of type int constant 
 115:    LDA  5,-8(1)	Load base address of array b into AC2 
 116:    SUB  5,5,3	Compute offset for array 
 117:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -177,7 +177,7 @@
 * CALL outputc
 123:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 124:    LDA  3,-8(1)	Load base address of array b 
-125:    LDC  3,2(6)	Load type int constant 
+125:    LDC  3,2(6)	Load of type int constant 
 126:    LDA  5,-8(1)	Load base address of array b into AC2 
 127:    SUB  5,5,3	Compute offset for array 
 128:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -191,7 +191,7 @@
 * CALL outputc
 134:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 135:    LDA  3,-8(1)	Load base address of array b 
-136:    LDC  3,3(6)	Load type int constant 
+136:    LDC  3,3(6)	Load of type int constant 
 137:    LDA  5,-8(1)	Load base address of array b into AC2 
 138:    SUB  5,5,3	Compute offset for array 
 139:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -222,7 +222,7 @@
 * CALL outputc
 159:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 160:    LDA  3,-3(1)	Load base address of array a 
-161:    LDC  3,0(6)	Load type int constant 
+161:    LDC  3,0(6)	Load of type int constant 
 162:    LDA  5,-3(1)	Load base address of array a into AC2 
 163:    SUB  5,5,3	Compute offset for array 
 164:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -236,7 +236,7 @@
 * CALL outputc
 170:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 171:    LDA  3,-3(1)	Load base address of array a 
-172:    LDC  3,1(6)	Load type int constant 
+172:    LDC  3,1(6)	Load of type int constant 
 173:    LDA  5,-3(1)	Load base address of array a into AC2 
 174:    SUB  5,5,3	Compute offset for array 
 175:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -250,7 +250,7 @@
 * CALL outputc
 181:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 182:    LDA  3,-3(1)	Load base address of array a 
-183:    LDC  3,2(6)	Load type int constant 
+183:    LDC  3,2(6)	Load of type int constant 
 184:    LDA  5,-3(1)	Load base address of array a into AC2 
 185:    SUB  5,5,3	Compute offset for array 
 186:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -264,7 +264,7 @@
 * CALL outputc
 192:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 193:    LDA  3,-3(1)	Load base address of array a 
-194:    LDC  3,3(6)	Load type int constant 
+194:    LDC  3,3(6)	Load of type int constant 
 195:    LDA  5,-3(1)	Load base address of array a into AC2 
 196:    SUB  5,5,3	Compute offset for array 
 197:     LD  3,0(5)	Load array element a from AC into loc from AC2 
@@ -277,7 +277,7 @@
 * END CALL outputc
 * CALL outputc
 203:     ST  1,-17(1)	Store fp in ghost frame for outputc 
-204:    LDC  3,32(6)	Load type char constant 
+204:    LDC  3,32(6)	Load of type char constant 
 205:     ST  3,-19(1)	Push parameter onto new frame 
 * Begin call
 206:    LDA  1,-17(1)	Move the fp to the new frame 
@@ -288,7 +288,7 @@
 * CALL outputc
 210:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 211:    LDA  3,-8(1)	Load base address of array b 
-212:    LDC  3,0(6)	Load type int constant 
+212:    LDC  3,0(6)	Load of type int constant 
 213:    LDA  5,-8(1)	Load base address of array b into AC2 
 214:    SUB  5,5,3	Compute offset for array 
 215:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -302,7 +302,7 @@
 * CALL outputc
 221:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 222:    LDA  3,-8(1)	Load base address of array b 
-223:    LDC  3,1(6)	Load type int constant 
+223:    LDC  3,1(6)	Load of type int constant 
 224:    LDA  5,-8(1)	Load base address of array b into AC2 
 225:    SUB  5,5,3	Compute offset for array 
 226:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -316,7 +316,7 @@
 * CALL outputc
 232:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 233:    LDA  3,-8(1)	Load base address of array b 
-234:    LDC  3,2(6)	Load type int constant 
+234:    LDC  3,2(6)	Load of type int constant 
 235:    LDA  5,-8(1)	Load base address of array b into AC2 
 236:    SUB  5,5,3	Compute offset for array 
 237:     LD  3,0(5)	Load array element b from AC into loc from AC2 
@@ -330,7 +330,7 @@
 * CALL outputc
 243:     ST  1,-17(1)	Store fp in ghost frame for outputc 
 244:    LDA  3,-8(1)	Load base address of array b 
-245:    LDC  3,3(6)	Load type int constant 
+245:    LDC  3,3(6)	Load of type int constant 
 246:    LDA  5,-8(1)	Load base address of array b into AC2 
 247:    SUB  5,5,3	Compute offset for array 
 248:     LD  3,0(5)	Load array element b from AC into loc from AC2 

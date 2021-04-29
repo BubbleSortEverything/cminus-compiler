@@ -70,7 +70,7 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,666(6)	Load type int constant 
+ 40:    LDC  3,666(6)	Load of type int constant 
 * END COMPOUND
 * Add standard closing in case there is no return statement
  41:    LDC  2,0(6)	Set return value to 0 

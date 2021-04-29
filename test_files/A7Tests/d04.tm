@@ -70,11 +70,11 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,1(6)	Load type bool constant 
+ 40:    LDC  3,1(6)	Load of type bool constant 
  41:     ST  3,-2(1)	Assigning variable x in Local 
- 42:    LDC  3,0(6)	Load type bool constant 
+ 42:    LDC  3,0(6)	Load of type bool constant 
  43:     ST  3,-3(1)	Assigning variable y in Local 
- 44:    LDC  3,1(6)	Load type bool constant 
+ 44:    LDC  3,1(6)	Load of type bool constant 
  45:     ST  3,-4(1)	Assigning variable z in Local 
 * CALL outputb
  46:     ST  1,-5(1)	Store fp in ghost frame for outputb 
@@ -182,11 +182,11 @@
 132:    JMP  7,-99(7)	Call function 
 133:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL outnl
-134:    LDC  3,1(6)	Load type bool constant 
+134:    LDC  3,1(6)	Load of type bool constant 
 135:     ST  3,-2(1)	Assigning variable x in Local 
-136:    LDC  3,1(6)	Load type bool constant 
+136:    LDC  3,1(6)	Load of type bool constant 
 137:     ST  3,-3(1)	Assigning variable y in Local 
-138:    LDC  3,0(6)	Load type bool constant 
+138:    LDC  3,0(6)	Load of type bool constant 
 139:     ST  3,-4(1)	Assigning variable z in Local 
 * CALL outputb
 140:     ST  1,-5(1)	Store fp in ghost frame for outputb 

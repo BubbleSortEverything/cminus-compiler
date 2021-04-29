@@ -71,9 +71,9 @@
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
  40:    LDA  3,-1(0)	Load base address of array x 
- 41:    LDC  3,3(6)	Load type int constant 
+ 41:    LDC  3,3(6)	Load of type int constant 
  42:     ST  3,-2(1)	Push array index onto temp stack 
- 43:    LDC  3,1023(6)	Load type int constant 
+ 43:    LDC  3,1023(6)	Load of type int constant 
  44:     LD  4,-2(1)	Pop array index into AC1 
  45:    LDA  5,-1(0)	Load base address of array x into AC2 
  46:    SUB  5,5,4	Compute offset for array 
@@ -81,7 +81,7 @@
 * CALL output
  48:     ST  1,-2(1)	Store fp in ghost frame for output 
  49:    LDA  3,-1(0)	Load base address of array x 
- 50:    LDC  3,3(6)	Load type int constant 
+ 50:    LDC  3,3(6)	Load of type int constant 
  51:     ST  3,-5(1)	Push array index onto temp stack 
  52:     LD  4,-5(1)	Pop array index into AC1 
  53:    LDA  5,-1(0)	Load base address of array x into AC2 
@@ -107,7 +107,7 @@
 * CALL output
  68:     ST  1,-2(1)	Store fp in ghost frame for output 
  69:    LDA  3,-1(0)	Load base address of array x 
- 70:    LDC  3,3(6)	Load type int constant 
+ 70:    LDC  3,3(6)	Load of type int constant 
  71:    LDA  5,-1(0)	Load base address of array x into AC2 
  72:    SUB  5,5,3	Compute offset for array 
  73:     LD  3,0(5)	Load array element x from AC into loc from AC2 
@@ -129,7 +129,7 @@
 * CALL output
  84:     ST  1,-2(1)	Store fp in ghost frame for output 
  85:    LDA  3,-1(0)	Load base address of array x 
- 86:    LDC  3,3(6)	Load type int constant 
+ 86:    LDC  3,3(6)	Load of type int constant 
  87:     ST  3,-5(1)	Push array index onto temp stack 
  88:     LD  4,-5(1)	Pop array index into AC1 
  89:    LDA  5,-1(0)	Load base address of array x into AC2 
@@ -155,7 +155,7 @@
 * CALL output
 104:     ST  1,-2(1)	Store fp in ghost frame for output 
 105:    LDA  3,-1(0)	Load base address of array x 
-106:    LDC  3,3(6)	Load type int constant 
+106:    LDC  3,3(6)	Load of type int constant 
 107:    LDA  5,-1(0)	Load base address of array x into AC2 
 108:    SUB  5,5,3	Compute offset for array 
 109:     LD  3,0(5)	Load array element x from AC into loc from AC2 

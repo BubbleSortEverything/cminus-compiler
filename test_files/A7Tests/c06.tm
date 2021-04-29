@@ -75,17 +75,17 @@
  42:    LDC  3,4(6)	Load size of y into AC 
  43:     ST  3,-6(1)	Store size of y in data memory 
  44:    LDA  3,-3(1)	Load base address of array x 
- 45:    LDC  3,2(6)	Load type int constant 
+ 45:    LDC  3,2(6)	Load of type int constant 
  46:     ST  3,-11(1)	Push array index onto temp stack 
- 47:    LDC  3,73(6)	Load type int constant 
+ 47:    LDC  3,73(6)	Load of type int constant 
  48:     LD  4,-11(1)	Pop array index into AC1 
  49:    LDA  5,-3(1)	Load base address of array x into AC2 
  50:    SUB  5,5,4	Compute offset for array 
  51:     ST  3,0(5)	Store variable x from AC into loc from AC2 
  52:    LDA  3,-7(1)	Load base address of array y 
- 53:    LDC  3,1(6)	Load type int constant 
+ 53:    LDC  3,1(6)	Load of type int constant 
  54:     ST  3,-11(1)	Push array index onto temp stack 
- 55:    LDC  3,211(6)	Load type int constant 
+ 55:    LDC  3,211(6)	Load of type int constant 
  56:     LD  4,-11(1)	Pop array index into AC1 
  57:    LDA  5,-7(1)	Load base address of array y into AC2 
  58:    SUB  5,5,4	Compute offset for array 
@@ -93,13 +93,13 @@
 * CALL output
  60:     ST  1,-11(1)	Store fp in ghost frame for output 
  61:    LDA  3,-3(1)	Load base address of array x 
- 62:    LDC  3,2(6)	Load type int constant 
+ 62:    LDC  3,2(6)	Load of type int constant 
  63:    LDA  5,-3(1)	Load base address of array x into AC2 
  64:    SUB  5,5,3	Compute offset for array 
  65:     LD  3,0(5)	Load array element x from AC into loc from AC2 
  66:     ST  3,-14(1)	Push left side onto temp variable stack 
  67:    LDA  3,-7(1)	Load base address of array y 
- 68:    LDC  3,1(6)	Load type int constant 
+ 68:    LDC  3,1(6)	Load of type int constant 
  69:    LDA  5,-7(1)	Load base address of array y into AC2 
  70:    SUB  5,5,3	Compute offset for array 
  71:     LD  3,0(5)	Load array element y from AC into loc from AC2 

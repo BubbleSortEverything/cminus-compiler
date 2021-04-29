@@ -72,12 +72,12 @@
 * COMPOUND
  40:    LDC  3,300(6)	Load size of x into AC 
  41:     ST  3,-2(1)	Store size of x in data memory 
- 42:    LDC  3,5(6)	Load type int constant 
+ 42:    LDC  3,5(6)	Load of type int constant 
  43:     ST  3,-303(1)	Assigning variable z in Local 
  44:    LDA  3,-3(1)	Load base address of array x 
  45:     LD  3,-303(1)	Load variable z into accumulator 
  46:     ST  3,-304(1)	Push array index onto temp stack 
- 47:    LDC  3,73(6)	Load type int constant 
+ 47:    LDC  3,73(6)	Load of type int constant 
  48:     LD  4,-304(1)	Pop array index into AC1 
  49:    LDA  5,-3(1)	Load base address of array x into AC2 
  50:    SUB  5,5,4	Compute offset for array 
@@ -104,22 +104,22 @@
  66:    JMP  7,-33(7)	Call function 
  67:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL outnl
- 68:    LDC  3,5(6)	Load type int constant 
+ 68:    LDC  3,5(6)	Load of type int constant 
  69:     ST  3,-303(1)	Assigning variable z in Local 
  70:    LDA  3,-3(1)	Load base address of array x 
  71:     LD  3,-303(1)	Load variable z into accumulator 
  72:     ST  3,-304(1)	Push array index onto temp stack 
- 73:    LDC  3,17(6)	Load type int constant 
+ 73:    LDC  3,17(6)	Load of type int constant 
  74:     LD  4,-304(1)	Pop array index into AC1 
  75:    LDA  5,-3(1)	Load base address of array x into AC2 
  76:    SUB  5,5,4	Compute offset for array 
  77:     ST  3,0(5)	Store variable x from AC into loc from AC2 
- 78:    LDC  3,17(6)	Load type int constant 
+ 78:    LDC  3,17(6)	Load of type int constant 
  79:     ST  3,-303(1)	Assigning variable z in Local 
  80:    LDA  3,-3(1)	Load base address of array x 
  81:     LD  3,-303(1)	Load variable z into accumulator 
  82:     ST  3,-304(1)	Push array index onto temp stack 
- 83:    LDC  3,5(6)	Load type int constant 
+ 83:    LDC  3,5(6)	Load of type int constant 
  84:     LD  4,-304(1)	Pop array index into AC1 
  85:    LDA  5,-3(1)	Load base address of array x into AC2 
  86:    SUB  5,5,4	Compute offset for array 

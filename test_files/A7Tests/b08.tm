@@ -72,7 +72,7 @@
 * COMPOUND
 * CALL outputb
  40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,1(6)	Load type bool constant 
+ 41:    LDC  3,1(6)	Load of type bool constant 
  42:    LDC  4,1(6)	Load 1 into AC1 for not operation 
  43:    TNE  3,4,3	Not ! operation store in AC 
  44:     ST  3,-4(1)	Push parameter onto new frame 
@@ -92,7 +92,7 @@
 * END CALL outnl
 * CALL outputb
  54:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 55:    LDC  3,0(6)	Load type bool constant 
+ 55:    LDC  3,0(6)	Load of type bool constant 
  56:    LDC  4,1(6)	Load 1 into AC1 for not operation 
  57:    TNE  3,4,3	Not ! operation store in AC 
  58:     ST  3,-4(1)	Push parameter onto new frame 

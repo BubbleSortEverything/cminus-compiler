@@ -70,7 +70,7 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,97(6)	Load type char constant 
+ 40:    LDC  3,97(6)	Load of type char constant 
  41:     ST  3,-2(1)	Assigning variable yy in Local 
 * CALL outputc
  42:     ST  1,-3(1)	Store fp in ghost frame for outputc 

@@ -70,7 +70,7 @@
 * FUNCTION cat
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,93(6)	Load type int constant 
+ 40:    LDC  3,93(6)	Load of type int constant 
  41:    LDA  2,0(3)	Copy accumulator to return register 
  42:     LD  3,-1(1)	Load return address 
  43:     LD  1,0(1)	Adjust fp 
@@ -89,7 +89,7 @@
 * COMPOUND
 * CALL output
  50:     ST  1,-2(1)	Store fp in ghost frame for output 
- 51:    LDC  3,781(6)	Load type int constant 
+ 51:    LDC  3,781(6)	Load of type int constant 
  52:     ST  3,-5(1)	Push left side onto temp variable stack 
 * CALL cat
  53:     ST  1,-6(1)	Store fp in ghost frame for cat 

@@ -70,12 +70,12 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type int constant 
+ 40:    LDC  3,0(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable x in Local 
 * Beginning WHILE statement
  42:     LD  3,-2(1)	Load variable x into accumulator 
  43:     ST  3,-3(1)	Push left side onto temp variable stack 
- 44:    LDC  3,10(6)	Load type int constant 
+ 44:    LDC  3,10(6)	Load of type int constant 
  45:     LD  4,-3(1)	Pop left hand side into AC1 
  46:    TLT  3,4,3	Less than < operation store in AC 
 * COMPOUND
@@ -92,7 +92,7 @@
 * BEGIN IF BLOCK
  55:     LD  3,-2(1)	Load variable x into accumulator 
  56:     ST  3,-3(1)	Push left side onto temp variable stack 
- 57:    LDC  3,5(6)	Load type int constant 
+ 57:    LDC  3,5(6)	Load of type int constant 
  58:     LD  4,-3(1)	Pop left hand side into AC1 
  59:    TEQ  3,4,3	== Equality Operation 
 * IF JUMP TO ELSE
@@ -102,7 +102,7 @@
 * END IF
  63:     LD  3,-2(1)	Load variable x into accumulator 
  64:     ST  3,-3(1)	Push left side onto temp variable stack 
- 65:    LDC  3,1(6)	Load type int constant 
+ 65:    LDC  3,1(6)	Load of type int constant 
  66:     LD  4,-3(1)	Pop left hand side into AC1 
  67:    ADD  3,4,3	+ Operation 
  68:     ST  3,-2(1)	Assigning variable x in Local 
@@ -113,7 +113,7 @@
 * End WHILE statement
 * CALL output
  70:     ST  1,-3(1)	Store fp in ghost frame for output 
- 71:    LDC  3,666(6)	Load type int constant 
+ 71:    LDC  3,666(6)	Load of type int constant 
  72:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  73:    LDA  1,-3(1)	Move the fp to the new frame 

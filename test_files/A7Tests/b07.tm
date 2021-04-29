@@ -72,7 +72,7 @@
 * COMPOUND
 * CALL output
  40:     ST  1,-2(1)	Store fp in ghost frame for output 
- 41:    LDC  3,666(6)	Load type int constant 
+ 41:    LDC  3,666(6)	Load of type int constant 
  42:    NEG  3,3,0	- Change Sign Operation 
  43:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call

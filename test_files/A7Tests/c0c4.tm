@@ -70,10 +70,10 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,65(6)	Load type char constant 
- 41:     ST  3,0(0)	Assigning variable x in Static 
- 42:    LDC  3,66(6)	Load type char constant 
- 43:     ST  3,-1(0)	Assigning variable y in Static 
+ 40:    LDC  3,65(6)	Load of type char constant 
+ 41:     ST  3,0(0)	Assigning variable x in LocalStatic 
+ 42:    LDC  3,66(6)	Load of type char constant 
+ 43:     ST  3,-1(0)	Assigning variable y in LocalStatic 
 * CALL outputc
  44:     ST  1,-2(1)	Store fp in ghost frame for outputc 
  45:     LD  3,0(0)	Load variable x into accumulator 
@@ -97,8 +97,8 @@
 * CALL outputc
  58:     ST  1,-2(1)	Store fp in ghost frame for outputc 
  59:     LD  3,-1(0)	Load variable y into accumulator 
- 60:     ST  3,0(0)	Assigning variable x in Static 
- 61:     ST  3,-2(0)	Assigning variable z in Static 
+ 60:     ST  3,0(0)	Assigning variable x in LocalStatic 
+ 61:     ST  3,-2(0)	Assigning variable z in LocalStatic 
  62:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  63:    LDA  1,-2(1)	Move the fp to the new frame 

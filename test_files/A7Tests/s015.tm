@@ -66,13 +66,13 @@
  38:    JMP  7,0(3)	Return 
 * END FUNCTION outnl
 * 
- 39:    LDC  3,666(6)	Load type int constant 
+ 39:    LDC  3,666(6)	Load of type int constant 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION load
  40:     ST  3,-1(1)	Store return address 
 * COMPOUND
 * COMPOUND
- 41:    LDC  3,777(6)	Load type int constant 
+ 41:    LDC  3,777(6)	Load of type int constant 
 * CALL output
  42:     ST  1,-2(1)	Store fp in ghost frame for output 
  43:     LD  3,-2(0)	Load variable goad into accumulator 
@@ -135,10 +135,10 @@
  75:    LDA  1,-3(0)	set first frame at end of globals 
  76:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
- 77:    LDC  3,666(6)	Load type int constant 
+ 77:    LDC  3,666(6)	Load of type int constant 
  78:     ST  3,0(0)	Assigning variable goad in Global 
- 79:    LDC  3,777(6)	Load type int constant 
- 80:     ST  3,-2(0)	Assigning variable goad in Static 
+ 79:    LDC  3,777(6)	Load of type int constant 
+ 80:     ST  3,-2(0)	Assigning variable goad in LocalStatic 
 * END INIT GLOBALS AND STATICS
  81:    LDA  3,1(7)	Return address in ac 
  82:    JMP  7,-18(7)	Jump to main 

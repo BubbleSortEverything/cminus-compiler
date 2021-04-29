@@ -70,19 +70,19 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,755(6)	Load type int constant 
+ 40:    LDC  3,755(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable x in Local 
- 42:    LDC  3,88(6)	Load type int constant 
+ 42:    LDC  3,88(6)	Load of type int constant 
  43:     ST  3,-3(1)	Assigning variable y in Local 
- 44:    LDC  3,3(6)	Load type int constant 
+ 44:    LDC  3,3(6)	Load of type int constant 
  45:     ST  3,-4(1)	Assigning variable z in Local 
 * CALL output
  46:     ST  1,-5(1)	Store fp in ghost frame for output 
- 47:    LDC  3,755(6)	Load type int constant 
+ 47:    LDC  3,755(6)	Load of type int constant 
  48:     ST  3,-8(1)	Push left side onto temp variable stack 
- 49:    LDC  3,88(6)	Load type int constant 
+ 49:    LDC  3,88(6)	Load of type int constant 
  50:     ST  3,-9(1)	Push left side onto temp variable stack 
- 51:    LDC  3,3(6)	Load type int constant 
+ 51:    LDC  3,3(6)	Load of type int constant 
  52:     LD  4,-9(1)	Pop left hand side into AC1 
  53:    MUL  3,4,3	* Multiplication Operation 
  54:     LD  4,-8(1)	Pop left hand side into AC1 
@@ -96,13 +96,13 @@
 * END CALL output
 * CALL output
  61:     ST  1,-5(1)	Store fp in ghost frame for output 
- 62:    LDC  3,755(6)	Load type int constant 
+ 62:    LDC  3,755(6)	Load of type int constant 
  63:     ST  3,-8(1)	Push left side onto temp variable stack 
- 64:    LDC  3,88(6)	Load type int constant 
+ 64:    LDC  3,88(6)	Load of type int constant 
  65:     LD  4,-8(1)	Pop left hand side into AC1 
  66:    MUL  3,4,3	* Multiplication Operation 
  67:     ST  3,-8(1)	Push left side onto temp variable stack 
- 68:    LDC  3,3(6)	Load type int constant 
+ 68:    LDC  3,3(6)	Load of type int constant 
  69:     LD  4,-8(1)	Pop left hand side into AC1 
  70:    ADD  3,4,3	+ Operation 
  71:     ST  3,-7(1)	Push parameter onto new frame 
@@ -114,13 +114,13 @@
 * END CALL output
 * CALL output
  76:     ST  1,-5(1)	Store fp in ghost frame for output 
- 77:    LDC  3,755(6)	Load type int constant 
+ 77:    LDC  3,755(6)	Load of type int constant 
  78:     ST  3,-8(1)	Push left side onto temp variable stack 
- 79:    LDC  3,88(6)	Load type int constant 
+ 79:    LDC  3,88(6)	Load of type int constant 
  80:     LD  4,-8(1)	Pop left hand side into AC1 
  81:    SUB  3,4,3	- Subtraction Operation 
  82:     ST  3,-8(1)	Push left side onto temp variable stack 
- 83:    LDC  3,3(6)	Load type int constant 
+ 83:    LDC  3,3(6)	Load of type int constant 
  84:     LD  4,-8(1)	Pop left hand side into AC1 
  85:    SUB  3,4,3	- Subtraction Operation 
  86:     ST  3,-7(1)	Push parameter onto new frame 
@@ -132,13 +132,13 @@
 * END CALL output
 * CALL output
  91:     ST  1,-5(1)	Store fp in ghost frame for output 
- 92:    LDC  3,755(6)	Load type int constant 
+ 92:    LDC  3,755(6)	Load of type int constant 
  93:     ST  3,-8(1)	Push left side onto temp variable stack 
- 94:    LDC  3,88(6)	Load type int constant 
+ 94:    LDC  3,88(6)	Load of type int constant 
  95:     LD  4,-8(1)	Pop left hand side into AC1 
  96:    DIV  3,4,3	/ Division operation 
  97:     ST  3,-8(1)	Push left side onto temp variable stack 
- 98:    LDC  3,3(6)	Load type int constant 
+ 98:    LDC  3,3(6)	Load of type int constant 
  99:     LD  4,-8(1)	Pop left hand side into AC1 
 100:    DIV  3,4,3	/ Division operation 
 101:     ST  3,-7(1)	Push parameter onto new frame 
@@ -150,15 +150,15 @@
 * END CALL output
 * CALL output
 106:     ST  1,-5(1)	Store fp in ghost frame for output 
-107:    LDC  3,755(6)	Load type int constant 
+107:    LDC  3,755(6)	Load of type int constant 
 108:     ST  3,-8(1)	Push left side onto temp variable stack 
-109:    LDC  3,88(6)	Load type int constant 
+109:    LDC  3,88(6)	Load of type int constant 
 110:     LD  4,-8(1)	Pop left hand side into AC1 
 111:    MUL  3,4,3	* Multiplication Operation 
 112:     ST  3,-8(1)	Push left side onto temp variable stack 
-113:    LDC  3,3(6)	Load type int constant 
+113:    LDC  3,3(6)	Load of type int constant 
 114:     ST  3,-9(1)	Push left side onto temp variable stack 
-115:    LDC  3,3(6)	Load type int constant 
+115:    LDC  3,3(6)	Load of type int constant 
 116:     LD  4,-9(1)	Pop left hand side into AC1 
 117:    MUL  3,4,3	* Multiplication Operation 
 118:     LD  4,-8(1)	Pop left hand side into AC1 
@@ -172,13 +172,13 @@
 * END CALL output
 * CALL output
 125:     ST  1,-5(1)	Store fp in ghost frame for output 
-126:    LDC  3,755(6)	Load type int constant 
+126:    LDC  3,755(6)	Load of type int constant 
 127:     ST  3,-8(1)	Push left side onto temp variable stack 
-128:    LDC  3,88(6)	Load type int constant 
+128:    LDC  3,88(6)	Load of type int constant 
 129:     LD  4,-8(1)	Pop left hand side into AC1 
 130:    MOD  3,4,3	% mod operation 
 131:     ST  3,-8(1)	Push left side onto temp variable stack 
-132:    LDC  3,3(6)	Load type int constant 
+132:    LDC  3,3(6)	Load of type int constant 
 133:     LD  4,-8(1)	Pop left hand side into AC1 
 134:    MOD  3,4,3	% mod operation 
 135:     ST  3,-7(1)	Push parameter onto new frame 
@@ -190,12 +190,12 @@
 * END CALL output
 * CALL output
 140:     ST  1,-5(1)	Store fp in ghost frame for output 
-141:    LDC  3,755(6)	Load type int constant 
+141:    LDC  3,755(6)	Load of type int constant 
 142:    NEG  3,3,0	- Change Sign Operation 
 143:     ST  3,-8(1)	Push left side onto temp variable stack 
-144:    LDC  3,88(6)	Load type int constant 
+144:    LDC  3,88(6)	Load of type int constant 
 145:     ST  3,-9(1)	Push left side onto temp variable stack 
-146:    LDC  3,3(6)	Load type int constant 
+146:    LDC  3,3(6)	Load of type int constant 
 147:     LD  4,-9(1)	Pop left hand side into AC1 
 148:    MUL  3,4,3	* Multiplication Operation 
 149:     LD  4,-8(1)	Pop left hand side into AC1 

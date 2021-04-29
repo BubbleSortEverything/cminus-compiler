@@ -72,7 +72,7 @@
 * COMPOUND
 * CALL outputb
  40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,1(6)	Load type bool constant 
+ 41:    LDC  3,1(6)	Load of type bool constant 
  42:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  43:    LDA  1,-2(1)	Move the fp to the new frame 

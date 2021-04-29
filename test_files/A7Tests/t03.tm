@@ -73,11 +73,11 @@
 * BEGIN IF BLOCK
  40:     LD  3,-2(1)	Load variable n into accumulator 
  41:     ST  3,-3(1)	Push left side onto temp variable stack 
- 42:    LDC  3,3(6)	Load type int constant 
+ 42:    LDC  3,3(6)	Load of type int constant 
  43:     LD  4,-3(1)	Pop left hand side into AC1 
  44:    TLT  3,4,3	Less than < operation store in AC 
 * IF JUMP TO ELSE
- 46:    LDC  3,1(6)	Load type int constant 
+ 46:    LDC  3,1(6)	Load of type int constant 
  47:    LDA  2,0(3)	Copy accumulator to return register 
  48:     LD  3,-1(1)	Load return address 
  49:     LD  1,0(1)	Adjust fp 
@@ -88,7 +88,7 @@
  52:     ST  1,-3(1)	Store fp in ghost frame for fib 
  53:     LD  3,-2(1)	Load variable n into accumulator 
  54:     ST  3,-6(1)	Push left side onto temp variable stack 
- 55:    LDC  3,1(6)	Load type int constant 
+ 55:    LDC  3,1(6)	Load of type int constant 
  56:     LD  4,-6(1)	Pop left hand side into AC1 
  57:    SUB  3,4,3	- Subtraction Operation 
  58:     ST  3,-5(1)	Push parameter onto new frame 
@@ -103,7 +103,7 @@
  64:     ST  1,-4(1)	Store fp in ghost frame for fib 
  65:     LD  3,-2(1)	Load variable n into accumulator 
  66:     ST  3,-7(1)	Push left side onto temp variable stack 
- 67:    LDC  3,2(6)	Load type int constant 
+ 67:    LDC  3,2(6)	Load of type int constant 
  68:     LD  4,-7(1)	Pop left hand side into AC1 
  69:    SUB  3,4,3	- Subtraction Operation 
  70:     ST  3,-6(1)	Push parameter onto new frame 
@@ -135,7 +135,7 @@
 * COMPOUND
 * CALL fib
  86:     ST  1,-3(1)	Store fp in ghost frame for fib 
- 87:    LDC  3,12(6)	Load type int constant 
+ 87:    LDC  3,12(6)	Load of type int constant 
  88:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  89:    LDA  1,-3(1)	Move the fp to the new frame 

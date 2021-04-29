@@ -7,52 +7,24 @@ extern int globalOffset;
 extern int localOffset;
 extern bool printMem;
 
-TokenTree::TokenTree() {
-    // Initializer for class... doesn't do anything now
-}
+TokenTree::TokenTree() {}   // initializer
 
-void TokenTree::setTokenClass(int tc) {
-    this->tokenClass = tc;
-}
+int TokenTree   ::  getTokenClass() { return this->tokenClass; }
+int TokenTree   ::  getLineNum() { return this->lineNum; }
+int TokenTree   ::  getNumValue() { return this->nvalue; }
+void TokenTree  ::  setTokenClass(int tc) { this->tokenClass = tc; }
+void TokenTree  ::  setLineNum(int line) { this->lineNum = line; }
+void TokenTree  ::  setTokenString(char *str) { this->tokenStr = strdup(str); }
+void TokenTree  ::  setCharValue(char c) { this->cvalue = c; }
+void TokenTree  ::  setNumValue(int n) { this->nvalue = n; }
+void TokenTree  ::  setStringValue(char *str) { setStringValue(str, true); }
+char TokenTree  ::  getCharValue() { return this->cvalue; }
+char *TokenTree ::  getTokenString() { return this->tokenStr; }
 
-int TokenTree::getTokenClass() {
-    return this->tokenClass;
-}
+char *TokenTree ::  getStringValue() { 
+    if (strcmp(this->svalue, "*")==0) return "sizeof";
 
-void TokenTree::setLineNum(int line) {
-    this->lineNum = line;
-}
-
-int TokenTree::getLineNum() {
-    return this->lineNum;
-}
-
-void TokenTree::setTokenString(char *str) {
-    this->tokenStr = strdup(str);
-}
-
-char *TokenTree::getTokenString() {
-    return this->tokenStr;
-}
-
-void TokenTree::setCharValue(char c) {
-    this->cvalue = c;
-}
-
-char TokenTree::getCharValue() {
-    return this->cvalue;
-}
-
-void TokenTree::setNumValue(int n) {
-    this->nvalue = n;
-}
-
-int TokenTree::getNumValue() {
-    return this->nvalue;
-}
-
-void TokenTree::setStringValue(char *str) {
-    setStringValue(str, true);
+    return this->svalue; 
 }
 
 void TokenTree::setStringValue(char *str, bool duplicate) {
@@ -63,9 +35,6 @@ void TokenTree::setStringValue(char *str, bool duplicate) {
     }
 }
 
-char *TokenTree::getStringValue() {
-    return this->svalue;
-}
 
 void TokenTree::_setParent() {
     for (int i = 0; i < MAX_CHILDREN; i++) {
@@ -195,15 +164,15 @@ ExprType TokenTree::getExprType() {
 const char *TokenTree::getTypeString() {
     switch (getExprType()) {
         case 0:
-            return "type int";
+            return "of type int";
         case 1:
-            return "type bool";
+            return "of type bool";
         case 2:
-            return "type char";
+            return "of type char";
         case 3:
-            return "type void";
+            return "of type void";
         case 4:
-            return "undefined type";
+            return "of undefined type";
     }
     return "error";
     // if (getExprType() == ExprType::BOOL) 
@@ -403,16 +372,17 @@ void TokenTree::printNode() {
         case 0:
             switch (getDeclKind()) {
                 case 0:
-                    printf("Var %s: ", getStringValue());
-                    if (isStatic()) printf("static ");
-                    if (isArray()) printf("array of ");
+                    printf("Var: %s ", getStringValue());
+                    if (isStatic()) printf("of static ");
+                    if (isArray() and not isStatic()) printf("of array ");
+                    if (isArray() and isStatic()) printf("array ");
                     printf("%s ", getTypeString());
                     break;
                 case 1:
-                    printf("Func %s: returns %s ", getStringValue(), getTypeString());
+                    printf("Func: %s returns %s ", getStringValue(), getTypeString());
                     break;
                 case 2:
-                    printf("Param %s: ", getStringValue());
+                    printf("Param: %s ", getStringValue());
                     if (isArray()) printf("array of ");
                     printf("%s ", getTypeString());
                 default:
@@ -428,7 +398,7 @@ void TokenTree::printNode() {
                     break;
                 }
                 case 1:
-                    printf("Call %s: %s ", getExprName(), getTypeString());
+                    printf("Call: %s %s ", getExprName(), getTypeString());
                     break;
                 case 2: {
                     printf("Const");
@@ -442,7 +412,7 @@ void TokenTree::printNode() {
                         }
                         printf(" : ");
                     } else {
-                        printf(" %s : ", getStringValue());
+                        printf(" %s ", getStringValue());
                     }
                     char *arrayStr = (char *) "";
                     if (isArray()) arrayStr = (char *) "array of ";
@@ -452,13 +422,14 @@ void TokenTree::printNode() {
                 case 3: {
                     char *staticStr = (char *) "";
                     char *arrayStr = (char *) "";
-                    if (isStatic()) staticStr = (char *) "static ";
-                    if (isArray()) arrayStr = (char *) "array of ";
-                    printf("Id %s: %s%s%s ", getStringValue(), staticStr, arrayStr, getTypeString());
+                    if (isStatic()) staticStr = (char *) "of static ";
+                    if (isArray() and not isStatic()) arrayStr = (char *) "of array ";
+                    if (isArray() and isStatic()) arrayStr = (char *) "array ";
+                    printf("Id: %s %s%s%s ", getStringValue(), staticStr, arrayStr, getTypeString());
                     break;
                 }
                 case 4:
-                    printf("Op %s : %s ", getStringValue(), getTypeString());
+                    printf("Op: %s %s ", getStringValue(), getTypeString());
                     break;
                 default:
                     break;
@@ -501,11 +472,11 @@ void TokenTree::printLine() {
 
 void TokenTree::printMemory() {
     if (this->getMemoryType() == MemoryType::UNDEFINED) return;
-    printf("[mem: %s  ", getMemoryTypeString());
+    printf("[mem: %s ", getMemoryTypeString());
+    printf("loc: %d ", getMemoryOffset());
     if (!(this->getNodeKind() == NodeKind::DeclK and this->getDeclKind() == DeclKind::FuncK)) {
-        printf("size: %d  ", getMemorySize());
+        printf("size: %d] ", getMemorySize());
     }
-    printf("loc: %d] ", getMemoryOffset());
 }
 
 void TokenTree::setMemorySize(unsigned int i) {
@@ -531,7 +502,7 @@ char *TokenTree::getMemoryTypeString() {
         case 1:
             return (char *) "Local";
         case 2:
-            return (char *) "Static";
+            return (char *) "LocalStatic";
         case 3:
             return (char *) "Param";
         case 4:

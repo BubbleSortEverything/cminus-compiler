@@ -72,9 +72,9 @@
 * COMPOUND
 * CALL outputb
  40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,1(6)	Load type int constant 
+ 41:    LDC  3,1(6)	Load of type int constant 
  42:     ST  3,-5(1)	Push left side onto temp variable stack 
- 43:    LDC  3,2(6)	Load type int constant 
+ 43:    LDC  3,2(6)	Load of type int constant 
  44:     LD  4,-5(1)	Pop left hand side into AC1 
  45:    TLT  3,4,3	Less than < operation store in AC 
  46:     ST  3,-4(1)	Push parameter onto new frame 
@@ -86,9 +86,9 @@
 * END CALL outputb
 * CALL outputb
  51:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 52:    LDC  3,1(6)	Load type int constant 
+ 52:    LDC  3,1(6)	Load of type int constant 
  53:     ST  3,-5(1)	Push left side onto temp variable stack 
- 54:    LDC  3,2(6)	Load type int constant 
+ 54:    LDC  3,2(6)	Load of type int constant 
  55:     LD  4,-5(1)	Pop left hand side into AC1 
  56:    TGT  3,4,3	Greather than > operation store in AC 
  57:     ST  3,-4(1)	Push parameter onto new frame 
@@ -100,9 +100,9 @@
 * END CALL outputb
 * CALL outputb
  62:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 63:    LDC  3,1(6)	Load type int constant 
+ 63:    LDC  3,1(6)	Load of type int constant 
  64:     ST  3,-5(1)	Push left side onto temp variable stack 
- 65:    LDC  3,2(6)	Load type int constant 
+ 65:    LDC  3,2(6)	Load of type int constant 
  66:     LD  4,-5(1)	Pop left hand side into AC1 
  67:    TEQ  3,4,3	== Equality Operation 
  68:     ST  3,-4(1)	Push parameter onto new frame 
@@ -114,9 +114,9 @@
 * END CALL outputb
 * CALL outputb
  73:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 74:    LDC  3,1(6)	Load type int constant 
+ 74:    LDC  3,1(6)	Load of type int constant 
  75:     ST  3,-5(1)	Push left side onto temp variable stack 
- 76:    LDC  3,2(6)	Load type int constant 
+ 76:    LDC  3,2(6)	Load of type int constant 
  77:     LD  4,-5(1)	Pop left hand side into AC1 
  78:    TNE  3,4,3	!= Equality Operation 
  79:     ST  3,-4(1)	Push parameter onto new frame 
@@ -128,9 +128,9 @@
 * END CALL outputb
 * CALL outputb
  84:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 85:    LDC  3,1(6)	Load type int constant 
+ 85:    LDC  3,1(6)	Load of type int constant 
  86:     ST  3,-5(1)	Push left side onto temp variable stack 
- 87:    LDC  3,2(6)	Load type int constant 
+ 87:    LDC  3,2(6)	Load of type int constant 
  88:     LD  4,-5(1)	Pop left hand side into AC1 
  89:    TGE  3,4,3	GEQ >- operation store in AC 
  90:     ST  3,-4(1)	Push parameter onto new frame 
@@ -142,9 +142,9 @@
 * END CALL outputb
 * CALL outputb
  95:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 96:    LDC  3,1(6)	Load type int constant 
+ 96:    LDC  3,1(6)	Load of type int constant 
  97:     ST  3,-5(1)	Push left side onto temp variable stack 
- 98:    LDC  3,2(6)	Load type int constant 
+ 98:    LDC  3,2(6)	Load of type int constant 
  99:     LD  4,-5(1)	Pop left hand side into AC1 
 100:    TLE  3,4,3	LEQ <= operation store in AC 
 101:     ST  3,-4(1)	Push parameter onto new frame 
@@ -156,9 +156,9 @@
 * END CALL outputb
 * CALL outputb
 106:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-107:    LDC  3,2(6)	Load type int constant 
+107:    LDC  3,2(6)	Load of type int constant 
 108:     ST  3,-5(1)	Push left side onto temp variable stack 
-109:    LDC  3,2(6)	Load type int constant 
+109:    LDC  3,2(6)	Load of type int constant 
 110:     LD  4,-5(1)	Pop left hand side into AC1 
 111:    TEQ  3,4,3	== Equality Operation 
 112:     ST  3,-4(1)	Push parameter onto new frame 
@@ -170,9 +170,9 @@
 * END CALL outputb
 * CALL outputb
 117:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-118:    LDC  3,2(6)	Load type int constant 
+118:    LDC  3,2(6)	Load of type int constant 
 119:     ST  3,-5(1)	Push left side onto temp variable stack 
-120:    LDC  3,2(6)	Load type int constant 
+120:    LDC  3,2(6)	Load of type int constant 
 121:     LD  4,-5(1)	Pop left hand side into AC1 
 122:    TNE  3,4,3	!= Equality Operation 
 123:     ST  3,-4(1)	Push parameter onto new frame 
@@ -184,9 +184,9 @@
 * END CALL outputb
 * CALL outputb
 128:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-129:    LDC  3,2(6)	Load type int constant 
+129:    LDC  3,2(6)	Load of type int constant 
 130:     ST  3,-5(1)	Push left side onto temp variable stack 
-131:    LDC  3,2(6)	Load type int constant 
+131:    LDC  3,2(6)	Load of type int constant 
 132:     LD  4,-5(1)	Pop left hand side into AC1 
 133:    TGE  3,4,3	GEQ >- operation store in AC 
 134:     ST  3,-4(1)	Push parameter onto new frame 
@@ -198,9 +198,9 @@
 * END CALL outputb
 * CALL outputb
 139:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-140:    LDC  3,2(6)	Load type int constant 
+140:    LDC  3,2(6)	Load of type int constant 
 141:     ST  3,-5(1)	Push left side onto temp variable stack 
-142:    LDC  3,2(6)	Load type int constant 
+142:    LDC  3,2(6)	Load of type int constant 
 143:     LD  4,-5(1)	Pop left hand side into AC1 
 144:    TLE  3,4,3	LEQ <= operation store in AC 
 145:     ST  3,-4(1)	Push parameter onto new frame 
@@ -212,9 +212,9 @@
 * END CALL outputb
 * CALL outputb
 150:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-151:    LDC  3,1(6)	Load type bool constant 
+151:    LDC  3,1(6)	Load of type bool constant 
 152:     ST  3,-5(1)	Push left side onto temp variable stack 
-153:    LDC  3,1(6)	Load type bool constant 
+153:    LDC  3,1(6)	Load of type bool constant 
 154:     LD  4,-5(1)	Pop left hand side into AC1 
 155:    TEQ  3,4,3	== Equality Operation 
 156:     ST  3,-4(1)	Push parameter onto new frame 
@@ -226,9 +226,9 @@
 * END CALL outputb
 * CALL outputb
 161:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-162:    LDC  3,1(6)	Load type bool constant 
+162:    LDC  3,1(6)	Load of type bool constant 
 163:     ST  3,-5(1)	Push left side onto temp variable stack 
-164:    LDC  3,1(6)	Load type bool constant 
+164:    LDC  3,1(6)	Load of type bool constant 
 165:     LD  4,-5(1)	Pop left hand side into AC1 
 166:    TNE  3,4,3	!= Equality Operation 
 167:     ST  3,-4(1)	Push parameter onto new frame 
@@ -240,9 +240,9 @@
 * END CALL outputb
 * CALL outputb
 172:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-173:    LDC  3,0(6)	Load type bool constant 
+173:    LDC  3,0(6)	Load of type bool constant 
 174:     ST  3,-5(1)	Push left side onto temp variable stack 
-175:    LDC  3,1(6)	Load type bool constant 
+175:    LDC  3,1(6)	Load of type bool constant 
 176:     LD  4,-5(1)	Pop left hand side into AC1 
 177:    TEQ  3,4,3	== Equality Operation 
 178:     ST  3,-4(1)	Push parameter onto new frame 
@@ -254,9 +254,9 @@
 * END CALL outputb
 * CALL outputb
 183:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-184:    LDC  3,0(6)	Load type bool constant 
+184:    LDC  3,0(6)	Load of type bool constant 
 185:     ST  3,-5(1)	Push left side onto temp variable stack 
-186:    LDC  3,1(6)	Load type bool constant 
+186:    LDC  3,1(6)	Load of type bool constant 
 187:     LD  4,-5(1)	Pop left hand side into AC1 
 188:    TNE  3,4,3	!= Equality Operation 
 189:     ST  3,-4(1)	Push parameter onto new frame 
@@ -268,9 +268,9 @@
 * END CALL outputb
 * CALL outputb
 194:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-195:    LDC  3,0(6)	Load type bool constant 
+195:    LDC  3,0(6)	Load of type bool constant 
 196:     ST  3,-5(1)	Push left side onto temp variable stack 
-197:    LDC  3,0(6)	Load type bool constant 
+197:    LDC  3,0(6)	Load of type bool constant 
 198:     LD  4,-5(1)	Pop left hand side into AC1 
 199:    TEQ  3,4,3	== Equality Operation 
 200:     ST  3,-4(1)	Push parameter onto new frame 
@@ -282,9 +282,9 @@
 * END CALL outputb
 * CALL outputb
 205:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-206:    LDC  3,0(6)	Load type bool constant 
+206:    LDC  3,0(6)	Load of type bool constant 
 207:     ST  3,-5(1)	Push left side onto temp variable stack 
-208:    LDC  3,0(6)	Load type bool constant 
+208:    LDC  3,0(6)	Load of type bool constant 
 209:     LD  4,-5(1)	Pop left hand side into AC1 
 210:    TNE  3,4,3	!= Equality Operation 
 211:     ST  3,-4(1)	Push parameter onto new frame 

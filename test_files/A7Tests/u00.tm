@@ -71,11 +71,11 @@
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
 * BEGIN IF BLOCK
- 40:    LDC  3,0(6)	Load type bool constant 
+ 40:    LDC  3,0(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
  42:     ST  1,-2(1)	Store fp in ghost frame for output 
- 43:    LDC  3,101(6)	Load type int constant 
+ 43:    LDC  3,101(6)	Load of type int constant 
  44:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  45:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -86,11 +86,11 @@
 * IF JUMP TO END
  41:    JZR  3,8(7)	IF JMP TO ELSE 
 * BEGIN IF BLOCK
- 50:    LDC  3,0(6)	Load type bool constant 
+ 50:    LDC  3,0(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
  52:     ST  1,-2(1)	Store fp in ghost frame for output 
- 53:    LDC  3,103(6)	Load type int constant 
+ 53:    LDC  3,103(6)	Load of type int constant 
  54:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  55:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -102,7 +102,7 @@
  51:    JZR  3,8(7)	IF JMP TO ELSE 
 * CALL output
  60:     ST  1,-2(1)	Store fp in ghost frame for output 
- 61:    LDC  3,105(6)	Load type int constant 
+ 61:    LDC  3,105(6)	Load of type int constant 
  62:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  63:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -115,11 +115,11 @@
  49:    LDA  7,17(7)	JUMP TO END 
 * END IF
 * BEGIN IF BLOCK
- 67:    LDC  3,0(6)	Load type bool constant 
+ 67:    LDC  3,0(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
  69:     ST  1,-2(1)	Store fp in ghost frame for output 
- 70:    LDC  3,101(6)	Load type int constant 
+ 70:    LDC  3,101(6)	Load of type int constant 
  71:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  72:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -130,11 +130,11 @@
 * IF JUMP TO END
  68:    JZR  3,8(7)	IF JMP TO ELSE 
 * BEGIN IF BLOCK
- 77:    LDC  3,1(6)	Load type bool constant 
+ 77:    LDC  3,1(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
  79:     ST  1,-2(1)	Store fp in ghost frame for output 
- 80:    LDC  3,103(6)	Load type int constant 
+ 80:    LDC  3,103(6)	Load of type int constant 
  81:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  82:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -146,7 +146,7 @@
  78:    JZR  3,8(7)	IF JMP TO ELSE 
 * CALL output
  87:     ST  1,-2(1)	Store fp in ghost frame for output 
- 88:    LDC  3,105(6)	Load type int constant 
+ 88:    LDC  3,105(6)	Load of type int constant 
  89:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  90:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -159,11 +159,11 @@
  76:    LDA  7,17(7)	JUMP TO END 
 * END IF
 * BEGIN IF BLOCK
- 94:    LDC  3,1(6)	Load type bool constant 
+ 94:    LDC  3,1(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
  96:     ST  1,-2(1)	Store fp in ghost frame for output 
- 97:    LDC  3,101(6)	Load type int constant 
+ 97:    LDC  3,101(6)	Load of type int constant 
  98:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
  99:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -174,11 +174,11 @@
 * IF JUMP TO END
  95:    JZR  3,8(7)	IF JMP TO ELSE 
 * BEGIN IF BLOCK
-104:    LDC  3,0(6)	Load type bool constant 
+104:    LDC  3,0(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
 106:     ST  1,-2(1)	Store fp in ghost frame for output 
-107:    LDC  3,103(6)	Load type int constant 
+107:    LDC  3,103(6)	Load of type int constant 
 108:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 109:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -190,7 +190,7 @@
 105:    JZR  3,8(7)	IF JMP TO ELSE 
 * CALL output
 114:     ST  1,-2(1)	Store fp in ghost frame for output 
-115:    LDC  3,105(6)	Load type int constant 
+115:    LDC  3,105(6)	Load of type int constant 
 116:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 117:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -203,11 +203,11 @@
 103:    LDA  7,17(7)	JUMP TO END 
 * END IF
 * BEGIN IF BLOCK
-121:    LDC  3,1(6)	Load type bool constant 
+121:    LDC  3,1(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
 123:     ST  1,-2(1)	Store fp in ghost frame for output 
-124:    LDC  3,101(6)	Load type int constant 
+124:    LDC  3,101(6)	Load of type int constant 
 125:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 126:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -218,11 +218,11 @@
 * IF JUMP TO END
 122:    JZR  3,8(7)	IF JMP TO ELSE 
 * BEGIN IF BLOCK
-131:    LDC  3,1(6)	Load type bool constant 
+131:    LDC  3,1(6)	Load of type bool constant 
 * IF JUMP TO ELSE
 * CALL output
 133:     ST  1,-2(1)	Store fp in ghost frame for output 
-134:    LDC  3,103(6)	Load type int constant 
+134:    LDC  3,103(6)	Load of type int constant 
 135:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 136:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -234,7 +234,7 @@
 132:    JZR  3,8(7)	IF JMP TO ELSE 
 * CALL output
 141:     ST  1,-2(1)	Store fp in ghost frame for output 
-142:    LDC  3,105(6)	Load type int constant 
+142:    LDC  3,105(6)	Load of type int constant 
 143:     ST  3,-4(1)	Push parameter onto new frame 
 * Begin call
 144:    LDA  1,-2(1)	Move the fp to the new frame 

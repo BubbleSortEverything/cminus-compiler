@@ -80,7 +80,7 @@
  45:    JMP  7,-40(7)	Call function 
  46:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL output
- 47:    LDC  3,122(6)	Load type int constant 
+ 47:    LDC  3,122(6)	Load of type int constant 
  48:     ST  3,-2(1)	Assigning variable z in Param 
 * CALL output
  49:     ST  1,-3(1)	Store fp in ghost frame for output 
@@ -104,7 +104,7 @@
 * FUNCTION main
  60:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 61:    LDC  3,637(6)	Load type int constant 
+ 61:    LDC  3,637(6)	Load of type int constant 
  62:     ST  3,-2(1)	Assigning variable z in Local 
 * CALL cat
  63:     ST  1,-3(1)	Store fp in ghost frame for cat 

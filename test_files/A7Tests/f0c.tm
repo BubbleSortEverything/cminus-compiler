@@ -70,7 +70,7 @@
 * FUNCTION cat
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,99(6)	Load type int constant 
+ 40:    LDC  3,99(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable z in Local 
 * CALL output
  42:     ST  1,-3(1)	Store fp in ghost frame for output 
@@ -94,7 +94,7 @@
 * FUNCTION main
  53:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 54:    LDC  3,1001(6)	Load type int constant 
+ 54:    LDC  3,1001(6)	Load of type int constant 
  55:     ST  3,-2(1)	Assigning variable z in Local 
 * CALL cat
  56:     ST  1,-3(1)	Store fp in ghost frame for cat 

@@ -70,7 +70,7 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,273(6)	Load type int constant 
+ 40:    LDC  3,273(6)	Load of type int constant 
  41:     ST  3,0(0)	Assigning variable x in Global 
 * CALL output
  42:     ST  1,-2(1)	Store fp in ghost frame for output 

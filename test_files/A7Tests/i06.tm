@@ -70,19 +70,19 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,1(6)	Load type bool constant 
+ 40:    LDC  3,1(6)	Load of type bool constant 
  41:     ST  3,-2(1)	Assigning variable ba in Local 
- 42:    LDC  3,1(6)	Load type bool constant 
+ 42:    LDC  3,1(6)	Load of type bool constant 
  43:     ST  3,-5(1)	Push left side onto temp variable stack 
- 44:    LDC  3,0(6)	Load type bool constant 
+ 44:    LDC  3,0(6)	Load of type bool constant 
  45:    LDC  4,1(6)	Load 1 into AC1 for not operation 
  46:    TNE  3,4,3	Not ! operation store in AC 
  47:     LD  4,-5(1)	Pop left hand side into AC1 
  48:    AND  3,4,3	AND operation store in AC 
  49:     ST  3,-3(1)	Assigning variable bb in Local 
- 50:    LDC  3,5(6)	Load type int constant 
+ 50:    LDC  3,5(6)	Load of type int constant 
  51:     ST  3,-5(1)	Push left side onto temp variable stack 
- 52:    LDC  3,4(6)	Load type int constant 
+ 52:    LDC  3,4(6)	Load of type int constant 
  53:     LD  4,-5(1)	Pop left hand side into AC1 
  54:    TGT  3,4,3	Greather than > operation store in AC 
  55:     ST  3,-4(1)	Assigning variable bc in Local 

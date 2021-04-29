@@ -93,7 +93,7 @@
  54:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL cat
  55:     ST  1,-5(1)	Store fp in ghost frame for cat 
- 56:    LDC  3,88(6)	Load type int constant 
+ 56:    LDC  3,88(6)	Load of type int constant 
  57:     ST  3,-7(1)	Push parameter onto new frame 
 * Begin call
  58:    LDA  1,-5(1)	Move the fp to the new frame 

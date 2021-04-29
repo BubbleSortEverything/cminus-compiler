@@ -72,15 +72,15 @@
 * COMPOUND
 * CALL outputb
  40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,111(6)	Load type int constant 
+ 41:    LDC  3,111(6)	Load of type int constant 
  42:     ST  3,-5(1)	Push left side onto temp variable stack 
- 43:    LDC  3,222(6)	Load type int constant 
+ 43:    LDC  3,222(6)	Load of type int constant 
  44:     LD  4,-5(1)	Pop left hand side into AC1 
  45:    TGT  3,4,3	Greather than > operation store in AC 
  46:     ST  3,-5(1)	Push left side onto temp variable stack 
- 47:    LDC  3,333(6)	Load type int constant 
+ 47:    LDC  3,333(6)	Load of type int constant 
  48:     ST  3,-6(1)	Push left side onto temp variable stack 
- 49:    LDC  3,444(6)	Load type int constant 
+ 49:    LDC  3,444(6)	Load of type int constant 
  50:     LD  4,-6(1)	Pop left hand side into AC1 
  51:    TLT  3,4,3	Less than < operation store in AC 
  52:     LD  4,-5(1)	Pop left hand side into AC1 

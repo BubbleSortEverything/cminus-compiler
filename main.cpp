@@ -91,6 +91,7 @@ int main(int argc, char **argv) {
 
         if (printAST and numErrors==0) {
             syntaxTree->printTree();
+            printf("Offset for end of global space: %d\n", globalOffset);
         }
 
         if (numErrors == 0) {

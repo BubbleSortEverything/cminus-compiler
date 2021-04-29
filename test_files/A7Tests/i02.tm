@@ -66,7 +66,7 @@
  38:    JMP  7,0(3)	Return 
 * END FUNCTION outnl
 * 
- 39:    LDC  3,1(6)	Load type bool constant 
+ 39:    LDC  3,1(6)	Load of type bool constant 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
  40:     ST  3,-1(1)	Store return address 
@@ -96,7 +96,7 @@
  52:    LDA  1,-1(0)	set first frame at end of globals 
  53:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
- 54:    LDC  3,1(6)	Load type bool constant 
+ 54:    LDC  3,1(6)	Load of type bool constant 
  55:     ST  3,0(0)	Assigning variable gb in Global 
 * END INIT GLOBALS AND STATICS
  56:    LDA  3,1(7)	Return address in ac 

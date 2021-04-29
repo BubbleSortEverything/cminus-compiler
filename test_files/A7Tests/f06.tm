@@ -70,7 +70,7 @@
 * FUNCTION cat
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,1(6)	Load type bool constant 
+ 40:    LDC  3,1(6)	Load of type bool constant 
  41:    LDA  2,0(3)	Copy accumulator to return register 
  42:     LD  3,-1(1)	Load return address 
  43:     LD  1,0(1)	Adjust fp 
@@ -96,7 +96,7 @@
  54:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL cat
  55:     ST  3,-3(1)	Push left side onto temp variable stack 
- 56:    LDC  3,0(6)	Load type bool constant 
+ 56:    LDC  3,0(6)	Load of type bool constant 
  57:     LD  4,-3(1)	Pop left hand side into AC1 
  58:    AND  3,4,3	AND operation store in AC 
  59:     ST  3,-2(1)	Assigning variable x in Local 
@@ -119,7 +119,7 @@
  71:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL cat
  72:     ST  3,-3(1)	Push left side onto temp variable stack 
- 73:    LDC  3,0(6)	Load type bool constant 
+ 73:    LDC  3,0(6)	Load of type bool constant 
  74:     LD  4,-3(1)	Pop left hand side into AC1 
  75:     OR  3,4,3	OR operation store in AC 
  76:     ST  3,-2(1)	Assigning variable x in Local 

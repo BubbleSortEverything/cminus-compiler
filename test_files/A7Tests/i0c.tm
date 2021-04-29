@@ -71,7 +71,7 @@
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
 * COMPOUND
- 40:    LDC  3,1(6)	Load type bool constant 
+ 40:    LDC  3,1(6)	Load of type bool constant 
  41:    LDC  4,1(6)	Load 1 into AC1 for not operation 
  42:    TNE  3,4,3	Not ! operation store in AC 
  43:     ST  3,-2(1)	Assigning variable ss in Local 

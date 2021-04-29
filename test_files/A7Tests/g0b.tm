@@ -88,9 +88,9 @@
  50:    LDC  3,10(6)	Load size of z into AC 
  51:     ST  3,-2(1)	Store size of z in data memory 
  52:    LDA  3,-3(1)	Load base address of array z 
- 53:    LDC  3,3(6)	Load type int constant 
+ 53:    LDC  3,3(6)	Load of type int constant 
  54:     ST  3,-13(1)	Push array index onto temp stack 
- 55:    LDC  3,445(6)	Load type int constant 
+ 55:    LDC  3,445(6)	Load of type int constant 
  56:     LD  4,-13(1)	Pop array index into AC1 
  57:    LDA  5,-3(1)	Load base address of array z into AC2 
  58:    SUB  5,5,4	Compute offset for array 
@@ -100,7 +100,7 @@
  61:    LDA  3,-3(1)	Load base address of array z 
 * CALL cat
  62:     ST  1,-16(1)	Store fp in ghost frame for cat 
- 63:    LDC  3,3(6)	Load type int constant 
+ 63:    LDC  3,3(6)	Load of type int constant 
  64:     ST  3,-18(1)	Push parameter onto new frame 
 * Begin call
  65:    LDA  1,-16(1)	Move the fp to the new frame 

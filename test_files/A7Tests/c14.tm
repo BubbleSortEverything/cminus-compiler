@@ -74,14 +74,14 @@
  41:     ST  3,-2(1)	Store size of x in data memory 
  42:    LDC  3,4(6)	Load size of y into AC 
  43:     ST  3,-6(1)	Store size of y in data memory 
- 44:    LDC  3,1(6)	Load type int constant 
+ 44:    LDC  3,1(6)	Load of type int constant 
  45:     ST  3,-11(1)	Assigning variable z in Local 
- 46:    LDC  3,2(6)	Load type int constant 
+ 46:    LDC  3,2(6)	Load of type int constant 
  47:     ST  3,-12(1)	Assigning variable zz in Local 
  48:    LDA  3,-3(1)	Load base address of array x 
  49:     LD  3,-12(1)	Load variable zz into accumulator 
  50:     ST  3,-13(1)	Push array index onto temp stack 
- 51:    LDC  3,73(6)	Load type int constant 
+ 51:    LDC  3,73(6)	Load of type int constant 
  52:     LD  4,-13(1)	Pop array index into AC1 
  53:    LDA  5,-3(1)	Load base address of array x into AC2 
  54:    SUB  5,5,4	Compute offset for array 
@@ -89,7 +89,7 @@
  56:    LDA  3,-7(1)	Load base address of array y 
  57:     LD  3,-11(1)	Load variable z into accumulator 
  58:     ST  3,-13(1)	Push array index onto temp stack 
- 59:    LDC  3,211(6)	Load type int constant 
+ 59:    LDC  3,211(6)	Load of type int constant 
  60:     LD  4,-13(1)	Pop array index into AC1 
  61:    LDA  5,-7(1)	Load base address of array y into AC2 
  62:    SUB  5,5,4	Compute offset for array 

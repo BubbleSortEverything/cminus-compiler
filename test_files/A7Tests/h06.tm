@@ -73,7 +73,7 @@
 * BEGIN IF BLOCK
  40:     LD  3,-3(1)	Load variable y into accumulator 
  41:     ST  3,-4(1)	Push left side onto temp variable stack 
- 42:    LDC  3,0(6)	Load type int constant 
+ 42:    LDC  3,0(6)	Load of type int constant 
  43:     LD  4,-4(1)	Pop left hand side into AC1 
  44:    TGE  3,4,3	GEQ >- operation store in AC 
 * IF JUMP TO ELSE
@@ -92,7 +92,7 @@
  56:     ST  3,-6(1)	Push parameter onto new frame 
  57:     LD  3,-3(1)	Load variable y into accumulator 
  58:     ST  3,-8(1)	Push left side onto temp variable stack 
- 59:    LDC  3,1(6)	Load type int constant 
+ 59:    LDC  3,1(6)	Load of type int constant 
  60:     LD  4,-8(1)	Pop left hand side into AC1 
  61:    SUB  3,4,3	- Subtraction Operation 
  62:     ST  3,-7(1)	Push parameter onto new frame 
@@ -125,7 +125,7 @@
 * COMPOUND
  77:    LDC  3,18(6)	Load size of x into AC 
  78:     ST  3,-2(1)	Store size of x in data memory 
- 79:    LDC  3,12(6)	Load type int constant 
+ 79:    LDC  3,12(6)	Load of type int constant 
  80:     ST  3,-21(1)	Assigning variable y in Local 
 * CALL cat
  81:     ST  1,-22(1)	Store fp in ghost frame for cat 
@@ -142,7 +142,7 @@
 * Beginning WHILE statement
  90:     LD  3,-21(1)	Load variable y into accumulator 
  91:     ST  3,-22(1)	Push left side onto temp variable stack 
- 92:    LDC  3,0(6)	Load type int constant 
+ 92:    LDC  3,0(6)	Load of type int constant 
  93:     LD  4,-22(1)	Pop left hand side into AC1 
  94:    TGE  3,4,3	GEQ >- operation store in AC 
 * COMPOUND
@@ -166,7 +166,7 @@
 * END CALL outnl
 108:     LD  3,-21(1)	Load variable y into accumulator 
 109:     ST  3,-22(1)	Push left side onto temp variable stack 
-110:    LDC  3,1(6)	Load type int constant 
+110:    LDC  3,1(6)	Load of type int constant 
 111:     LD  4,-22(1)	Pop left hand side into AC1 
 112:    SUB  3,4,3	- Subtraction Operation 
 113:     ST  3,-21(1)	Assigning variable y in Local 

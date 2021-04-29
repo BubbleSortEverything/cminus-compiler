@@ -70,9 +70,9 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,1(6)	Load type bool constant 
+ 40:    LDC  3,1(6)	Load of type bool constant 
  41:     ST  3,-2(1)	Assigning variable x in Local 
- 42:    LDC  3,0(6)	Load type bool constant 
+ 42:    LDC  3,0(6)	Load of type bool constant 
  43:     ST  3,-3(1)	Assigning variable y in Local 
 * CALL outputb
  44:     ST  1,-4(1)	Store fp in ghost frame for outputb 

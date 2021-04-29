@@ -70,11 +70,11 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,213(6)	Load type int constant 
+ 40:    LDC  3,213(6)	Load of type int constant 
  41:     ST  3,-2(1)	Assigning variable a in Local 
- 42:    LDC  3,11(6)	Load type int constant 
+ 42:    LDC  3,11(6)	Load of type int constant 
  43:     ST  3,-3(1)	Assigning variable b in Local 
- 44:    LDC  3,4133(6)	Load type int constant 
+ 44:    LDC  3,4133(6)	Load of type int constant 
  45:     ST  3,-4(1)	Assigning variable c in Local 
 * CALL outputb
  46:     ST  1,-5(1)	Store fp in ghost frame for outputb 
@@ -246,11 +246,11 @@
 196:    JMP  7,-163(7)	Call function 
 197:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL outnl
-198:    LDC  3,213(6)	Load type int constant 
+198:    LDC  3,213(6)	Load of type int constant 
 199:     ST  3,-3(1)	Assigning variable b in Local 
-200:    LDC  3,11(6)	Load type int constant 
+200:    LDC  3,11(6)	Load of type int constant 
 201:     ST  3,-4(1)	Assigning variable c in Local 
-202:    LDC  3,4133(6)	Load type int constant 
+202:    LDC  3,4133(6)	Load of type int constant 
 203:     ST  3,-2(1)	Assigning variable a in Local 
 * CALL outputb
 204:     ST  1,-5(1)	Store fp in ghost frame for outputb 
@@ -422,11 +422,11 @@
 354:    JMP  7,-321(7)	Call function 
 355:    LDA  3,0(2)	Save return result in accumulator 
 * END CALL outnl
-356:    LDC  3,11(6)	Load type int constant 
+356:    LDC  3,11(6)	Load of type int constant 
 357:     ST  3,-3(1)	Assigning variable b in Local 
-358:    LDC  3,213(6)	Load type int constant 
+358:    LDC  3,213(6)	Load of type int constant 
 359:     ST  3,-4(1)	Assigning variable c in Local 
-360:    LDC  3,4133(6)	Load type int constant 
+360:    LDC  3,4133(6)	Load of type int constant 
 361:     ST  3,-2(1)	Assigning variable a in Local 
 * CALL outputb
 362:     ST  1,-5(1)	Store fp in ghost frame for outputb 

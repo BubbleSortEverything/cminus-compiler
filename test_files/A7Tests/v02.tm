@@ -70,11 +70,11 @@
 * FUNCTION main
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load type char constant 
+ 40:    LDC  3,0(6)	Load of type char constant 
  41:    LDC  3,5(6)	Load size of a into AC 
  42:     ST  3,-2(1)	Store size of a in data memory 
  43:     ST  3,-3(1)	Assigning variable a in Local 
- 44:    LDC  3,0(6)	Load type char constant 
+ 44:    LDC  3,0(6)	Load of type char constant 
  45:    LDC  3,5(6)	Load size of b into AC 
  46:     ST  3,-8(1)	Store size of b in data memory 
  47:     ST  3,-9(1)	Assigning variable b in Local 

@@ -73,14 +73,14 @@
 * BEGIN IF BLOCK
  40:     LD  3,-2(1)	Load variable init into accumulator 
 * IF JUMP TO ELSE
- 42:    LDC  3,0(6)	Load type int constant 
- 43:     ST  3,-1(0)	Assigning variable runningSum in Static 
+ 42:    LDC  3,0(6)	Load of type int constant 
+ 43:     ST  3,-1(0)	Assigning variable runningSum in LocalStatic 
 * IF JUMP TO END
  41:    JZR  3,3(7)	IF JMP TO ELSE 
  45:     LD  3,-3(1)	Load variable x into accumulator 
  46:     LD  4,-1(0)	Load lhs variable 
  47:    ADD  3,4,3	+= operation 
- 48:     ST  3,-1(0)	Assigning variable runningSum in Static 
+ 48:     ST  3,-1(0)	Assigning variable runningSum in LocalStatic 
  44:    LDA  7,4(7)	JUMP TO END 
 * END IF
  49:     LD  3,-1(0)	Load variable runningSum into accumulator 
@@ -102,9 +102,9 @@
 * COMPOUND
 * CALL sum
  59:     ST  1,-2(1)	Store fp in ghost frame for sum 
- 60:    LDC  3,1(6)	Load type bool constant 
+ 60:    LDC  3,1(6)	Load of type bool constant 
  61:     ST  3,-4(1)	Push parameter onto new frame 
- 62:    LDC  3,666(6)	Load type int constant 
+ 62:    LDC  3,666(6)	Load of type int constant 
  63:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  64:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -114,9 +114,9 @@
 * END CALL sum
 * CALL sum
  68:     ST  1,-2(1)	Store fp in ghost frame for sum 
- 69:    LDC  3,0(6)	Load type bool constant 
+ 69:    LDC  3,0(6)	Load of type bool constant 
  70:     ST  3,-4(1)	Push parameter onto new frame 
- 71:    LDC  3,777(6)	Load type int constant 
+ 71:    LDC  3,777(6)	Load of type int constant 
  72:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  73:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -128,9 +128,9 @@
  77:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL sum
  78:     ST  1,-5(1)	Store fp in ghost frame for sum 
- 79:    LDC  3,0(6)	Load type bool constant 
+ 79:    LDC  3,0(6)	Load of type bool constant 
  80:     ST  3,-7(1)	Push parameter onto new frame 
- 81:    LDC  3,0(6)	Load type int constant 
+ 81:    LDC  3,0(6)	Load of type int constant 
  82:     ST  3,-8(1)	Push parameter onto new frame 
 * Begin call
  83:    LDA  1,-5(1)	Move the fp to the new frame 
@@ -147,9 +147,9 @@
 * END CALL output
 * CALL sum
  92:     ST  1,-2(1)	Store fp in ghost frame for sum 
- 93:    LDC  3,0(6)	Load type bool constant 
+ 93:    LDC  3,0(6)	Load of type bool constant 
  94:     ST  3,-4(1)	Push parameter onto new frame 
- 95:    LDC  3,888(6)	Load type int constant 
+ 95:    LDC  3,888(6)	Load of type int constant 
  96:     ST  3,-5(1)	Push parameter onto new frame 
 * Begin call
  97:    LDA  1,-2(1)	Move the fp to the new frame 
@@ -161,9 +161,9 @@
 101:     ST  1,-2(1)	Store fp in ghost frame for output 
 * CALL sum
 102:     ST  1,-5(1)	Store fp in ghost frame for sum 
-103:    LDC  3,0(6)	Load type bool constant 
+103:    LDC  3,0(6)	Load of type bool constant 
 104:     ST  3,-7(1)	Push parameter onto new frame 
-105:    LDC  3,0(6)	Load type int constant 
+105:    LDC  3,0(6)	Load of type int constant 
 106:     ST  3,-8(1)	Push parameter onto new frame 
 * Begin call
 107:    LDA  1,-5(1)	Move the fp to the new frame 
