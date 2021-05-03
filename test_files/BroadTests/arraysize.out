@@ -1,0 +1,11 @@
+WARNING(12): The variable 'i' seems not to be used.
+Number of warnings: 1
+Number of errors: 0
+Loading file: arraysize.tm
+777 11 0 12
+777 11 888 12
+666 13
+888 12 888 12
+666 13
+132
+Bye.

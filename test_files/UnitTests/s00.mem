@@ -1,0 +1,36 @@
+WARNING(23): Variable 'aaa' may be uninitialized when used here.
+WARNING(12): The variable 'bbb' seems not to be used.
+WARNING(13): The variable 'ccc' seems not to be used.
+WARNING(14): The variable 'ddd' seems not to be used.
+WARNING(9): The variable 'eee' seems not to be used.
+WARNING(9): The variable 'fff' seems not to be used.
+WARNING(9): The variable 'ggg' seems not to be used.
+WARNING(9): The variable 'hhh' seems not to be used.
+WARNING(16): The variable 'saaa' seems not to be used.
+WARNING(17): The variable 'sbbb' seems not to be used.
+WARNING(18): The variable 'sccc' seems not to be used.
+WARNING(19): The variable 'sddd' seems not to be used.
+Var: aaa of type int [mem: Global loc: 0 size: 1] [line: 2]
+Sibling: 1  Var: bbb of type bool [mem: Global loc: -1 size: 1] [line: 3]
+Sibling: 2  Var: ccc of array of type int [mem: Global loc: -3 size: 11] [line: 4]
+Sibling: 3  Var: ddd of array of type bool [mem: Global loc: -14 size: 11] [line: 5]
+Sibling: 4  Func: main returns of type void [line: 7]
+Sibling: 5  Func: dogs returns of type int [line: 9]
+.   Child: 0  Parm: eee of type int [mem: Parameter loc: -2 size: 1] [line: 9]
+.   Sibling: 1  Parm: fff of type bool [mem: Parameter loc: -3 size: 1] [line: 9]
+.   Sibling: 2  Parm: ggg array of of type int [mem: Parameter loc: -4 size: 1] [line: 9]
+.   Sibling: 3  Parm: hhh array of of type bool [mem: Parameter loc: -5 size: 1] [line: 9]
+.   Child: 1  Compound [line: 10]
+.   .   Child: 0  Var: aaa of type int [mem: Local loc: -6 size: 1] [line: 11]
+.   .   Sibling: 1  Var: bbb of type bool [mem: Local loc: -7 size: 1] [line: 12]
+.   .   Sibling: 2  Var: ccc of array of type int [mem: Local loc: -9 size: 11] [line: 13]
+.   .   Sibling: 3  Var: ddd of array of type bool [mem: Local loc: -20 size: 11] [line: 14]
+.   .   Sibling: 4  Var: saaa of static of type int [mem: LocalStatic loc: -24 size: 1] [line: 16]
+.   .   Sibling: 5  Var: sbbb of static of type bool [mem: LocalStatic loc: -25 size: 1] [line: 17]
+.   .   Sibling: 6  Var: sccc of static array of type int [mem: LocalStatic loc: -27 size: 11] [line: 18]
+.   .   Sibling: 7  Var: sddd of static array of type bool [mem: LocalStatic loc: -38 size: 11] [line: 19]
+.   .   Child: 1  Return [line: 23]
+.   .   .   Child: 0  Id: aaa of type int [mem: Local loc: -6 size: 1] [line: 23]
+Offset for end of global space: -48
+Number of warnings: 12
+Number of errors: 0
