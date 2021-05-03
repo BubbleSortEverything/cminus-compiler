@@ -15,6 +15,7 @@ int TokenTree   ::  getNumValue() { return this->nvalue; }
 void TokenTree  ::  setTokenClass(int tc) { this->tokenClass = tc; }
 void TokenTree  ::  setLineNum(int line) { this->lineNum = line; }
 void TokenTree  ::  setTokenString(char *str) { this->tokenStr = strdup(str); }
+void TokenTree  ::  setStrValue(char *str) { this->svalue = strdup(str); }
 void TokenTree  ::  setCharValue(char c) { this->cvalue = c; }
 void TokenTree  ::  setNumValue(int n) { this->nvalue = n; }
 void TokenTree  ::  setStringValue(char *str) { setStringValue(str, true); }
@@ -22,8 +23,8 @@ char TokenTree  ::  getCharValue() { return this->cvalue; }
 char *TokenTree ::  getTokenString() { return this->tokenStr; }
 
 char *TokenTree ::  getStringValue() { 
-    if (strcmp(this->svalue, "*")==0) return "sizeof";
-
+    if (strcmp(this->svalue, "*")==0 and this->svalue=="sizeof") return "sizeof";
+    if (strcmp(this->svalue, "-")==0 and this->svalue=="chsign") return "chsign";
     return this->svalue; 
 }
 
@@ -36,18 +37,18 @@ void TokenTree::setStringValue(char *str, bool duplicate) {
 }
 
 
-void TokenTree::_setParent() {
+void TokenTree::makeParent() {
     for (int i = 0; i < MAX_CHILDREN; i++) {
         TokenTree *child = children[i];
         if (child != NULL) {
             child->parent = this;
-            child->_setParent();
+            child->makeParent();
         }
     }
 
     if (this->sibling != NULL) {
         sibling->parent = parent;
-        sibling->_setParent();
+        sibling->makeParent();
     }
 }
 
@@ -68,7 +69,7 @@ void TokenTree::_setFunction() {
 }
 
 void TokenTree::setParentAndFunction() {
-    _setParent();
+    makeParent();
     _setFunction();
 }
 
@@ -382,7 +383,7 @@ void TokenTree::printNode() {
                     printf("Func: %s returns %s ", getStringValue(), getTypeString());
                     break;
                 case 2:
-                    printf("Param: %s ", getStringValue());
+                    printf("Parm: %s ", getStringValue());
                     if (isArray()) printf("array of ");
                     printf("%s ", getTypeString());
                 default:
@@ -394,7 +395,7 @@ void TokenTree::printNode() {
                 case 0: {
                     char *arrayStr = (char *) "";
                     if (isArray()) arrayStr = (char *) "array of ";
-                    printf("Assign %s : %s%s ", getTokenString(), arrayStr, getTypeString());
+                    printf("Assign: %s %s%s ", getTokenString(), arrayStr, getTypeString());
                     break;
                 }
                 case 1:
@@ -408,7 +409,7 @@ void TokenTree::printNode() {
                             fwrite(getStringValue(), sizeof(char), getNumValue(), stdout);
                             printf("\"");
                         } else {
-                            printf(": \'%c\'", getCharValue());
+                            printf(" \'%c\'", getCharValue());
                         }
                         printf(" : ");
                     } else {
@@ -428,9 +429,12 @@ void TokenTree::printNode() {
                     printf("Id: %s %s%s%s ", getStringValue(), staticStr, arrayStr, getTypeString());
                     break;
                 }
-                case 4:
+                case 4: {
+                    // char *strVal = (char *) "";
+                    // strVal = getStringValue()=="*" ? (char *)"sizeof" : getStringValue(); 
                     printf("Op: %s %s ", getStringValue(), getTypeString());
                     break;
+                }
                 default:
                     break;
             }
@@ -504,7 +508,7 @@ char *TokenTree::getMemoryTypeString() {
         case 2:
             return (char *) "LocalStatic";
         case 3:
-            return (char *) "Param";
+            return (char *) "Parameter";
         case 4:
             return (char *) "Undefined";
         default:

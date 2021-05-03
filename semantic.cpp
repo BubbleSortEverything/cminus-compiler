@@ -55,9 +55,9 @@ void handleNot(TokenTree *tree) {
         printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
     }
     if (lhs->isArray()) {
-            err(tree);
-            printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
-        }
+        err(tree);
+        printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
+    }
 }
 
 void handleMath(TokenTree *tree) {
@@ -410,8 +410,8 @@ void afterChild(TokenTree *tree, int childNo) {
                             res->setIsInitialized(true);
                         }
                         if (res == NULL or !res->isArray()) {
-                            err(tree);
-                            printf("For statement requires that symbol '%s' be an array to loop through.\n", array->getStringValue());
+                            // err(tree);
+                            // printf("For statement requires that symbol '%s' be an array to loop through.\n", array->getStringValue());
                         }
                     }
                     break;

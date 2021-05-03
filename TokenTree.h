@@ -67,7 +67,7 @@ class TokenTree {
         int lastLine;
 
         void _printTree(int level, bool isChild, bool isSibling, int num);
-        void _setParent();
+        void makeParent();
         void _setFunction();
         int _calculateMemoryOfChildren();
 
@@ -80,6 +80,7 @@ class TokenTree {
         void setLineNum(int line);
         int getLineNum();
         void setTokenString(char *str);
+        void setStrValue(char *str);
         char *getTokenString();
         void setCharValue(char c);
         char getCharValue();

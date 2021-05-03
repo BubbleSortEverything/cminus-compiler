@@ -378,6 +378,7 @@ iterStmt
                                                     $$ = $1;
                                                     $2->setExprType(ExprType::UNDEFINED);
                                                     $2->setDeclKind(DeclKind::VarK);
+                                                    $2->setExprType(ExprType::INT);
                                                     $$->setStmtKind(StmtKind::ForK);
                                                     $$->children[0] = $2;
                                                     $$->children[1] = $4;
@@ -474,6 +475,7 @@ exp
 simpleExp       
     : simpleExp OR andExpr                      {
                                                     $2->setTokenString("|");
+                                                    $2->setStrValue("or");
                                                     $$ = $2;
                                                     $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
@@ -486,6 +488,7 @@ simpleExp
 andExpr         
     : andExpr AND unaryRelExp                   {
                                                     $2->setTokenString("&");
+                                                    $2->setStrValue("and");
                                                     $$ = $2;
                                                     $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
@@ -498,6 +501,7 @@ andExpr
 unaryRelExp     
     : NOT unaryRelExp                           {
                                                     $1->setTokenString("!");
+                                                    $1->setStrValue("not");
                                                     $$ = $1;
                                                     $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $2;
@@ -585,8 +589,8 @@ unaryExp
     ;
 
 unaryop         
-    : '-'                                       { $$ = $1; }
-    | '*'                                       { $$ = $1; }
+    : '-'                                       { $$ = $1; $$->setStrValue("chsign"); }
+    | '*'                                       { $$ = $1; $$->setStrValue("sizeof"); }
     | '?'                                       { $$ = $1; }
     ;
 

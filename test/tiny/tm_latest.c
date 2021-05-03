@@ -99,8 +99,8 @@ char *versionNumber =(char *)"TM version 4.6a";
 #define READONLY -2
 
 /******* const *******/
-#define   IADDR_SIZE  10000	/* increase for large programs */
-#define   DADDR_SIZE  10000	/* increase for large programs */
+#define   IADDR_SIZE  10000 /* increase for large programs */
+#define   DADDR_SIZE  10000 /* increase for large programs */
 #define   NO_REGS 8
 #define   PC_REG  7
 
@@ -114,8 +114,8 @@ char *versionNumber =(char *)"TM version 4.6a";
 // classes of op codes by format
 typedef enum
 {
-    opclRR,			/* reg operands r, s, t */
-    opclRA,			/* reg r, int d+s */
+    opclRR,         /* reg operands r, s, t */
+    opclRA,         /* reg r, int d+s */
     opclLIT                     /* literal command */
 } OPCLASS;
 
@@ -123,56 +123,56 @@ typedef enum
 typedef enum
 {
     // RR instructions 
-    opHALT,			// RR     halt, operands are ignored 
-    opNOP,			// RR     no op, operands are ignored 
-    opIN,			// RR     read integer into reg(r); s and t are ignored 
-    opINB,			// RR     read bool into reg(r); s and t are ignored 
-    opINC,			// RR     read char into reg(r); s and t are ignored 
-    opOUT,			// RR     write integer from reg(r), s and t are ignored 
-    opOUTB,			// RR     write bool from reg(r), s and t are ignored 
-    opOUTC,			// RR     write char from reg(r), s and t are ignored 
-    opOUTNL,			// RR     write newline regs r, s and t are ignored 
-    opADD,			// RR     reg(r) = reg(s)+reg(t) 
-    opSUB,			// RR     reg(r) = reg(s)-reg(t) 
-    opMUL,			// RR     reg(r) = reg(s)*reg(t) 
-    opDIV,			// RR     reg(r) = reg(s)/reg(t) 
-    opMOD,			// RR     reg(r) = reg(s)%reg(t) 
-    opAND,			// RR     reg(r) = reg(s)&reg(t) 
-    opOR,			// RR     reg(r) = reg(s)|reg(t) 
-    opXOR,			// RR     reg(r) = reg(s)^reg(t) 
-    opNOT,			// RR     reg(r) = ~reg(s) 
-    opNEG,			// RR     reg(r) = -reg(s) 
-    opSWP,			// RR     reg[r] = min(reg[r], reg[s]), reg[s] = max(reg[r], reg[s])  
-    opRND,			// RR     reg[r] = random(0, abs(reg[s])) 
+    opHALT,         // RR     halt, operands are ignored 
+    opNOP,          // RR     no op, operands are ignored 
+    opIN,           // RR     read integer into reg(r); s and t are ignored 
+    opINB,          // RR     read bool into reg(r); s and t are ignored 
+    opINC,          // RR     read char into reg(r); s and t are ignored 
+    opOUT,          // RR     write integer from reg(r), s and t are ignored 
+    opOUTB,         // RR     write bool from reg(r), s and t are ignored 
+    opOUTC,         // RR     write char from reg(r), s and t are ignored 
+    opOUTNL,            // RR     write newline regs r, s and t are ignored 
+    opADD,          // RR     reg(r) = reg(s)+reg(t) 
+    opSUB,          // RR     reg(r) = reg(s)-reg(t) 
+    opMUL,          // RR     reg(r) = reg(s)*reg(t) 
+    opDIV,          // RR     reg(r) = reg(s)/reg(t) 
+    opMOD,          // RR     reg(r) = reg(s)%reg(t) 
+    opAND,          // RR     reg(r) = reg(s)&reg(t) 
+    opOR,           // RR     reg(r) = reg(s)|reg(t) 
+    opXOR,          // RR     reg(r) = reg(s)^reg(t) 
+    opNOT,          // RR     reg(r) = ~reg(s) 
+    opNEG,          // RR     reg(r) = -reg(s) 
+    opSWP,          // RR     reg[r] = min(reg[r], reg[s]), reg[s] = max(reg[r], reg[s])  
+    opRND,          // RR     reg[r] = random(0, abs(reg[s])) 
 
-    opTLT,			// RR     if reg(s)<reg(t) then reg(r) = 1  else reg(r) = 0 
-    opSLT,			// RR     if (reg[r]>=0) reg[r] = (reg[s]<reg[t] ? 1 : 0); else reg[r] = (-reg[s] < -reg[t] ? 1 : 0);
-    opTLE,			// RR     if reg(s)<=reg(t) then reg(r) = 1  else reg(r) = 0 
-    opTGT,			// RR     if reg(s)>reg(t) then reg(r) = 1  else reg(r) = 0 
-    opSGT,	                // RR     if (reg[r]<=0) reg[r] = (reg[s]>reg[t] ? 1 : 0); else reg[r] = (-reg[s] > -reg[t] ? 1 : 0);
-    opTGE,			// RR     if reg(s)>=reg(t) then reg(r) = 1  else reg(r) = 0 
-    opTEQ,			// RR     if reg(s)==reg(t) then reg(r) = 1  else reg(r) = 0 
-    opTNE,			// RR     if reg(s)!=reg(t) then reg(r) = 1  else reg(r) = 0 
+    opTLT,          // RR     if reg(s)<reg(t) then reg(r) = 1  else reg(r) = 0 
+    opSLT,          // RR     if (reg[r]>=0) reg[r] = (reg[s]<reg[t] ? 1 : 0); else reg[r] = (-reg[s] < -reg[t] ? 1 : 0);
+    opTLE,          // RR     if reg(s)<=reg(t) then reg(r) = 1  else reg(r) = 0 
+    opTGT,          // RR     if reg(s)>reg(t) then reg(r) = 1  else reg(r) = 0 
+    opSGT,                  // RR     if (reg[r]<=0) reg[r] = (reg[s]>reg[t] ? 1 : 0); else reg[r] = (-reg[s] > -reg[t] ? 1 : 0);
+    opTGE,          // RR     if reg(s)>=reg(t) then reg(r) = 1  else reg(r) = 0 
+    opTEQ,          // RR     if reg(s)==reg(t) then reg(r) = 1  else reg(r) = 0 
+    opTNE,          // RR     if reg(s)!=reg(t) then reg(r) = 1  else reg(r) = 0 
 
     opMOV,                      // RR     dMem[reg[r] + (0..reg[t]-1)] = dMem[reg[s] + (0..reg[t]-1)] 
     opSET,                      // RR     dMem[reg[r] + (0..reg[t]-1)] = reg[s] 
     opCO,                       // RR     compare memory instruction
     opCOA,                      // RR     compare memory instruction returning address
-    opRRLim,			// limit of RR opcodes 
+    opRRLim,            // limit of RR opcodes 
 
     // RA instructions 
-    opLD,			// RM     reg(r) = mem(d+reg(s)) 
-    opST,			// RM     mem(d+reg(s)) = reg(r) 
-    opLDA,			// RA     reg(r) = d+reg(s) 
-    opLDC,			// RA     reg(r) = d ; reg(t) is ignored 
-    opJZR,			// RA     if reg(r)==0 then reg(7) = d+reg(s) 
-    opJNZ,			// RA     if reg(r)!=0 then reg(7) = d+reg(s) 
+    opLD,           // RM     reg(r) = mem(d+reg(s)) 
+    opST,           // RM     mem(d+reg(s)) = reg(r) 
+    opLDA,          // RA     reg(r) = d+reg(s) 
+    opLDC,          // RA     reg(r) = d ; reg(t) is ignored 
+    opJZR,          // RA     if reg(r)==0 then reg(7) = d+reg(s) 
+    opJNZ,          // RA     if reg(r)!=0 then reg(7) = d+reg(s) 
     opJMP,                      // RA     reg(7) = d+reg(s) 
 
     opRALim,                    // limit of RA opcodes
     opLIT,                      // the special litteral op code
 
-    opEND			// Limit of RA opcodes 
+    opEND           // Limit of RA opcodes 
 } OPCODE;
 
 typedef enum
@@ -457,22 +457,22 @@ void writeInstruction(int loc, int trace)
 //DEBUG    printf("PC: %d  R7: %lld  loc: %d\n", pc, reg[7], loc);
     printf("%4d: ", loc);
     if ((loc >= 0) && (loc<IADDR_SIZE)) {
-	printf("%4s%3lld,", opCodeTab[iMem[loc].iop], iMem[loc].iarg1);
-	switch (opClass(iMem[loc].iop)) {
-	case opclRR:
-	    printf("%3lld, %1lld ", iMem[loc].iarg2, iMem[loc].iarg3);
-	    if (trace) {
+    printf("%4s%3lld,", opCodeTab[iMem[loc].iop], iMem[loc].iarg1);
+    switch (opClass(iMem[loc].iop)) {
+    case opclRR:
+        printf("%3lld, %1lld ", iMem[loc].iarg2, iMem[loc].iarg3);
+        if (trace) {
                 printf(" | ");
                 {
                     int i;
                     for (i=0; i<7; i++) printf(" r[%1d]:%-3lld", i, reg[i]);
                 }
                 printf(" | ");
-	    }
-	    break;
-	case opclRA:
-	    printf("%4lld(%1lld)", iMem[loc].iarg2, iMem[loc].iarg3);
-	    if (trace) {
+        }
+        break;
+    case opclRA:
+        printf("%4lld(%1lld)", iMem[loc].iarg2, iMem[loc].iarg3);
+        if (trace) {
                 long long int tmp;
 
                 printf(" | ");
@@ -490,14 +490,14 @@ void writeInstruction(int loc, int trace)
                     printf(" | ");
                 }
             }
-	    break;
-	}
+        break;
+    }
         if (breakpoint == loc || savedbreakpoint == loc) printf(" %s", "<-[break]");
         if (reg[7] == loc && !trace) printf(" %s", "<-[pc]");
-	printf(" %s\n", iMem[loc].comment);
+    printf(" %s\n", iMem[loc].comment);
     }
     fflush(stdout);
-}				/* writeInstruction */
+}               /* writeInstruction */
 
 
 
@@ -508,11 +508,11 @@ int getCh()
 {
 //    printf("LINE: \'%s\'  LINELEN: %d INCOL: %d\n", in_Line, lineLen, inCol);
     if (++inCol<lineLen) {
-	ch = in_Line[inCol];
+    ch = in_Line[inCol];
         return 1;
     }
     else {
-	ch = ' ';
+    ch = ' ';
         return 0;
     }
 }
@@ -525,14 +525,14 @@ int getCh()
 int nonBlank(void)
 {
     while ((inCol<lineLen) &&
-	   ((in_Line[inCol] == ' ') || (in_Line[inCol] == '\t'))) inCol++;
+       ((in_Line[inCol] == ' ') || (in_Line[inCol] == '\t'))) inCol++;
     if (inCol<lineLen) {
-	ch = in_Line[inCol];
-	return TRUE;
+    ch = in_Line[inCol];
+    return TRUE;
     }
     else {
-	ch = ' ';
-	return FALSE;
+    ch = ' ';
+    return FALSE;
     }
 }
 
@@ -543,12 +543,12 @@ int uptoComment(void)
 {
     while ((inCol<lineLen) && (in_Line[inCol] != '*')) inCol++;
     if (inCol<lineLen) {
-	ch = in_Line[inCol];
-	return TRUE;
+    ch = in_Line[inCol];
+    return TRUE;
     }
     else {
-	ch = ' ';
-	return FALSE;
+    ch = ' ';
+    return FALSE;
     }
 }
 
@@ -626,26 +626,26 @@ int getNum(void)
     num = 0;
     nonBlank();
     do {
-	sign = 1;
-	while ((ch == '+') || (ch == '-')) {
-	    ok = FALSE;
-	    if (ch == '-')
-		sign = -sign;
-	    getCh();
-	}
-	term = 0;
-	while (isdigit(ch)) {
-	    ok = TRUE;
-	    term = term*10 + (ch - '0');
-	    getCh();
-	}
-	num = num + (term*sign);
+    sign = 1;
+    while ((ch == '+') || (ch == '-')) {
+        ok = FALSE;
+        if (ch == '-')
+        sign = -sign;
+        getCh();
+    }
+    term = 0;
+    while (isdigit(ch)) {
+        ok = TRUE;
+        term = term*10 + (ch - '0');
+        getCh();
+    }
+    num = num + (term*sign);
     }
     while ((ch == '+') || (ch == '-'));
 
 //    printf("NUM: %d\n", num);
     return ok;
-}				/* getNum */
+}               /* getNum */
 
 
 
@@ -666,16 +666,16 @@ int getWord(void)
     int temp = FALSE;
     int length = 0;
     if (nonBlank()) {
-	while (isalnum(ch) || ch=='=' || ch=='?') {
-	    if (length<WORDSIZE - 1)
-		word[length++] = ch;
-	    getCh();
-	}
-	word[length] = '\0';
-	temp = (length != 0);
+    while (isalnum(ch) || ch=='=' || ch=='?') {
+        if (length<WORDSIZE - 1)
+        word[length++] = ch;
+        getCh();
+    }
+    word[length] = '\0';
+    temp = (length != 0);
     }
     return temp;
-}				/* getWord */
+}               /* getWord */
 
 
 /********************************************/
@@ -696,11 +696,11 @@ int skipCh(char c)
 {
     int temp = FALSE;
     if (nonBlank() && (ch == c)) {
-	getCh();
-	temp = TRUE;
+    getCh();
+    temp = TRUE;
     }
     return temp;
-}				/* skipCh */
+}               /* skipCh */
 
 
 
@@ -719,7 +719,7 @@ char *getRemaining(void)
 int atEOL(void)
 {
     return (!nonBlank());
-}				/* atEOL */
+}               /* atEOL */
 
 
 
@@ -728,10 +728,10 @@ int error(char *msg, int lineNo, int instNo)
 {
     printf("ERROR: Line %d", lineNo);
     if (instNo >= 0)
-	printf(" (Address: %d)", instNo);
+    printf(" (Address: %d)", instNo);
     printf("   %s\n", msg);
     return FALSE;
-}				/* error */
+}               /* error */
 
 
 
@@ -746,8 +746,8 @@ void clearMachine()
     reg[0] = DADDR_SIZE - 1;   // v 4.6
 
     for (loc = 0; loc<DADDR_SIZE; loc++) {
-	dMem[loc] = 0;
-	dMemTag[loc] = UNUSED;
+    dMem[loc] = 0;
+    dMemTag[loc] = UNUSED;
         dMemCmt[loc] = (char *)"";
     }
 // NO LONGER starting v4.6   dMem[0] = DADDR_SIZE - 1;
@@ -772,12 +772,12 @@ void fullClearMachine()
 
     /* zero out instruction memory */
     for (loc = 0; loc<IADDR_SIZE; loc++) {
-	iMem[loc].iop = opHALT;
-	iMem[loc].iarg1 = 0;
-	iMem[loc].iarg2 = 0;
-	iMem[loc].iarg3 = 0;
-	iMem[loc].comment = (char *)"* initially empty";
-	iMemTag[loc] = UNUSED;
+    iMem[loc].iop = opHALT;
+    iMem[loc].iarg1 = 0;
+    iMem[loc].iarg2 = 0;
+    iMem[loc].iarg3 = 0;
+    iMem[loc].comment = (char *)"* initially empty";
+    iMemTag[loc] = UNUSED;
     }
 }
 
@@ -795,8 +795,8 @@ int readInstructions(char *fileName)
     if (strchr(pgmName, '.') == NULL) strcat(pgmName, (char *)".tm");
     pgm = fopen(pgmName, "r");
     if (pgm == NULL) {
-	printf("ERROR(readInstructions): file '%s' not found\n", pgmName);
-	return FALSE;
+    printf("ERROR(readInstructions): file '%s' not found\n", pgmName);
+    return FALSE;
     }
     printf("Loading file: %s\n", pgmName);
 
@@ -810,18 +810,18 @@ int readInstructions(char *fileName)
     fgets(in_Line, LINESIZE - 2, pgm);
     while (!feof(pgm)) {
         /* process line */
-	inCol = 0;
-	lineNo++;
-	lineLen = strlen(in_Line) - 1;
-	if (in_Line[lineLen] == '\n')
-	    in_Line[lineLen] = '\0';
-	else
-	    in_Line[++lineLen] = '\0';
+    inCol = 0;
+    lineNo++;
+    lineLen = strlen(in_Line) - 1;
+    if (in_Line[lineLen] == '\n')
+        in_Line[lineLen] = '\0';
+    else
+        in_Line[++lineLen] = '\0';
 
         /* process an instruction */
-	if ((nonBlank()) && (in_Line[inCol] != '*')) {
+    if ((nonBlank()) && (in_Line[inCol] != '*')) {
             /* get address */
-	    if (getNum()) {
+        if (getNum()) {
                 loc = num;
 
                 /* colon after address */
@@ -832,14 +832,14 @@ int readInstructions(char *fileName)
             else {   /* if no address given then just increment counter */
                 loc++;
             }
-	    if (loc<0 || loc>=IADDR_SIZE) {
+        if (loc<0 || loc>=IADDR_SIZE) {
                 printf("ERROR(readInstructions): at line %d attempting to set out of bounds instruction memory at loc: %d\n", lineNo, loc);
                 exit(1);
             }
 
             /* get op code */
-	    if (!getWord())
-		return error((char *)"Missing opcode", lineNo, loc);
+        if (!getWord())
+        return error((char *)"Missing opcode", lineNo, loc);
 
             { int opcnt;
 
@@ -850,7 +850,7 @@ int readInstructions(char *fileName)
                     sprintf(errorString, (char *)"Illegal opcode: %s", word);
                     return error(errorString, lineNo, loc);
                 }
-		op = (OPCODE)opcnt;
+        op = (OPCODE)opcnt;
             }
 
             /* process args to op code */
@@ -946,13 +946,13 @@ int readInstructions(char *fileName)
                 iMem[loc].comment = getRemaining();
                 iMemTag[loc] = USED;     /* correctly counts assignments to same loc  */
             }
-	}
+    }
 
         /* get next line */
         fgets(in_Line, LINESIZE - 2, pgm);
     }
     return TRUE;
-}				/* readInstructions */
+}               /* readInstructions */
 
 
 
@@ -975,12 +975,12 @@ STEPRESULT stepTM(void)
 
     pc = reg[PC_REG];
     if ((pc<0) || (pc>=IADDR_SIZE))
-	return srIMEM_ERR;
+    return srIMEM_ERR;
 
     if (pc == breakpoint) {
-	savedbreakpoint = breakpoint;
-	breakpoint = -1;
-	return srHALT;
+    savedbreakpoint = breakpoint;
+    breakpoint = -1;
+    return srHALT;
     }
     breakpoint = savedbreakpoint;
 
@@ -996,28 +996,28 @@ STEPRESULT stepTM(void)
         t = currentinstruction.iarg3;
     }
     else {  /* note s changes its position */
-	r = currentinstruction.iarg1;
+    r = currentinstruction.iarg1;
         d = currentinstruction.iarg2;
-	s = currentinstruction.iarg3;
-	m = currentinstruction.iarg2 + reg[s];
+    s = currentinstruction.iarg3;
+    m = currentinstruction.iarg2 + reg[s];
     }
 
     switch (currentinstruction.iop) {
-	/* RR instructions */
+    /* RR instructions */
     case opHALT:
         /***********************************/
-	return srHALT;
-	/* break; */
+    return srHALT;
+    /* break; */
 
     case opNOP:
         break;
 
     case opIN:
         /***********************************/
-	do {
-	    if (promptflag) printf("Enter integer value: ");
-	    fflush(stdin);
-	    fflush(stdout);
+    do {
+        if (promptflag) printf("Enter integer value: ");
+        fflush(stdin);
+        fflush(stdout);
 
             fgets(in_Line, LINESIZE - 2, stdin);
             {
@@ -1032,58 +1032,58 @@ STEPRESULT stepTM(void)
                 lineLen = p-in_Line;
             }
 
-	    if (!promptflag) printf("entered: %s\n", in_Line);
+        if (!promptflag) printf("entered: %s\n", in_Line);
 
-	    inCol = 0;
-	    ok = getNum();
-	    if (!ok) {
-		printf("Illegal value in input: \"%s\"\n", in_Line);
+        inCol = 0;
+        ok = getNum();
+        if (!ok) {
+        printf("Illegal value in input: \"%s\"\n", in_Line);
                 exit(1);
             }
-	    else {
-		reg[r] = num;
+        else {
+        reg[r] = num;
             }
-	}
-	while (!ok);
-	if (skipCh('#')) return srHALT;
-	break;
+    }
+    while (!ok);
+    if (skipCh('#')) return srHALT;
+    break;
 
     case opINB:
         /***********************************/
-	if (promptflag) printf("Enter Boolean value: ");
-	fflush(stdin);
-	fflush(stdout);
+    if (promptflag) printf("Enter Boolean value: ");
+    fflush(stdin);
+    fflush(stdout);
 
-	fgets(in_Line, LINESIZE - 2, stdin);
-	{
-	    char *p;
+    fgets(in_Line, LINESIZE - 2, stdin);
+    {
+        char *p;
 
-	    for (p=in_Line; *p; p++) {
-		if (*p=='\n') {
-		    *p='\0';
-		    break;
-		}
-	    }
-	    lineLen = p-in_Line;
-	}
+        for (p=in_Line; *p; p++) {
+        if (*p=='\n') {
+            *p='\0';
+            break;
+        }
+        }
+        lineLen = p-in_Line;
+    }
 
-	if (!promptflag) printf("entered: %s\n", in_Line);
+    if (!promptflag) printf("entered: %s\n", in_Line);
 
-	inCol = 0;
-	getBool();
-	reg[r] = num;
-	if (skipCh('#')) return srHALT;
-	break;
+    inCol = 0;
+    getBool();
+    reg[r] = num;
+    if (skipCh('#')) return srHALT;
+    break;
 
     case opINC:
         /***********************************/
-	fflush(stdin);
-	fflush(stdout);
+    fflush(stdin);
+    fflush(stdout);
 
         while (inCol+1>=lineLen) {
             char *p;
 
-	    if (promptflag) printf("Enter characters: ");
+        if (promptflag) printf("Enter characters: ");
             fgets(in_Line, LINESIZE - 2, stdin);
 
             for (p=in_Line; *p; p++) {
@@ -1102,83 +1102,83 @@ STEPRESULT stepTM(void)
             reg[r] = ch;
         }
 
-	break;
+    break;
 
     case opOUT:
         if (outputLimitFail()) return srOUTPUTLIMIT_ERR;
-	printf("%lld ", reg[r]);
+    printf("%lld ", reg[r]);
         fflush(stdout);
-	break;
+    break;
 
     case opOUTB:
         if (outputLimitFail()) return srOUTPUTLIMIT_ERR;
-	if (reg[r]) printf("T ");
-	else printf("F ");
+    if (reg[r]) printf("T ");
+    else printf("F ");
         fflush(stdout);
-	break;
+    break;
 
     case opOUTC:
         if (outputLimitFail()) return srOUTPUTLIMIT_ERR;
-	printf("%c", (char)reg[r]);
+    printf("%c", (char)reg[r]);
         fflush(stdout);
-	break;
+    break;
 
     case opOUTNL:
         if (outputLimitFail()) return srOUTPUTLIMIT_ERR;
-	printf("\n");
+    printf("\n");
         fflush(stdout);
-	break;
+    break;
 
     case opADD:
-	reg[r] = reg[s] + reg[t];
-	break;
+    reg[r] = reg[s] + reg[t];
+    break;
 
     case opSUB:
-	reg[r] = reg[s] - reg[t];
-	break;
+    reg[r] = reg[s] - reg[t];
+    break;
 
     case opMUL:
-	reg[r] = reg[s]*reg[t];
-	break;
+    reg[r] = reg[s]*reg[t];
+    break;
 
     case opDIV:
-	if (reg[t] != 0)
-	    reg[r] = reg[s]/reg[t];
-	else
-	    return srZERODIVIDE;
-	break;
+    if (reg[t] != 0)
+        reg[r] = reg[s]/reg[t];
+    else
+        return srZERODIVIDE;
+    break;
 
     case opMOD:
-	if (reg[t] != 0) {
+    if (reg[t] != 0) {
             long long int tmp;  // r may equal t
 
-	    tmp = reg[s]%reg[t];
+        tmp = reg[s]%reg[t];
             if (tmp<0) tmp += llabs(reg[t]);  // always return a nonnegative answer
-	    reg[r] = tmp;
+        reg[r] = tmp;
         }
-	else
-	    return srZERODIVIDE;
-	break;
+    else
+        return srZERODIVIDE;
+    break;
 
     case opAND:
-	reg[r] = reg[s]&reg[t];
-	break;
+    reg[r] = reg[s]&reg[t];
+    break;
 
     case opOR:
-	reg[r] = reg[s]|reg[t];
-	break;
+    reg[r] = reg[s]|reg[t];
+    break;
 
     case opXOR:
-	reg[r] = reg[s]^reg[t];
-	break;
+    reg[r] = reg[s]^reg[t];
+    break;
 
     case opNOT:
-	reg[r] = ~reg[s];
-	break;
+    reg[r] = ~reg[s];
+    break;
 
     case opNEG:
-	reg[r] = -reg[s];
-	break;
+    reg[r] = -reg[s];
+    break;
 
     case opSWP:
         if (reg[r]>reg[s]) {
@@ -1187,14 +1187,14 @@ STEPRESULT stepTM(void)
             reg[r] = reg[s];
             reg[s] = tmp;
         }
-	break;
+    break;
 
     case opRND:
-	if (reg[s] != 0)
+    if (reg[s] != 0)
             reg[r] = random()%llabs(reg[s]);
-	else
-	    return srZERODIVIDE;
-	break;
+    else
+        return srZERODIVIDE;
+    break;
 
     case opMOV: {
         int raddr, saddr;
@@ -1230,7 +1230,7 @@ STEPRESULT stepTM(void)
     // zero then r and s will be set to 0.
     case opCO: {
         int raddr, saddr;
-	int i;
+    int i;
 
         raddr = reg[r];
         saddr = reg[s];
@@ -1253,7 +1253,7 @@ STEPRESULT stepTM(void)
     // the differing mem values in r5 and r6
     case opCOA: {
         int raddr, saddr;
-	int i;
+    int i;
 
         raddr = reg[r];
         saddr = reg[s];
@@ -1269,59 +1269,59 @@ STEPRESULT stepTM(void)
 
         /*************** RA instructions ********************/
     case opLD:
-	reg[r] = getDMem(m);
-	break;
+    reg[r] = getDMem(m);
+    break;
     case opST:
         setDMem(m, reg[r]);
-	break;
+    break;
     case opLDA:
-	reg[r] = m;
-	break;
+    reg[r] = m;
+    break;
     case opLDC:
-	reg[r] = d;
-	break;
+    reg[r] = d;
+    break;
     case opTLT:
         reg[r] = (reg[s]<reg[t] ? 1 : 0);
-	break;
+    break;
     case opSLT:
         if (reg[r]>=0) reg[r] = (reg[s]<reg[t] ? 1 : 0);
         else reg[r] = (-reg[s] < -reg[t] ? 1 : 0);
-	break;
+    break;
     case opTGT:
         reg[r] = (reg[s]>reg[t] ? 1 : 0);
-	break;
+    break;
     case opSGT:
         if (reg[r]>=0) reg[r] = (reg[s]>reg[t] ? 1 : 0);
         else reg[r] = (-reg[s] > -reg[t] ? 1 : 0);
-	break;
+    break;
     case opTLE:
         reg[r] = (reg[s]<=reg[t] ? 1 : 0);
-	break;
+    break;
     case opTGE:
         reg[r] = (reg[s]>=reg[t] ? 1 : 0);
-	break;
+    break;
     case opTEQ:
         reg[r] = (reg[s]==reg[t] ? 1 : 0);
-	break;
+    break;
     case opTNE:
         reg[r] = (reg[s]!=reg[t] ? 1 : 0);
-	break;
+    break;
     case opJZR:
-	if (reg[r] == 0)
-	    reg[PC_REG] = m;
-	break;
+    if (reg[r] == 0)
+        reg[PC_REG] = m;
+    break;
     case opJNZ:
-	if (reg[r] != 0)
-	    reg[PC_REG] = m;
-	break;
+    if (reg[r] != 0)
+        reg[PC_REG] = m;
+    break;
     case opJMP:
         reg[PC_REG] = m;
-	break;
+    break;
 
-	/* end of legal instructions */
-    }				/* case */
+    /* end of legal instructions */
+    }               /* case */
     return srOKAY;
-}				/* stepTM */
+}               /* stepTM */
 
 
 
@@ -1368,29 +1368,29 @@ int doCommand(void)
 
     stepcnt = 0;
     do {
-	if (promptflag) printf("Enter command: ");
-	fflush(stdin);
-	fflush(stdout);
+    if (promptflag) printf("Enter command: ");
+    fflush(stdin);
+    fflush(stdout);
 
-	fgets(in_Line, LINESIZE - 2, stdin);
-	if (feof(stdin)) {
-	    word[0] = 'q';
-	    word[1] = '\0';
-	    break;
-	}
+    fgets(in_Line, LINESIZE - 2, stdin);
+    if (feof(stdin)) {
+        word[0] = 'q';
+        word[1] = '\0';
+        break;
+    }
 
-	{
-	    char *p;
+    {
+        char *p;
 
-	    for (p=in_Line; *p; p++) {
-		if (*p=='\n') {
-		    *p='\0';
-		    break;
-		}
-	    }
-	    lineLen = p-in_Line;
-	}
-	inCol = 0;
+        for (p=in_Line; *p; p++) {
+        if (*p=='\n') {
+            *p='\0';
+            break;
+        }
+        }
+        lineLen = p-in_Line;
+    }
+    inCol = 0;
     }
     while ((lineLen>0) && !getWord());
 
@@ -1405,77 +1405,77 @@ int doCommand(void)
     switch (cmd) {
     case 'l':
         /***********************************/
-	if (!getWord()) *word = '\0';
-	readInstructions(word);
-	break;
+    if (!getWord()) *word = '\0';
+    readInstructions(word);
+    break;
 
     case 't':
         /***********************************/
-	traceflag = !traceflag;
-	printf("Tracing now ");
-	if (traceflag)
-	    printf("on.\n");
-	else
-	    printf("off.\n");
-	break;
+    traceflag = !traceflag;
+    printf("Tracing now ");
+    if (traceflag)
+        printf("on.\n");
+    else
+        printf("off.\n");
+    break;
 
         /***********************************/
     case 'u':
 //        printf("\n");
-	promptflag = FALSE;
-	break;
+    promptflag = FALSE;
+    break;
 
         /***********************************/
     case 'v':
         printVersion();
-	break;
+    break;
 
     case '?':
     case 'h':
         /***********************************/
-	usage();
-	break;
+    usage();
+    break;
 
     case 'p':
         /***********************************/
-	icountflag = !icountflag;
-	printf("Printing instruction count now ");
-	if (icountflag)
-	    printf("on.\n");
-	else
-	    printf("off.\n");
-	break;
+    icountflag = !icountflag;
+    printf("Printing instruction count now ");
+    if (icountflag)
+        printf("on.\n");
+    else
+        printf("off.\n");
+    break;
 
     case 'a':
         /***********************************/
         if (getNum()) {
-	    abortLimit = llabs(num);
+        abortLimit = llabs(num);
         }
-	else {
-	    abortLimit = 0;
-	    printf("Abort limit turned off.\n");
+    else {
+        abortLimit = 0;
+        printf("Abort limit turned off.\n");
         }
-	break;
+    break;
 
     case 'o':
         /***********************************/
         if (getNum()) {
-	    outputLimit = llabs(num);
+        outputLimit = llabs(num);
         }
-	else {
-	    outputLimit = 0;
-	    printf("Output limit turned off.\n");
+    else {
+        outputLimit = 0;
+        printf("Output limit turned off.\n");
         }
-	break;
+    break;
 
     case 's':
         /***********************************/
-	if (atEOL())
-	    stepcnt = 1;
-	else if (getNum())
-	    stepcnt = llabs(num);
-	else
-	    printf("Step count?\n");
+    if (atEOL())
+        stepcnt = 1;
+    else if (getNum())
+        stepcnt = llabs(num);
+    else
+        printf("Step count?\n");
         if (! traceflag) writeInstruction(reg[7], NOTRACE);
         break;
 
@@ -1485,51 +1485,51 @@ int doCommand(void)
             printf("EXEC STAT: Number of instructions executed: %d\n", instrCount);
             printf("EXEC STAT: Number of output instructions executed: %d\n", outputInstrCount);
 
-	    cnt = 0;
-	    for (i = 0; i<IADDR_SIZE; i++) if (iMemTag[i]==USED) cnt++;
-	    printf("EXEC STAT: Instruction memory used: %d\n", cnt);
+        cnt = 0;
+        for (i = 0; i<IADDR_SIZE; i++) if (iMemTag[i]==USED) cnt++;
+        printf("EXEC STAT: Instruction memory used: %d\n", cnt);
 
-	    cnt = 0;
-	    for (i = 0; i<IADDR_SIZE; i++) if (dMemTag[i]>=0) cnt++;
-	    printf("EXEC STAT: Data memory touched: %d\n", cnt);
+        cnt = 0;
+        for (i = 0; i<IADDR_SIZE; i++) if (dMemTag[i]>=0) cnt++;
+        printf("EXEC STAT: Data memory touched: %d\n", cnt);
 
-	    cnt = 0;
-	    for (i = 0; i<IADDR_SIZE; i++) if (dMemTag[i]==READONLY) cnt++;
-	    printf("EXEC STAT: Read only memory: %d\n", cnt);
+        cnt = 0;
+        for (i = 0; i<IADDR_SIZE; i++) if (dMemTag[i]==READONLY) cnt++;
+        printf("EXEC STAT: Read only memory: %d\n", cnt);
     }
     break;
 
     case 'g':
         /***********************************/
-	stepcnt = 1;
-	break;
+    stepcnt = 1;
+    break;
 
     case 'r':
         /***********************************/
-	for (i = 0; i<NO_REGS; i++) {
-	    printf("r[%1d]: %-4lld   ", i, reg[i]);
-	    if ((i%4) == 3) printf("\n");
-	}
-	break;
+    for (i = 0; i<NO_REGS; i++) {
+        printf("r[%1d]: %-4lld   ", i, reg[i]);
+        if ((i%4) == 3) printf("\n");
+    }
+    break;
 
     case '=':
         /***********************************/
-	if (getNum()) {
-	    loc = num;
-	    if (getNum()) {
-		if (loc<0 || loc>=NO_REGS) printf("%d is not a legal register number\n", loc);
-		else reg[loc] = num;
-	    }
-	    else printf("Register value?\n");
-	}
+    if (getNum()) {
+        loc = num;
+        if (getNum()) {
+        if (loc<0 || loc>=NO_REGS) printf("%d is not a legal register number\n", loc);
+        else reg[loc] = num;
+        }
+        else printf("Register value?\n");
+    }
         else printf("Register number?\n");
         break;
 
         /***********************************/
     case 'n':
-	iloc = reg[PC_REG];
-	if ((iloc >= 0) && (iloc<IADDR_SIZE)) writeInstruction(iloc, TRACE);
-	break;
+    iloc = reg[PC_REG];
+    if ((iloc >= 0) && (iloc<IADDR_SIZE)) writeInstruction(iloc, TRACE);
+    break;
 
     case 'i':
         /***********************************/
@@ -1612,69 +1612,69 @@ int doCommand(void)
             break;
 
     case 'b':
-	if (atEOL()) {
-	    savedbreakpoint = breakpoint = -1;
-	}
-	else if (getNum())
-	    savedbreakpoint = breakpoint = llabs(num);
-	else
-	    printf("Breakpoint location?\n");
-	break;
+    if (atEOL()) {
+        savedbreakpoint = breakpoint = -1;
+    }
+    else if (getNum())
+        savedbreakpoint = breakpoint = llabs(num);
+    else
+        printf("Breakpoint location?\n");
+    break;
 
 
     case 'c':
         /***********************************/
-	clearMachine();
-	lastpc = 0;
+    clearMachine();
+    lastpc = 0;
         stepcnt = 0;
-	break;
+    break;
 
     case 'q':
     case 'x':
-	return FALSE;		/* break; */
+    return FALSE;       /* break; */
 
     default:
-	printf("ERROR: TM Command %c unknown.\n", cmd);
-//	usage();
-	break;
-    }				/* case */
+    printf("ERROR: TM Command %c unknown.\n", cmd);
+//  usage();
+    break;
+    }               /* case */
 
     stepResult = srOKAY;
     if (stepcnt>0) {
-	if (cmd == 'g') {
+    if (cmd == 'g') {
             outputInstrCount = stepcnt = 0;
-//	    stepcnt = 0;
-	    while ((stepResult == srOKAY) && ((abortLimit==0) || (stepcnt<abortLimit))) {
-		iloc = reg[PC_REG];
-		stepResult = stepTM();
-		if (traceflag) writeInstruction(iloc, TRACE);
-		stepcnt++;
-	    }
-	    if ((stepcnt>=abortLimit) && (abortLimit!=0)) {
-		stepResult = srHALT;
-		printf("Abort limit reached! (limit = %d) (see 'a' command in help).\n", abortLimit);
-	    }
-	    if (icountflag)
-		printf("Number of instructions executed = %d\n", stepcnt);
-	}
-	else {
-	    while ((stepcnt>0) && (stepResult == srOKAY)) {
-		iloc = reg[PC_REG];
-		stepResult = stepTM();
-		if (traceflag) writeInstruction(iloc, TRACE);
-		stepcnt--;
-	    }
-	}
+//      stepcnt = 0;
+        while ((stepResult == srOKAY) && ((abortLimit==0) || (stepcnt<abortLimit))) {
+        iloc = reg[PC_REG];
+        stepResult = stepTM();
+        if (traceflag) writeInstruction(iloc, TRACE);
+        stepcnt++;
+        }
+        if ((stepcnt>=abortLimit) && (abortLimit!=0)) {
+        stepResult = srHALT;
+        printf("Abort limit reached! (limit = %d) (see 'a' command in help).\n", abortLimit);
+        }
+        if (icountflag)
+        printf("Number of instructions executed = %d\n", stepcnt);
+    }
+    else {
+        while ((stepcnt>0) && (stepResult == srOKAY)) {
+        iloc = reg[PC_REG];
+        stepResult = stepTM();
+        if (traceflag) writeInstruction(iloc, TRACE);
+        stepcnt--;
+        }
+    }
 
-	printf("\nStatus: %s\n", stepResultTab[stepResult]);
-	if (stepResult!=srOKAY) {
-	    printf("Last executed cmd: ");
-	    writeInstruction(lastpc, TRACE);
-	}
-	printf("PC was %d, PC is now %lld\n", lastpc, reg[PC_REG]);
+    printf("\nStatus: %s\n", stepResultTab[stepResult]);
+    if (stepResult!=srOKAY) {
+        printf("Last executed cmd: ");
+        writeInstruction(lastpc, TRACE);
+    }
+    printf("PC was %d, PC is now %lld\n", lastpc, reg[PC_REG]);
     }
     return TRUE;
-}				/* doCommand */
+}               /* doCommand */
 
 
 
