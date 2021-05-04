@@ -38,5 +38,3 @@ Sibling: 1  Func: main returns of type void [line: 12]
 .   .   .   Child: 0  Id: z of type int [mem: Local loc: -4 size: 1] [line: 19]
 .   .   Sibling: 4  Call: outnl of type void [line: 20]
 Offset for end of global space: 0
-Number of warnings: 0
-Number of errors: 0

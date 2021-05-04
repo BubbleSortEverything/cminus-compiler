@@ -22,63 +22,12 @@
     TokenTree *tree;
 }
 
-// Non-terminals
-%type <tree> program
-%type <tree> declList
-%type <tree> decl
-%type <tree> varDecl
-%type <tree> scopedVarDecl
-%type <tree> varDeclList
-%type <tree> varDeclInit
-%type <tree> varDeclId
-%type <tree> typeSpec
-%type <tree> funDecl
-%type <tree> params
-%type <tree> paramList
-%type <tree> paramTypeList
-%type <tree> paramIdList
-%type <tree> paramId
-%type <tree> stmt
-//%type <tree> simpleStmt
-//%type <tree> openStmt
-//%type <tree> closedStmt
-%type <tree> expStmt
-%type <tree> compoundStmt
-%type <tree> localDecls
-%type <tree> stmtList
-%type <tree> selectStmt
-//%type <tree> closedSelStmt
-//%type <tree> openIterStmt
-//%type <tree> closedIterStmt
-%type <tree> returnStmt
-%type <tree> breakStmt
-%type <tree> exp
-%type <tree> simpleExp
-%type <tree> andExpr
-%type <tree> unaryRelExp
-%type <tree> relExp
-%type <tree> relop
-%type <tree> sumExp
-%type <tree> sumop
-%type <tree> mulExp
-%type <tree> mulOp
-%type <tree> unaryExp
-%type <tree> unaryop
-%type <tree> factor
-%type <tree> mutable
-%type <tree> immutable
-%type <tree> call
-%type <tree> args
-%type <tree> argList
-%type <tree> constant
-%type <tree> minmaxop
-%type <tree> minmaxExp
-%type <tree> iterStmt
-%type <tree> iterRange
-%type <tree> matched
-%type <tree> unmatched
+// non terminals
+%type <tree> program declList decl varDecl scopedVarDecl varDeclList varDeclInit varDeclId typeSpec funDecl
+%type <tree> params paramList paramTypeList paramIdList paramId stmt expStmt compoundStmt localDecls
+%type <tree> stmtList selectStmt returnStmt breakStmt exp simpleExp andExpr unaryRelExp relExp relop sumExp sumop mulExp mulOp unaryExp
+%type <tree> unaryop factor mutable immutable call args argList constant minmaxop minmaxExp iterStmt iterRange matched unmatched
 
-// token specifies the token classes from the scanner
 %token <tree> ADDASS DEC DIVASS INC MULASS SUBASS
 %token <tree> EQ GEQ LEQ NEQ NOT AND OR MIN MAX
 %token <tree> '+' '-' '=' '|' '&' '!' '<' '>' '*' '/' '%' '?'

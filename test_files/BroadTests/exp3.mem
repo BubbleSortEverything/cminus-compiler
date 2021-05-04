@@ -107,5 +107,3 @@ Func: main returns of type void [line: 3]
 .   .   .   Child: 0  Id: arwen of type bool [mem: Local loc: -7 size: 1] [line: 40]
 .   .   Sibling: 23  Call: outnl of type void [line: 41]
 Offset for end of global space: 0
-Number of warnings: 0
-Number of errors: 0

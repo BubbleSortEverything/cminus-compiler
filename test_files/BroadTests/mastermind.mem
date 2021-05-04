@@ -257,5 +257,3 @@ Sibling: 9  Func: main returns of type void [line: 127]
 .   .   .   .   .   Child: 0  Id: i of type int [mem: Local loc: -2 size: 1] [line: 153]
 .   .   Sibling: 10  Call: outnl of type void [line: 155]
 Offset for end of global space: -141
-Number of warnings: 0
-Number of errors: 0

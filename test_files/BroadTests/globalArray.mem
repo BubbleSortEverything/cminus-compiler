@@ -22,5 +22,3 @@ Sibling: 2  Func: main returns of type void [line: 4]
 .   .   .   .   Child: 1  Const 3 of type int [line: 10]
 .   .   Sibling: 4  Return [line: 12]
 Offset for end of global space: -9
-Number of warnings: 0
-Number of errors: 0

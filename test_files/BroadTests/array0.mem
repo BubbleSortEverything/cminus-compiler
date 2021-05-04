@@ -82,5 +82,3 @@ Sibling: 2  Func: main returns of type void [line: 8]
 .   .   .   .   Child: 1  Const 100 of type int [line: 35]
 .   .   Sibling: 18  Call: outnl of type void [line: 36]
 Offset for end of global space: -5
-Number of warnings: 0
-Number of errors: 0

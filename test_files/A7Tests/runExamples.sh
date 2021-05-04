@@ -6,7 +6,7 @@
 # file.out file of output from compiler and then from running code
 # file.tm  file of tm code
 
-cd test_files/A7Tests/
+cd test_files/BroadTests/
 
 compiler=../../c-
 tm=../../tm
@@ -23,12 +23,12 @@ for file in *.c-
 do
     echo "===================================="
     echo "FILE: $file"
-	file=`basename $file '.c-'`
+    file=`basename $file '.c-'`
         rm -f $file.tm $file.out
-        $compiler  $file.c- > $file.tm
+        # $compiler  $file.c- > $file.tm
         $compiler  $file.c- > $file.out
         $compiler -M $file.c- > $file.mem
-        echo "------------------------------------" >> $file.out
+        # echo "------------------------------------" >> $file.out
         if [ -f $file.tm ]
         then
             if [ -f $file.in ]
@@ -48,7 +48,7 @@ do
                     egrep -v 'Status:|Memory|Addresses|Instruc|Enter|Limit|Source|command|PC|cmd|version' >> $file.out
             fi
         fi
-	ls -l $file.*
+    ls -l $file.*
         if [ -f $file.expected ] 
         then
             cat $file.expected |
@@ -62,7 +62,7 @@ do
                 echo "$file (Output OK)"
             else
                 echo "$file (Output DIFF)"
-   	        sdiff -w200 $file.out $tmp
+            sdiff -w200 $file.out $tmp
             fi
         else
             echo "$file (NO EXPECTED FILE)"

@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  c09.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,48 +71,72 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,753(6)	Load of type int constant 
- 41:     ST  3,0(0)	Assigning variable x in Global 
- 42:    LDC  3,444(6)	Load of type int constant 
- 43:     ST  3,-1(0)	Assigning variable y in Global 
- 44:     LD  3,-1(0)	Load variable y into accumulator 
- 45:     LD  4,0(0)	Load lhs variable 
- 46:    ADD  3,4,3	+= operation 
- 47:     ST  3,0(0)	Assigning variable x in Global 
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
+ 40:    LDC  3,753(6)	Load integer constant 
+ 41:     ST  3,0(0)	Store variable x
+* EXPRESSION
+ 42:    LDC  3,444(6)	Load integer constant 
+ 43:     ST  3,-1(0)	Store variable y
+* EXPRESSION
+ 44:     LD  3,-1(0)	Load variable y
+ 45:     LD  4,0(0)	load lhs variable x
+ 46:    ADD  3,4,3	op += 
+ 47:     ST  3,0(0)	Store variable x
+* EXPRESSION
 * CALL output
- 48:     ST  1,-2(1)	Store fp in ghost frame for output 
- 49:     LD  3,0(0)	Load variable x into accumulator 
- 50:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 51:    LDA  1,-2(1)	Move the fp to the new frame 
- 52:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 53:    JMP  7,-48(7)	Call function 
- 54:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
- 55:     LD  3,0(0)	Load variable x into accumulator 
- 56:     LD  4,-1(0)	Load lhs variable 
- 57:    SUB  3,4,3	-= operation 
- 58:     ST  3,-1(0)	Assigning variable y in Global 
+ 48:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 49:     LD  3,0(0)	Load variable x
+ 50:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 51:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 52:    LDA  3,1(7)	Return address in ac 
+ 53:    JMP  7,-48(7)	CALL output
+ 54:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
+* EXPRESSION
+ 55:     LD  3,0(0)	Load variable x
+ 56:     LD  4,-1(0)	load lhs variable y
+ 57:    SUB  3,4,3	op -= 
+ 58:     ST  3,-1(0)	Store variable y
+* EXPRESSION
 * CALL output
- 59:     ST  1,-2(1)	Store fp in ghost frame for output 
- 60:     LD  3,-1(0)	Load variable y into accumulator 
- 61:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 62:    LDA  1,-2(1)	Move the fp to the new frame 
- 63:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 64:    JMP  7,-59(7)	Call function 
- 65:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 59:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 60:     LD  3,-1(0)	Load variable y
+ 61:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 62:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 63:    LDA  3,1(7)	Return address in ac 
+ 64:    JMP  7,-59(7)	CALL output
+ 65:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
+* EXPRESSION
 * CALL outnl
- 66:     ST  1,-2(1)	Store fp in ghost frame for outnl 
-* Begin call
- 67:    LDA  1,-2(1)	Move the fp to the new frame 
- 68:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 69:    JMP  7,-36(7)	Call function 
- 70:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+ 66:     ST  1,-2(1)	Store fp in ghost frame for outnl
+* TOFF dec: -3
+* TOFF dec: -4
+* Param end outnl
+ 67:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 68:    LDA  3,1(7)	Return address in ac 
+ 69:    JMP  7,-36(7)	CALL outnl
+ 70:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -2
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  71:    LDC  2,0(6)	Set return value to 0 
@@ -117,7 +144,6 @@
  73:     LD  1,0(1)	Adjust fp 
  74:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,74(7)	Jump to init [backpatch] 
 * INIT
  75:    LDA  1,-2(0)	set first frame at end of globals 

@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  g08.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,87 +71,120 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION cat
+* TOFF set: -4
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,77(6)	Load of type int constant 
- 41:     ST  3,-4(1)	Push left side onto temp variable stack 
- 42:     LD  3,-2(1)	Load base address of array z 
- 43:     LD  3,-3(1)	Load variable x into accumulator 
- 44:     LD  5,-2(1)	Load base address of array z into AC2 
- 45:    SUB  5,5,3	Compute offset for array 
- 46:     LD  3,0(5)	Load array element z from AC into loc from AC2 
- 47:     ST  3,-5(1)	Push left side onto temp variable stack 
- 48:     LD  3,-2(1)	Load base address of array z 
- 49:     LD  3,-3(1)	Load variable x into accumulator 
- 50:     LD  5,-2(1)	Load base address of array z into AC2 
- 51:    SUB  5,5,3	Compute offset for array 
- 52:     LD  3,0(5)	Load array element z from AC into loc from AC2 
- 53:     LD  4,-5(1)	Pop left hand side into AC1 
- 54:    MUL  3,4,3	* Multiplication Operation 
- 55:     LD  4,-4(1)	Pop left hand side into AC1 
- 56:    ADD  3,4,3	+ Operation 
- 57:    LDA  2,0(3)	Copy accumulator to return register 
- 58:     LD  3,-1(1)	Load return address 
- 59:     LD  1,0(1)	Adjust fp 
- 60:    JMP  7,0(3)	Return 
+* TOFF set: -4
+* Compound Body
+* RETURN
+ 40:    LDC  3,77(6)	Load integer constant 
+ 41:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 42:     LD  3,-2(1)	Load address of base of array z
+ 43:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+ 44:     LD  3,-3(1)	Load variable x
+* TOFF inc: -5
+ 45:     LD  4,-5(1)	Pop left into ac1 
+ 46:    SUB  3,4,3	compute location from index 
+ 47:     LD  3,0(3)	Load array element 
+ 48:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+ 49:     LD  3,-2(1)	Load address of base of array z
+ 50:     ST  3,-6(1)	Push left side 
+* TOFF dec: -7
+ 51:     LD  3,-3(1)	Load variable x
+* TOFF inc: -6
+ 52:     LD  4,-6(1)	Pop left into ac1 
+ 53:    SUB  3,4,3	compute location from index 
+ 54:     LD  3,0(3)	Load array element 
+* TOFF inc: -5
+ 55:     LD  4,-5(1)	Pop left into ac1 
+ 56:    MUL  3,4,3	Op * 
+* TOFF inc: -4
+ 57:     LD  4,-4(1)	Pop left into ac1 
+ 58:    ADD  3,4,3	Op + 
+ 59:    LDA  2,0(3)	Copy result to return register 
+ 60:     LD  3,-1(1)	Load return address 
+ 61:     LD  1,0(1)	Adjust fp 
+ 62:    JMP  7,0(3)	Return 
+* TOFF set: -4
 * END COMPOUND
 * Add standard closing in case there is no return statement
- 61:    LDC  2,0(6)	Set return value to 0 
- 62:     LD  3,-1(1)	Load return address 
- 63:     LD  1,0(1)	Adjust fp 
- 64:    JMP  7,0(3)	Return 
+ 63:    LDC  2,0(6)	Set return value to 0 
+ 64:     LD  3,-1(1)	Load return address 
+ 65:     LD  1,0(1)	Adjust fp 
+ 66:    JMP  7,0(3)	Return 
 * END FUNCTION cat
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
- 65:     ST  3,-1(1)	Store return address 
+* TOFF set: -2
+ 67:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 66:    LDC  3,10(6)	Load size of z into AC 
- 67:     ST  3,-2(1)	Store size of z in data memory 
- 68:    LDA  3,-3(1)	Load base address of array z 
- 69:    LDC  3,3(6)	Load of type int constant 
- 70:     ST  3,-13(1)	Push array index onto temp stack 
- 71:    LDC  3,445(6)	Load of type int constant 
- 72:     LD  4,-13(1)	Pop array index into AC1 
- 73:    LDA  5,-3(1)	Load base address of array z into AC2 
- 74:    SUB  5,5,4	Compute offset for array 
- 75:     ST  3,0(5)	Store variable z from AC into loc from AC2 
+* TOFF set: -13
+ 68:    LDC  3,10(6)	load size of array z
+ 69:     ST  3,-2(1)	save size of array z
+* Compound Body
+* EXPRESSION
+ 70:    LDC  3,3(6)	Load integer constant 
+ 71:     ST  3,-13(1)	Push index 
+* TOFF dec: -14
+ 72:    LDC  3,445(6)	Load integer constant 
+* TOFF inc: -13
+ 73:     LD  4,-13(1)	Pop index 
+ 74:    LDA  5,-3(1)	Load address of base of array z
+ 75:    SUB  5,5,4	Compute offset of value 
+ 76:     ST  3,0(5)	Store variable z
+* EXPRESSION
 * CALL output
- 76:     ST  1,-13(1)	Store fp in ghost frame for output 
+ 77:     ST  1,-13(1)	Store fp in ghost frame for output
+* TOFF dec: -14
+* TOFF dec: -15
+* Param 1
 * CALL cat
- 77:     ST  1,-16(1)	Store fp in ghost frame for cat 
- 78:    LDA  3,-3(1)	Load base address of array z 
- 79:     ST  3,-18(1)	Push parameter onto new frame 
- 80:    LDC  3,3(6)	Load of type int constant 
- 81:     ST  3,-19(1)	Push parameter onto new frame 
-* Begin call
- 82:    LDA  1,-16(1)	Move the fp to the new frame 
- 83:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 84:    JMP  7,-46(7)	Call function 
- 85:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL cat
- 86:     ST  3,-15(1)	Push parameter onto new frame 
-* Begin call
- 87:    LDA  1,-13(1)	Move the fp to the new frame 
- 88:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 89:    JMP  7,-84(7)	Call function 
- 90:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 78:     ST  1,-15(1)	Store fp in ghost frame for cat
+* TOFF dec: -16
+* TOFF dec: -17
+* Param 1
+ 79:    LDA  3,-3(1)	Load address of base of array z
+ 80:     ST  3,-17(1)	Push parameter 
+* TOFF dec: -18
+* Param 2
+ 81:    LDC  3,3(6)	Load integer constant 
+ 82:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end cat
+ 83:    LDA  1,-15(1)	Ghost frame becomes new active frame 
+ 84:    LDA  3,1(7)	Return address in ac 
+ 85:    JMP  7,-47(7)	CALL cat
+ 86:    LDA  3,0(2)	Save the result in ac 
+* Call end cat
+* TOFF set: -15
+ 87:     ST  3,-15(1)	Push parameter 
+* TOFF dec: -16
+* Param end output
+ 88:    LDA  1,-13(1)	Ghost frame becomes new active frame 
+ 89:    LDA  3,1(7)	Return address in ac 
+ 90:    JMP  7,-85(7)	CALL output
+ 91:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -13
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
- 91:    LDC  2,0(6)	Set return value to 0 
- 92:     LD  3,-1(1)	Load return address 
- 93:     LD  1,0(1)	Adjust fp 
- 94:    JMP  7,0(3)	Return 
+ 92:    LDC  2,0(6)	Set return value to 0 
+ 93:     LD  3,-1(1)	Load return address 
+ 94:     LD  1,0(1)	Adjust fp 
+ 95:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
-  0:    JMP  7,94(7)	Jump to init [backpatch] 
+  0:    JMP  7,95(7)	Jump to init [backpatch] 
 * INIT
- 95:    LDA  1,0(0)	set first frame at end of globals 
- 96:     ST  1,0(1)	store old fp (point to self) 
+ 96:    LDA  1,0(0)	set first frame at end of globals 
+ 97:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
 * END INIT GLOBALS AND STATICS
- 97:    LDA  3,1(7)	Return address in ac 
- 98:    JMP  7,-34(7)	Jump to main 
- 99:   HALT  0,0,0	DONE! 
+ 98:    LDA  3,1(7)	Return address in ac 
+ 99:    JMP  7,-33(7)	Jump to main 
+100:   HALT  0,0,0	DONE! 
 * END INIT

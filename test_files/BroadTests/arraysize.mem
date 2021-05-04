@@ -76,5 +76,3 @@ Sibling: 3  Func: main returns of type void [line: 27]
 .   .   .   .   .   Child: 0  Id: g of array of type int [mem: Global loc: -1 size: 13] [line: 41]
 .   .   Sibling: 9  Call: outnl of type void [line: 42]
 Offset for end of global space: -37
-Number of warnings: 1
-Number of errors: 0

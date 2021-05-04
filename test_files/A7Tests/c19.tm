@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  c19.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,46 +71,68 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,753(6)	Load of type int constant 
- 41:     ST  3,0(0)	Assigning variable x in Global 
- 42:    LDC  3,444(6)	Load of type int constant 
- 43:     ST  3,-1(0)	Assigning variable y in Global 
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
+ 40:    LDC  3,753(6)	Load integer constant 
+ 41:     ST  3,0(0)	Store variable x
+* EXPRESSION
+ 42:    LDC  3,444(6)	Load integer constant 
+ 43:     ST  3,-1(0)	Store variable y
+* EXPRESSION
 * CALL output
- 44:     ST  1,-2(1)	Store fp in ghost frame for output 
- 45:     LD  3,-1(0)	Load variable y into accumulator 
- 46:     LD  4,0(0)	Load lhs variable 
- 47:    MUL  3,4,3	*= operation 
- 48:     ST  3,0(0)	Assigning variable x in Global 
- 49:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 50:    LDA  1,-2(1)	Move the fp to the new frame 
- 51:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 52:    JMP  7,-47(7)	Call function 
- 53:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 44:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 45:     LD  3,-1(0)	Load variable y
+ 46:     LD  4,0(0)	load lhs variable x
+ 47:    MUL  3,4,3	op *= 
+ 48:     ST  3,0(0)	Store variable x
+ 49:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 50:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 51:    LDA  3,1(7)	Return address in ac 
+ 52:    JMP  7,-47(7)	CALL output
+ 53:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
+* EXPRESSION
 * CALL output
- 54:     ST  1,-2(1)	Store fp in ghost frame for output 
- 55:     LD  3,0(0)	Load variable x into accumulator 
- 56:     LD  4,-1(0)	Load lhs variable 
- 57:    DIV  3,4,3	+= operation 
- 58:     ST  3,-1(0)	Assigning variable y in Global 
- 59:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 60:    LDA  1,-2(1)	Move the fp to the new frame 
- 61:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 62:    JMP  7,-57(7)	Call function 
- 63:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 54:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 55:     LD  3,0(0)	Load variable x
+ 56:     LD  4,-1(0)	load lhs variable y
+ 57:    DIV  3,4,3	op /= 
+ 58:     ST  3,-1(0)	Store variable y
+ 59:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 60:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 61:    LDA  3,1(7)	Return address in ac 
+ 62:    JMP  7,-57(7)	CALL output
+ 63:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
+* EXPRESSION
 * CALL outnl
- 64:     ST  1,-2(1)	Store fp in ghost frame for outnl 
-* Begin call
- 65:    LDA  1,-2(1)	Move the fp to the new frame 
- 66:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 67:    JMP  7,-34(7)	Call function 
- 68:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+ 64:     ST  1,-2(1)	Store fp in ghost frame for outnl
+* TOFF dec: -3
+* TOFF dec: -4
+* Param end outnl
+ 65:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 66:    LDA  3,1(7)	Return address in ac 
+ 67:    JMP  7,-34(7)	CALL outnl
+ 68:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -2
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  69:    LDC  2,0(6)	Set return value to 0 
@@ -115,7 +140,6 @@
  71:     LD  1,0(1)	Adjust fp 
  72:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,72(7)	Jump to init [backpatch] 
 * INIT
  73:    LDA  1,-2(0)	set first frame at end of globals 

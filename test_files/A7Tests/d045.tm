@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  d045.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,30 +71,46 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
 * CALL outputb
- 40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,111(6)	Load of type int constant 
- 42:     ST  3,-5(1)	Push left side onto temp variable stack 
- 43:    LDC  3,222(6)	Load of type int constant 
- 44:     LD  4,-5(1)	Pop left hand side into AC1 
- 45:    TGT  3,4,3	Greather than > operation store in AC 
- 46:     ST  3,-5(1)	Push left side onto temp variable stack 
- 47:    LDC  3,333(6)	Load of type int constant 
- 48:     ST  3,-6(1)	Push left side onto temp variable stack 
- 49:    LDC  3,444(6)	Load of type int constant 
- 50:     LD  4,-6(1)	Pop left hand side into AC1 
- 51:    TLT  3,4,3	Less than < operation store in AC 
- 52:     LD  4,-5(1)	Pop left hand side into AC1 
- 53:    AND  3,4,3	AND operation store in AC 
- 54:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 55:    LDA  1,-2(1)	Move the fp to the new frame 
- 56:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 57:    JMP  7,-41(7)	Call function 
- 58:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 40:     ST  1,-2(1)	Store fp in ghost frame for outputb
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 41:    LDC  3,111(6)	Load integer constant 
+ 42:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 43:    LDC  3,222(6)	Load integer constant 
+* TOFF inc: -4
+ 44:     LD  4,-4(1)	Pop left into ac1 
+ 45:    TGT  3,4,3	Op > 
+ 46:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 47:    LDC  3,333(6)	Load integer constant 
+ 48:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+ 49:    LDC  3,444(6)	Load integer constant 
+* TOFF inc: -5
+ 50:     LD  4,-5(1)	Pop left into ac1 
+ 51:    TLT  3,4,3	Op < 
+* TOFF inc: -4
+ 52:     LD  4,-4(1)	Pop left into ac1 
+ 53:    AND  3,4,3	Op AND 
+ 54:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end outputb
+ 55:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 56:    LDA  3,1(7)	Return address in ac 
+ 57:    JMP  7,-41(7)	CALL outputb
+ 58:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -2
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  59:    LDC  2,0(6)	Set return value to 0 
@@ -99,7 +118,6 @@
  61:     LD  1,0(1)	Adjust fp 
  62:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,62(7)	Jump to init [backpatch] 
 * INIT
  63:    LDA  1,0(0)	set first frame at end of globals 

@@ -383,5 +383,3 @@ Sibling: 5  Func: main returns of type void [line: 30]
 .   .   .   Child: 0  Id: c of array of type int [mem: Local loc: -4 size: 11] [line: 113]
 .   .   .   Sibling: 1  Const 10 of type int [line: 113]
 Offset for end of global space: -12
-Number of warnings: 0
-Number of errors: 0

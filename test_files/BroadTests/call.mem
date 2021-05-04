@@ -229,5 +229,3 @@ Sibling: 11  Func: main returns of type void [line: 84]
 .   .   .   .   Child: 1  Call: magic of type int [line: 115]
 .   .   Sibling: 19  Call: outnl of type void [line: 116]
 Offset for end of global space: -1
-Number of warnings: 0
-Number of errors: 0

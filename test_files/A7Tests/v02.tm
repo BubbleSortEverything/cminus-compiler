@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  v02.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,247 +71,500 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load of type char constant 
- 41:    LDC  3,5(6)	Load size of a into AC 
- 42:     ST  3,-2(1)	Store size of a in data memory 
- 43:     ST  3,-3(1)	Assigning variable a in Local 
- 44:    LDC  3,0(6)	Load of type char constant 
- 45:    LDC  3,5(6)	Load size of b into AC 
- 46:     ST  3,-8(1)	Store size of b in data memory 
- 47:     ST  3,-9(1)	Assigning variable b in Local 
+* TOFF set: -14
+ 40:    LDC  3,5(6)	load size of array a
+ 41:     ST  3,-2(1)	save size of array a
+  1:    LIT  "acid"
+ 42:    LDA  3,-1(0)	Load address of char array 
+ 43:    LDA  4,-3(1)	address of lhs 
+ 44:     LD  5,1(3)	size of rhs 
+ 45:     LD  6,1(4)	size of lhs 
+ 46:    SWP  5,6,6	pick smallest size 
+ 47:    MOV  4,3,5	array op = 
+ 48:    LDC  3,5(6)	load size of array b
+ 49:     ST  3,-8(1)	save size of array b
+  6:    LIT  "army"
+ 50:    LDA  3,-6(0)	Load address of char array 
+ 51:    LDA  4,-9(1)	address of lhs 
+ 52:     LD  5,1(3)	size of rhs 
+ 53:     LD  6,1(4)	size of lhs 
+ 54:    SWP  5,6,6	pick smallest size 
+ 55:    MOV  4,3,5	array op = 
+* Compound Body
+* EXPRESSION
 * CALL outputb
- 48:     ST  1,-14(1)	Store fp in ghost frame for outputb 
- 49:    LDA  3,-3(1)	Load base address of array a 
- 50:     ST  3,-17(1)	Push left side onto temp variable stack 
- 51:    LDA  3,-9(1)	Load base address of array b 
- 52:     LD  4,-17(1)	Pop left hand side into AC1 
- 53:    TEQ  3,4,3	== Equality Operation 
- 54:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
- 55:    LDA  1,-14(1)	Move the fp to the new frame 
- 56:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 57:    JMP  7,-41(7)	Call function 
- 58:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 56:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+ 57:    LDA  3,-3(1)	Load address of base of array a
+ 58:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+ 59:    LDA  3,-9(1)	Load address of base of array b
+* TOFF inc: -16
+ 60:     LD  4,-16(1)	Pop left into ac1 
+ 61:     LD  5,1(3)	AC2 <- |RHS| 
+ 62:     LD  6,1(4)	AC3 <- |LHS| 
+ 63:    LDA  2,0(5)	R2 <- |RHS| 
+ 64:    SWP  5,6,6	pick smallest size 
+ 65:     LD  6,1(4)	AC3 <- |LHS| 
+ 66:     CO  4,3,5	setup array compare  LHS vs RHS 
+ 67:    TNE  5,4,3	if not equal then test (AC1, AC) 
+ 68:    JNZ  5,2,7	jump not equal 
+ 69:    LDA  3,0(2)	AC1 <- |RHS| 
+ 70:    LDA  4,0(6)	AC <- |LHS| 
+ 71:    TEQ  3,4,3	Op == 
+ 72:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+ 73:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+ 74:    LDA  3,1(7)	Return address in ac 
+ 75:    JMP  7,-59(7)	CALL outputb
+ 76:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
- 59:     ST  1,-14(1)	Store fp in ghost frame for outputb 
- 60:    LDA  3,-9(1)	Load base address of array b 
- 61:     ST  3,-17(1)	Push left side onto temp variable stack 
- 62:    LDA  3,-3(1)	Load base address of array a 
- 63:     LD  4,-17(1)	Pop left hand side into AC1 
- 64:    TEQ  3,4,3	== Equality Operation 
- 65:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
- 66:    LDA  1,-14(1)	Move the fp to the new frame 
- 67:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 68:    JMP  7,-52(7)	Call function 
- 69:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 77:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+ 78:    LDA  3,-9(1)	Load address of base of array b
+ 79:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+ 80:    LDA  3,-3(1)	Load address of base of array a
+* TOFF inc: -16
+ 81:     LD  4,-16(1)	Pop left into ac1 
+ 82:     LD  5,1(3)	AC2 <- |RHS| 
+ 83:     LD  6,1(4)	AC3 <- |LHS| 
+ 84:    LDA  2,0(5)	R2 <- |RHS| 
+ 85:    SWP  5,6,6	pick smallest size 
+ 86:     LD  6,1(4)	AC3 <- |LHS| 
+ 87:     CO  4,3,5	setup array compare  LHS vs RHS 
+ 88:    TNE  5,4,3	if not equal then test (AC1, AC) 
+ 89:    JNZ  5,2,7	jump not equal 
+ 90:    LDA  3,0(2)	AC1 <- |RHS| 
+ 91:    LDA  4,0(6)	AC <- |LHS| 
+ 92:    TEQ  3,4,3	Op == 
+ 93:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+ 94:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+ 95:    LDA  3,1(7)	Return address in ac 
+ 96:    JMP  7,-80(7)	CALL outputb
+ 97:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outnl
- 70:     ST  1,-14(1)	Store fp in ghost frame for outnl 
-* Begin call
- 71:    LDA  1,-14(1)	Move the fp to the new frame 
- 72:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 73:    JMP  7,-40(7)	Call function 
- 74:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+ 98:     ST  1,-14(1)	Store fp in ghost frame for outnl
+* TOFF dec: -15
+* TOFF dec: -16
+* Param end outnl
+ 99:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+100:    LDA  3,1(7)	Return address in ac 
+101:    JMP  7,-68(7)	CALL outnl
+102:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
- 75:     ST  1,-14(1)	Store fp in ghost frame for outputb 
- 76:    LDA  3,-3(1)	Load base address of array a 
- 77:     ST  3,-17(1)	Push left side onto temp variable stack 
- 78:    LDA  3,-9(1)	Load base address of array b 
- 79:     LD  4,-17(1)	Pop left hand side into AC1 
- 80:    TNE  3,4,3	!= Equality Operation 
- 81:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
- 82:    LDA  1,-14(1)	Move the fp to the new frame 
- 83:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 84:    JMP  7,-68(7)	Call function 
- 85:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+103:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+104:    LDA  3,-3(1)	Load address of base of array a
+105:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+106:    LDA  3,-9(1)	Load address of base of array b
+* TOFF inc: -16
+107:     LD  4,-16(1)	Pop left into ac1 
+108:     LD  5,1(3)	AC2 <- |RHS| 
+109:     LD  6,1(4)	AC3 <- |LHS| 
+110:    LDA  2,0(5)	R2 <- |RHS| 
+111:    SWP  5,6,6	pick smallest size 
+112:     LD  6,1(4)	AC3 <- |LHS| 
+113:     CO  4,3,5	setup array compare  LHS vs RHS 
+114:    TNE  5,4,3	if not equal then test (AC1, AC) 
+115:    JNZ  5,2,7	jump not equal 
+116:    LDA  3,0(2)	AC1 <- |RHS| 
+117:    LDA  4,0(6)	AC <- |LHS| 
+118:    TNE  3,4,3	Op != 
+119:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+120:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+121:    LDA  3,1(7)	Return address in ac 
+122:    JMP  7,-106(7)	CALL outputb
+123:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
- 86:     ST  1,-14(1)	Store fp in ghost frame for outputb 
- 87:    LDA  3,-9(1)	Load base address of array b 
- 88:     ST  3,-17(1)	Push left side onto temp variable stack 
- 89:    LDA  3,-3(1)	Load base address of array a 
- 90:     LD  4,-17(1)	Pop left hand side into AC1 
- 91:    TNE  3,4,3	!= Equality Operation 
- 92:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
- 93:    LDA  1,-14(1)	Move the fp to the new frame 
- 94:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 95:    JMP  7,-79(7)	Call function 
- 96:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+124:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+125:    LDA  3,-9(1)	Load address of base of array b
+126:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+127:    LDA  3,-3(1)	Load address of base of array a
+* TOFF inc: -16
+128:     LD  4,-16(1)	Pop left into ac1 
+129:     LD  5,1(3)	AC2 <- |RHS| 
+130:     LD  6,1(4)	AC3 <- |LHS| 
+131:    LDA  2,0(5)	R2 <- |RHS| 
+132:    SWP  5,6,6	pick smallest size 
+133:     LD  6,1(4)	AC3 <- |LHS| 
+134:     CO  4,3,5	setup array compare  LHS vs RHS 
+135:    TNE  5,4,3	if not equal then test (AC1, AC) 
+136:    JNZ  5,2,7	jump not equal 
+137:    LDA  3,0(2)	AC1 <- |RHS| 
+138:    LDA  4,0(6)	AC <- |LHS| 
+139:    TNE  3,4,3	Op != 
+140:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+141:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+142:    LDA  3,1(7)	Return address in ac 
+143:    JMP  7,-127(7)	CALL outputb
+144:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outnl
- 97:     ST  1,-14(1)	Store fp in ghost frame for outnl 
-* Begin call
- 98:    LDA  1,-14(1)	Move the fp to the new frame 
- 99:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-100:    JMP  7,-67(7)	Call function 
-101:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+145:     ST  1,-14(1)	Store fp in ghost frame for outnl
+* TOFF dec: -15
+* TOFF dec: -16
+* Param end outnl
+146:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+147:    LDA  3,1(7)	Return address in ac 
+148:    JMP  7,-115(7)	CALL outnl
+149:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-102:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-103:    LDA  3,-3(1)	Load base address of array a 
-104:     ST  3,-17(1)	Push left side onto temp variable stack 
-105:    LDA  3,-9(1)	Load base address of array b 
-106:     LD  4,-17(1)	Pop left hand side into AC1 
-107:    TGT  3,4,3	Greather than > operation store in AC 
-108:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-109:    LDA  1,-14(1)	Move the fp to the new frame 
-110:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-111:    JMP  7,-95(7)	Call function 
-112:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+150:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+151:    LDA  3,-3(1)	Load address of base of array a
+152:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+153:    LDA  3,-9(1)	Load address of base of array b
+* TOFF inc: -16
+154:     LD  4,-16(1)	Pop left into ac1 
+155:     LD  5,1(3)	AC2 <- |RHS| 
+156:     LD  6,1(4)	AC3 <- |LHS| 
+157:    LDA  2,0(5)	R2 <- |RHS| 
+158:    SWP  5,6,6	pick smallest size 
+159:     LD  6,1(4)	AC3 <- |LHS| 
+160:     CO  4,3,5	setup array compare  LHS vs RHS 
+161:    TNE  5,4,3	if not equal then test (AC1, AC) 
+162:    JNZ  5,2,7	jump not equal 
+163:    LDA  3,0(2)	AC1 <- |RHS| 
+164:    LDA  4,0(6)	AC <- |LHS| 
+165:    TGT  3,4,3	Op > 
+166:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+167:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+168:    LDA  3,1(7)	Return address in ac 
+169:    JMP  7,-153(7)	CALL outputb
+170:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-113:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-114:    LDA  3,-9(1)	Load base address of array b 
-115:     ST  3,-17(1)	Push left side onto temp variable stack 
-116:    LDA  3,-3(1)	Load base address of array a 
-117:     LD  4,-17(1)	Pop left hand side into AC1 
-118:    TGT  3,4,3	Greather than > operation store in AC 
-119:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-120:    LDA  1,-14(1)	Move the fp to the new frame 
-121:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-122:    JMP  7,-106(7)	Call function 
-123:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+171:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+172:    LDA  3,-9(1)	Load address of base of array b
+173:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+174:    LDA  3,-3(1)	Load address of base of array a
+* TOFF inc: -16
+175:     LD  4,-16(1)	Pop left into ac1 
+176:     LD  5,1(3)	AC2 <- |RHS| 
+177:     LD  6,1(4)	AC3 <- |LHS| 
+178:    LDA  2,0(5)	R2 <- |RHS| 
+179:    SWP  5,6,6	pick smallest size 
+180:     LD  6,1(4)	AC3 <- |LHS| 
+181:     CO  4,3,5	setup array compare  LHS vs RHS 
+182:    TNE  5,4,3	if not equal then test (AC1, AC) 
+183:    JNZ  5,2,7	jump not equal 
+184:    LDA  3,0(2)	AC1 <- |RHS| 
+185:    LDA  4,0(6)	AC <- |LHS| 
+186:    TGT  3,4,3	Op > 
+187:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+188:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+189:    LDA  3,1(7)	Return address in ac 
+190:    JMP  7,-174(7)	CALL outputb
+191:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outnl
-124:     ST  1,-14(1)	Store fp in ghost frame for outnl 
-* Begin call
-125:    LDA  1,-14(1)	Move the fp to the new frame 
-126:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-127:    JMP  7,-94(7)	Call function 
-128:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+192:     ST  1,-14(1)	Store fp in ghost frame for outnl
+* TOFF dec: -15
+* TOFF dec: -16
+* Param end outnl
+193:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+194:    LDA  3,1(7)	Return address in ac 
+195:    JMP  7,-162(7)	CALL outnl
+196:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-129:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-130:    LDA  3,-3(1)	Load base address of array a 
-131:     ST  3,-17(1)	Push left side onto temp variable stack 
-132:    LDA  3,-9(1)	Load base address of array b 
-133:     LD  4,-17(1)	Pop left hand side into AC1 
-134:    TGE  3,4,3	GEQ >- operation store in AC 
-135:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-136:    LDA  1,-14(1)	Move the fp to the new frame 
-137:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-138:    JMP  7,-122(7)	Call function 
-139:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+197:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+198:    LDA  3,-3(1)	Load address of base of array a
+199:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+200:    LDA  3,-9(1)	Load address of base of array b
+* TOFF inc: -16
+201:     LD  4,-16(1)	Pop left into ac1 
+202:     LD  5,1(3)	AC2 <- |RHS| 
+203:     LD  6,1(4)	AC3 <- |LHS| 
+204:    LDA  2,0(5)	R2 <- |RHS| 
+205:    SWP  5,6,6	pick smallest size 
+206:     LD  6,1(4)	AC3 <- |LHS| 
+207:     CO  4,3,5	setup array compare  LHS vs RHS 
+208:    TNE  5,4,3	if not equal then test (AC1, AC) 
+209:    JNZ  5,2,7	jump not equal 
+210:    LDA  3,0(2)	AC1 <- |RHS| 
+211:    LDA  4,0(6)	AC <- |LHS| 
+212:    TGE  3,4,3	Op >= 
+213:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+214:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+215:    LDA  3,1(7)	Return address in ac 
+216:    JMP  7,-200(7)	CALL outputb
+217:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-140:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-141:    LDA  3,-9(1)	Load base address of array b 
-142:     ST  3,-17(1)	Push left side onto temp variable stack 
-143:    LDA  3,-3(1)	Load base address of array a 
-144:     LD  4,-17(1)	Pop left hand side into AC1 
-145:    TGE  3,4,3	GEQ >- operation store in AC 
-146:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-147:    LDA  1,-14(1)	Move the fp to the new frame 
-148:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-149:    JMP  7,-133(7)	Call function 
-150:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+218:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+219:    LDA  3,-9(1)	Load address of base of array b
+220:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+221:    LDA  3,-3(1)	Load address of base of array a
+* TOFF inc: -16
+222:     LD  4,-16(1)	Pop left into ac1 
+223:     LD  5,1(3)	AC2 <- |RHS| 
+224:     LD  6,1(4)	AC3 <- |LHS| 
+225:    LDA  2,0(5)	R2 <- |RHS| 
+226:    SWP  5,6,6	pick smallest size 
+227:     LD  6,1(4)	AC3 <- |LHS| 
+228:     CO  4,3,5	setup array compare  LHS vs RHS 
+229:    TNE  5,4,3	if not equal then test (AC1, AC) 
+230:    JNZ  5,2,7	jump not equal 
+231:    LDA  3,0(2)	AC1 <- |RHS| 
+232:    LDA  4,0(6)	AC <- |LHS| 
+233:    TGE  3,4,3	Op >= 
+234:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+235:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+236:    LDA  3,1(7)	Return address in ac 
+237:    JMP  7,-221(7)	CALL outputb
+238:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outnl
-151:     ST  1,-14(1)	Store fp in ghost frame for outnl 
-* Begin call
-152:    LDA  1,-14(1)	Move the fp to the new frame 
-153:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-154:    JMP  7,-121(7)	Call function 
-155:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+239:     ST  1,-14(1)	Store fp in ghost frame for outnl
+* TOFF dec: -15
+* TOFF dec: -16
+* Param end outnl
+240:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+241:    LDA  3,1(7)	Return address in ac 
+242:    JMP  7,-209(7)	CALL outnl
+243:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-156:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-157:    LDA  3,-3(1)	Load base address of array a 
-158:     ST  3,-17(1)	Push left side onto temp variable stack 
-159:    LDA  3,-9(1)	Load base address of array b 
-160:     LD  4,-17(1)	Pop left hand side into AC1 
-161:    TLT  3,4,3	Less than < operation store in AC 
-162:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-163:    LDA  1,-14(1)	Move the fp to the new frame 
-164:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-165:    JMP  7,-149(7)	Call function 
-166:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+244:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+245:    LDA  3,-3(1)	Load address of base of array a
+246:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+247:    LDA  3,-9(1)	Load address of base of array b
+* TOFF inc: -16
+248:     LD  4,-16(1)	Pop left into ac1 
+249:     LD  5,1(3)	AC2 <- |RHS| 
+250:     LD  6,1(4)	AC3 <- |LHS| 
+251:    LDA  2,0(5)	R2 <- |RHS| 
+252:    SWP  5,6,6	pick smallest size 
+253:     LD  6,1(4)	AC3 <- |LHS| 
+254:     CO  4,3,5	setup array compare  LHS vs RHS 
+255:    TNE  5,4,3	if not equal then test (AC1, AC) 
+256:    JNZ  5,2,7	jump not equal 
+257:    LDA  3,0(2)	AC1 <- |RHS| 
+258:    LDA  4,0(6)	AC <- |LHS| 
+259:    TLT  3,4,3	Op < 
+260:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+261:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+262:    LDA  3,1(7)	Return address in ac 
+263:    JMP  7,-247(7)	CALL outputb
+264:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-167:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-168:    LDA  3,-9(1)	Load base address of array b 
-169:     ST  3,-17(1)	Push left side onto temp variable stack 
-170:    LDA  3,-3(1)	Load base address of array a 
-171:     LD  4,-17(1)	Pop left hand side into AC1 
-172:    TLT  3,4,3	Less than < operation store in AC 
-173:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-174:    LDA  1,-14(1)	Move the fp to the new frame 
-175:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-176:    JMP  7,-160(7)	Call function 
-177:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+265:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+266:    LDA  3,-9(1)	Load address of base of array b
+267:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+268:    LDA  3,-3(1)	Load address of base of array a
+* TOFF inc: -16
+269:     LD  4,-16(1)	Pop left into ac1 
+270:     LD  5,1(3)	AC2 <- |RHS| 
+271:     LD  6,1(4)	AC3 <- |LHS| 
+272:    LDA  2,0(5)	R2 <- |RHS| 
+273:    SWP  5,6,6	pick smallest size 
+274:     LD  6,1(4)	AC3 <- |LHS| 
+275:     CO  4,3,5	setup array compare  LHS vs RHS 
+276:    TNE  5,4,3	if not equal then test (AC1, AC) 
+277:    JNZ  5,2,7	jump not equal 
+278:    LDA  3,0(2)	AC1 <- |RHS| 
+279:    LDA  4,0(6)	AC <- |LHS| 
+280:    TLT  3,4,3	Op < 
+281:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+282:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+283:    LDA  3,1(7)	Return address in ac 
+284:    JMP  7,-268(7)	CALL outputb
+285:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outnl
-178:     ST  1,-14(1)	Store fp in ghost frame for outnl 
-* Begin call
-179:    LDA  1,-14(1)	Move the fp to the new frame 
-180:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-181:    JMP  7,-148(7)	Call function 
-182:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+286:     ST  1,-14(1)	Store fp in ghost frame for outnl
+* TOFF dec: -15
+* TOFF dec: -16
+* Param end outnl
+287:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+288:    LDA  3,1(7)	Return address in ac 
+289:    JMP  7,-256(7)	CALL outnl
+290:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-183:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-184:    LDA  3,-3(1)	Load base address of array a 
-185:     ST  3,-17(1)	Push left side onto temp variable stack 
-186:    LDA  3,-9(1)	Load base address of array b 
-187:     LD  4,-17(1)	Pop left hand side into AC1 
-188:    TLE  3,4,3	LEQ <= operation store in AC 
-189:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-190:    LDA  1,-14(1)	Move the fp to the new frame 
-191:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-192:    JMP  7,-176(7)	Call function 
-193:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+291:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+292:    LDA  3,-3(1)	Load address of base of array a
+293:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+294:    LDA  3,-9(1)	Load address of base of array b
+* TOFF inc: -16
+295:     LD  4,-16(1)	Pop left into ac1 
+296:     LD  5,1(3)	AC2 <- |RHS| 
+297:     LD  6,1(4)	AC3 <- |LHS| 
+298:    LDA  2,0(5)	R2 <- |RHS| 
+299:    SWP  5,6,6	pick smallest size 
+300:     LD  6,1(4)	AC3 <- |LHS| 
+301:     CO  4,3,5	setup array compare  LHS vs RHS 
+302:    TNE  5,4,3	if not equal then test (AC1, AC) 
+303:    JNZ  5,2,7	jump not equal 
+304:    LDA  3,0(2)	AC1 <- |RHS| 
+305:    LDA  4,0(6)	AC <- |LHS| 
+306:    TLE  3,4,3	Op <= 
+307:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+308:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+309:    LDA  3,1(7)	Return address in ac 
+310:    JMP  7,-294(7)	CALL outputb
+311:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outputb
-194:     ST  1,-14(1)	Store fp in ghost frame for outputb 
-195:    LDA  3,-9(1)	Load base address of array b 
-196:     ST  3,-17(1)	Push left side onto temp variable stack 
-197:    LDA  3,-3(1)	Load base address of array a 
-198:     LD  4,-17(1)	Pop left hand side into AC1 
-199:    TLE  3,4,3	LEQ <= operation store in AC 
-200:     ST  3,-16(1)	Push parameter onto new frame 
-* Begin call
-201:    LDA  1,-14(1)	Move the fp to the new frame 
-202:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-203:    JMP  7,-187(7)	Call function 
-204:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+312:     ST  1,-14(1)	Store fp in ghost frame for outputb
+* TOFF dec: -15
+* TOFF dec: -16
+* Param 1
+313:    LDA  3,-9(1)	Load address of base of array b
+314:     ST  3,-16(1)	Push left side 
+* TOFF dec: -17
+315:    LDA  3,-3(1)	Load address of base of array a
+* TOFF inc: -16
+316:     LD  4,-16(1)	Pop left into ac1 
+317:     LD  5,1(3)	AC2 <- |RHS| 
+318:     LD  6,1(4)	AC3 <- |LHS| 
+319:    LDA  2,0(5)	R2 <- |RHS| 
+320:    SWP  5,6,6	pick smallest size 
+321:     LD  6,1(4)	AC3 <- |LHS| 
+322:     CO  4,3,5	setup array compare  LHS vs RHS 
+323:    TNE  5,4,3	if not equal then test (AC1, AC) 
+324:    JNZ  5,2,7	jump not equal 
+325:    LDA  3,0(2)	AC1 <- |RHS| 
+326:    LDA  4,0(6)	AC <- |LHS| 
+327:    TLE  3,4,3	Op <= 
+328:     ST  3,-16(1)	Push parameter 
+* TOFF dec: -17
+* Param end outputb
+329:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+330:    LDA  3,1(7)	Return address in ac 
+331:    JMP  7,-315(7)	CALL outputb
+332:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -14
+* EXPRESSION
 * CALL outnl
-205:     ST  1,-14(1)	Store fp in ghost frame for outnl 
-* Begin call
-206:    LDA  1,-14(1)	Move the fp to the new frame 
-207:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-208:    JMP  7,-175(7)	Call function 
-209:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+333:     ST  1,-14(1)	Store fp in ghost frame for outnl
+* TOFF dec: -15
+* TOFF dec: -16
+* Param end outnl
+334:    LDA  1,-14(1)	Ghost frame becomes new active frame 
+335:    LDA  3,1(7)	Return address in ac 
+336:    JMP  7,-303(7)	CALL outnl
+337:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -14
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
-210:    LDC  2,0(6)	Set return value to 0 
-211:     LD  3,-1(1)	Load return address 
-212:     LD  1,0(1)	Adjust fp 
-213:    JMP  7,0(3)	Return 
+338:    LDC  2,0(6)	Set return value to 0 
+339:     LD  3,-1(1)	Load return address 
+340:     LD  1,0(1)	Adjust fp 
+341:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
-  0:    JMP  7,213(7)	Jump to init [backpatch] 
+  0:    JMP  7,341(7)	Jump to init [backpatch] 
 * INIT
-214:    LDA  1,-10(0)	set first frame at end of globals 
-215:     ST  1,0(1)	store old fp (point to self) 
+342:    LDA  1,-10(0)	set first frame at end of globals 
+343:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
 * END INIT GLOBALS AND STATICS
-216:    LDA  3,1(7)	Return address in ac 
-217:    JMP  7,-179(7)	Jump to main 
-218:   HALT  0,0,0	DONE! 
+344:    LDA  3,1(7)	Return address in ac 
+345:    JMP  7,-307(7)	Jump to main 
+346:   HALT  0,0,0	DONE! 
 * END INIT

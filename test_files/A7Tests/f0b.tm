@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  f0b.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,20 +71,31 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION cat
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
 * CALL output
- 40:     ST  1,-2(1)	Store fp in ghost frame for output 
- 41:     LD  3,0(0)	Load variable z into accumulator 
- 42:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 43:    LDA  1,-2(1)	Move the fp to the new frame 
- 44:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 45:    JMP  7,-40(7)	Call function 
- 46:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
- 47:    LDC  3,99(6)	Load of type int constant 
- 48:     ST  3,0(0)	Assigning variable z in Global 
+ 40:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 41:     LD  3,0(0)	Load variable z
+ 42:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 43:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 44:    LDA  3,1(7)	Return address in ac 
+ 45:    JMP  7,-40(7)	CALL output
+ 46:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
+* EXPRESSION
+ 47:    LDC  3,99(6)	Load integer constant 
+ 48:     ST  3,0(0)	Store variable z
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  49:    LDC  2,0(6)	Set return value to 0 
@@ -92,36 +106,55 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  53:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 54:    LDC  3,1001(6)	Load of type int constant 
- 55:     ST  3,0(0)	Assigning variable z in Global 
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
+ 54:    LDC  3,1001(6)	Load integer constant 
+ 55:     ST  3,0(0)	Store variable z
+* EXPRESSION
 * CALL cat
- 56:     ST  1,-2(1)	Store fp in ghost frame for cat 
-* Begin call
- 57:    LDA  1,-2(1)	Move the fp to the new frame 
- 58:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 59:    JMP  7,-21(7)	Call function 
- 60:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL cat
+ 56:     ST  1,-2(1)	Store fp in ghost frame for cat
+* TOFF dec: -3
+* TOFF dec: -4
+* Param end cat
+ 57:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 58:    LDA  3,1(7)	Return address in ac 
+ 59:    JMP  7,-21(7)	CALL cat
+ 60:    LDA  3,0(2)	Save the result in ac 
+* Call end cat
+* TOFF set: -2
+* EXPRESSION
 * CALL output
- 61:     ST  1,-2(1)	Store fp in ghost frame for output 
- 62:     LD  3,0(0)	Load variable z into accumulator 
- 63:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 64:    LDA  1,-2(1)	Move the fp to the new frame 
- 65:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 66:    JMP  7,-61(7)	Call function 
- 67:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 61:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 62:     LD  3,0(0)	Load variable z
+ 63:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 64:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 65:    LDA  3,1(7)	Return address in ac 
+ 66:    JMP  7,-61(7)	CALL output
+ 67:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
+* EXPRESSION
 * CALL outnl
- 68:     ST  1,-2(1)	Store fp in ghost frame for outnl 
-* Begin call
- 69:    LDA  1,-2(1)	Move the fp to the new frame 
- 70:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 71:    JMP  7,-38(7)	Call function 
- 72:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+ 68:     ST  1,-2(1)	Store fp in ghost frame for outnl
+* TOFF dec: -3
+* TOFF dec: -4
+* Param end outnl
+ 69:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 70:    LDA  3,1(7)	Return address in ac 
+ 71:    JMP  7,-38(7)	CALL outnl
+ 72:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -2
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  73:    LDC  2,0(6)	Set return value to 0 
@@ -129,7 +162,6 @@
  75:     LD  1,0(1)	Adjust fp 
  76:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,76(7)	Jump to init [backpatch] 
 * INIT
  77:    LDA  1,-1(0)	set first frame at end of globals 

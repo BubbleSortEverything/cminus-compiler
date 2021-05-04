@@ -92,5 +92,3 @@ Sibling: 3  Func: main returns of type void [line: 5]
 .   .   .   .   Child: 0  Id: t of type bool [mem: Local loc: -41 size: 1] [line: 48]
 .   .   .   Sibling: 3  Call: outnl of type void [line: 49]
 Offset for end of global space: -33
-Number of warnings: 2
-Number of errors: 0

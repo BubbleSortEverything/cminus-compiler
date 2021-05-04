@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  a001.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,9 +71,14 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,666(6)	Load of type int constant 
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
+ 40:    LDC  3,666(6)	Load integer constant 
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  41:    LDC  2,0(6)	Set return value to 0 
@@ -78,7 +86,6 @@
  43:     LD  1,0(1)	Adjust fp 
  44:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,44(7)	Jump to init [backpatch] 
 * INIT
  45:    LDA  1,0(0)	set first frame at end of globals 

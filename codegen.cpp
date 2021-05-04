@@ -7,7 +7,7 @@
 #include "string.h"
 
 // Prototypes
-void _generateCode(TokenTree *tree);
+void emitCode(TokenTree *tree);
 
 extern TokenTree *syntaxTree;
 extern SymbolTable *symbolTable;
@@ -19,22 +19,22 @@ int fOffset;
 
 std::stack<int> lastLineOfWhile;
 
-void lineSep() {
-    emitComment((char *) "** ** ** ** ** ** ** ** ** ** ** **");
-}
+void generateAstrik() { emitComment((char *) "** ** ** ** ** ** ** ** ** ** ** **"); }
 
-void funcHeader(char *funcName) {
-    lineSep();
+void funcHeader(char *funcName) 
+{
+    generateAstrik();
+    
     char *line;
     asprintf(&line, "FUNCTION %s", funcName);
     emitComment(line);
     free(line);
-    // Save function address!
-    TokenTree *func = (TokenTree *) symbolTable->lookupGlobal(funcName);
-    if (func == NULL) {
-        throw std::runtime_error("ERROR: Symbol table lookup error.");
-    }
-    func->setMemoryOffset(emitSkip(0));
+
+    // important to save function address
+    TokenTree *funcNode = (TokenTree *) symbolTable->lookupGlobal(funcName);
+    if (funcNode == NULL) { throw std::runtime_error("ERROR: Symbol table lookup error."); }
+
+    funcNode->setMemoryOffset(emitSkip(0));
     emitRM((char *) "ST", 3, -1, 1, (char *) "Store return address");
 }
 
@@ -276,7 +276,7 @@ void initGlobal(TokenTree *tree) {
             tree->setGenerated(false, true);
             for (int i = 0; i < MAX_CHILDREN; i++) {
                 if (tree->children[i] != NULL) {
-                    _generateCode(tree->children[i]);
+                    emitCode(tree->children[i]);
                 }
             }
             if (tree->children[0] != NULL) {
@@ -334,7 +334,7 @@ void processMathAssign(TokenTree *tree) {
     }
 }
 
-void generateInit() {
+void initGenerator() {
     backPatchAJumpToHere(0, (char *) "Jump to init [backpatch]");
     emitComment((char *) "INIT");
     // emitRM((char *) "LD", 0, 0, 0, (char *) "Set the global pointer");
@@ -434,7 +434,7 @@ void beforeChildrenCodeGen(TokenTree *tree) {
                     for (int i = 0; i < MAX_CHILDREN; i++) {
                         TokenTree *child = tree->children[i];
                         if (child != NULL) {
-                            _generateCode(child);
+                            emitCode(child);
                         }
                     }
 
@@ -470,17 +470,17 @@ void beforeChildrenCodeGen(TokenTree *tree) {
                 case 5: {
                     emitComment((char *) "BEGIN IF BLOCK");
                     int currentLoc, saveLoc1, saveLoc2;
-                    _generateCode(tree->children[0]);
+                    emitCode(tree->children[0]);
                     saveLoc1 = emitSkip(1);
                     emitComment((char *) "IF JUMP TO ELSE");
-                    _generateCode(tree->children[1]);
+                    emitCode(tree->children[1]);
                     saveLoc2 = emitSkip(1);
                     emitComment((char *) "IF JUMP TO END");
                     currentLoc = emitSkip(0);
                     emitNewLoc(saveLoc1);
                     emitRMAbs((char *) "JZR", AC, currentLoc, (char *) "IF JMP TO ELSE");
                     emitNewLoc(currentLoc);
-                    _generateCode(tree->children[2]);
+                    emitCode(tree->children[2]);
                     currentLoc = emitSkip(0);
                     emitNewLoc(saveLoc2);
                     emitRMAbs((char *) "LDA", PC, currentLoc, (char *) "JUMP TO END");
@@ -491,9 +491,9 @@ void beforeChildrenCodeGen(TokenTree *tree) {
                 case 3: {
                     emitComment((char *) "Beginning WHILE statement");
                     int L1 = emitSkip(0);
-                    _generateCode(tree->children[0]);
+                    emitCode(tree->children[0]);
                     int bp = emitSkip(1);
-                    _generateCode(tree->children[1]);
+                    emitCode(tree->children[1]);
                     emitGotoAbs(L1, (char *) "Go to L1");
                     int end = emitSkip(0);
                     emitNewLoc(bp);
@@ -511,7 +511,7 @@ void beforeChildrenCodeGen(TokenTree *tree) {
     }
 }
 
-void afterChildrenCodeGen(TokenTree *tree) {
+void childGenerator(TokenTree *tree) {
     switch (tree->getNodeKind()) {
         case 0: {
             switch (tree->getDeclKind()) {
@@ -681,7 +681,8 @@ void afterChildCodeGen(TokenTree *tree, int i) {
     }
 }
 
-void _generateCode(TokenTree *tree) {
+void emitCode(TokenTree *tree) 
+{
     if (tree == NULL or tree->wasGenerated()) { // Skip already generated code
         return;
     }
@@ -691,23 +692,21 @@ void _generateCode(TokenTree *tree) {
     for (int i = 0; i < MAX_CHILDREN; i++) {
         TokenTree *child = tree->children[i];
         if (child != NULL) {
-            _generateCode(child);
+            emitCode(child);
             afterChildCodeGen(tree, i);
         }
     }
 
-    afterChildrenCodeGen(tree);
-
-    if (tree->sibling != NULL) {
-        _generateCode(tree->sibling);
-    }
-    
+    childGenerator(tree);
+    if (tree->sibling != NULL) emitCode(tree->sibling);
 }
 
-void generateCode() {
-    generateHeader();
-    emitSkip(1); // Leave space for backpatch
-    generateIOLibrary();
-    _generateCode(syntaxTree);
-    generateInit();
+void generateCode() 
+{
+    generateHeader();   // header generation
+    emitSkip(1);    // backpatch
+    generateIOLibrary();    // io library generation
+
+    emitCode(syntaxTree);   // emit tm code
+    initGenerator();
 }

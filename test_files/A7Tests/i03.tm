@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  i03.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,39 +71,50 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
 * CALL output
- 40:     ST  1,-2(1)	Store fp in ghost frame for output 
- 41:    LDA  3,-1(0)	Load base address of array gc 
- 42:    LDA  3,-1(0)	Load address of base array gc 
- 43:     LD  3,1(3)	Load array size 
- 44:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 45:    LDA  1,-2(1)	Move the fp to the new frame 
- 46:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 47:    JMP  7,-42(7)	Call function 
- 48:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 40:     ST  1,-2(1)	Store fp in ghost frame for output
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 41:    LDA  3,-1(0)	Load address of base of array gc
+ 42:     LD  3,1(3)	Load array size 
+ 43:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end output
+ 44:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 45:    LDA  3,1(7)	Return address in ac 
+ 46:    JMP  7,-41(7)	CALL output
+ 47:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -2
 * COMPOUND
+* TOFF set: -2
+* Compound Body
+* TOFF set: -2
 * END COMPOUND
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
- 49:    LDC  2,0(6)	Set return value to 0 
- 50:     LD  3,-1(1)	Load return address 
- 51:     LD  1,0(1)	Adjust fp 
- 52:    JMP  7,0(3)	Return 
+ 48:    LDC  2,0(6)	Set return value to 0 
+ 49:     LD  3,-1(1)	Load return address 
+ 50:     LD  1,0(1)	Adjust fp 
+ 51:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
-  0:    JMP  7,52(7)	Jump to init [backpatch] 
+  0:    JMP  7,51(7)	Jump to init [backpatch] 
 * INIT
- 53:    LDA  1,-14(0)	set first frame at end of globals 
- 54:     ST  1,0(1)	store old fp (point to self) 
+ 52:    LDA  1,-14(0)	set first frame at end of globals 
+ 53:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
- 55:    LDC  3,13(6)	Load size of gc into AC 
- 56:     ST  3,0(0)	Store size of gc in data memory 
+ 54:    LDC  3,13(6)	load size of array gc
+ 55:     ST  3,0(0)	save size of array gc
 * END INIT GLOBALS AND STATICS
- 57:    LDA  3,1(7)	Return address in ac 
- 58:    JMP  7,-20(7)	Jump to main 
- 59:   HALT  0,0,0	DONE! 
+ 56:    LDA  3,1(7)	Return address in ac 
+ 57:    JMP  7,-19(7)	Jump to main 
+ 58:   HALT  0,0,0	DONE! 
 * END INIT

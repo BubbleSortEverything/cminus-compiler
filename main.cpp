@@ -1,6 +1,6 @@
 /*  Author: Oshan Karki         Course: Compiler-Construction
  *  Year: Spring 2021
- *                  [ ** dirver program for c- compiler ** ]
+ *                  [*** dirver program for c- compiler ***]
  */
 
 /*  standard libs
@@ -19,32 +19,40 @@
 #include "codegen.h"
 #include "util.h"
 
+/*  prototype
+ */
+void useageMessage();   // prints useaga message
+size_t bstrcpy(char *dest, size_t size, const char *src);
 
 /*  global variables
  */
+// errors and warnings
 int numErrors = 0;
 int numWarnings = 0;
+
+// memory management
 int localOffset = -2;
 int globalOffset = 0;
-bool symtabDebug = false;
 bool printMem = false;
+
+// symbnol table
+bool symtabDebug = false;
 TokenTree *syntaxTree;
 SymbolTable *symbolTable;
 FILE *code;
 
-/*  externals
- */
+// externals
 extern int yyparse();
 extern int yydebug;
 extern FILE *yyin;
 
-/*  main driver function
- */
-int main(int argc, char **argv) {
+// main driver
+int main(int argc, char **argv) 
+{
     extern int optind;
     bool printAST = false;
     char *fileName = NULL;
-    char *outputFileName = NULL;
+    char *outputFile = NULL;
     int c;
 
     initErrorProcessing();
@@ -55,12 +63,7 @@ int main(int argc, char **argv) {
                 yydebug = true;
                 break;
             case 'h':
-                printf("Usage: c- [options] [sourceFile]\n");
-                printf("  -d  turn on Bison debugging\n");
-                printf("  -h  this usage message\n");
-                printf("  -P  print abstract syntax tree + types\n");
-                printf("  -M  print abstract syntax tree + types + memory info\n");
-                printf("  -D  turn on symbol table debugging\n");
+                useageMessage();
                 return 0;
             case 'P':
                 printAST = true;
@@ -71,6 +74,8 @@ int main(int argc, char **argv) {
                 break;
             case 'D':
                 symtabDebug = true;
+                break;
+            default:
                 break;
         }
     }
@@ -96,19 +101,48 @@ int main(int argc, char **argv) {
 
         if (numErrors == 0) {
             if (fileName == NULL) {
-                outputFileName = (char *) "out.tm";
-            } else {
+                outputFile = (char *) "out.tm";
+            } 
+            else {
                 int outLength = strlen(fileName) + 1;
-                outputFileName = (char *) malloc(sizeof(char) * outLength);
-                bstrcpy(outputFileName, outLength, fileName);
-                outputFileName[outLength - 3] = 't';
-                outputFileName[outLength - 2] = 'm';
+                outputFile = (char *) malloc(sizeof(char) * outLength);
+                bstrcpy(outputFile, outLength, fileName);
+                outputFile[outLength - 3] = 't';
+                outputFile[outLength - 2] = 'm';
             }
-            code = fopen(outputFileName, "w");
+            code = fopen(outputFile, "w");
             generateCode();
         }
     }
     
     printf("Number of warnings: %d\n", numWarnings);
     printf("Number of errors: %d\n", numErrors);
+}
+
+
+void useageMessage() 
+{
+    printf("Usage: c-[options] [sourceFile]\n");
+    printf("options\n");
+    printf("-d      - turn on parser debugging\n");
+    printf("-D      - turn on symbol table debugging\n");
+    printf("-h      - this usage message\n");
+    printf("-p      - print the abstract syntax tree\n");
+    printf("-P      - print the abstract syntax tree plus type information\n");
+    printf("-M      - print abstract syntax tree + extra types + memory offsets\n");
+}
+
+size_t bstrcpy(char *dest, size_t size, const char *src) 
+{
+    size_t i;
+    for (i = 0; i + 1 < size && src[i] != '\0'; i++) {
+        dest[i] = src[i];
+    }
+
+    if (i < size) { dest[i] = '\0'; }
+    while (src[i] != '\0') {
+        i++;
+    }
+
+    return i;
 }

@@ -25,7 +25,7 @@ do
     echo "FILE: $file"
     file=`basename $file '.c-'`
         rm -f $file.tm $file.out
-        $compiler  $file.c- > $file.tm
+        # $compiler  $file.c- > $file.tm
         $compiler  $file.c- > $file.out
         $compiler -M $file.c- > $file.mem
         # echo "------------------------------------" >> $file.out

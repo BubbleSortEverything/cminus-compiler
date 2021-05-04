@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  f06.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,13 +71,18 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION cat
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,1(6)	Load of type bool constant 
- 41:    LDA  2,0(3)	Copy accumulator to return register 
+* TOFF set: -2
+* Compound Body
+* RETURN
+ 40:    LDC  3,1(6)	Load Boolean constant 
+ 41:    LDA  2,0(3)	Copy result to return register 
  42:     LD  3,-1(1)	Load return address 
  43:     LD  1,0(1)	Adjust fp 
  44:    JMP  7,0(3)	Return 
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  45:    LDC  2,0(6)	Set return value to 0 
@@ -85,83 +93,125 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  49:     ST  3,-1(1)	Store return address 
 * COMPOUND
+* TOFF set: -3
+* Compound Body
+* EXPRESSION
 * CALL cat
- 50:     ST  1,-3(1)	Store fp in ghost frame for cat 
-* Begin call
- 51:    LDA  1,-3(1)	Move the fp to the new frame 
- 52:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 53:    JMP  7,-15(7)	Call function 
- 54:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL cat
- 55:     ST  3,-3(1)	Push left side onto temp variable stack 
- 56:    LDC  3,0(6)	Load of type bool constant 
- 57:     LD  4,-3(1)	Pop left hand side into AC1 
- 58:    AND  3,4,3	AND operation store in AC 
- 59:     ST  3,-2(1)	Assigning variable x in Local 
+ 50:     ST  1,-3(1)	Store fp in ghost frame for cat
+* TOFF dec: -4
+* TOFF dec: -5
+* Param end cat
+ 51:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 52:    LDA  3,1(7)	Return address in ac 
+ 53:    JMP  7,-15(7)	CALL cat
+ 54:    LDA  3,0(2)	Save the result in ac 
+* Call end cat
+* TOFF set: -3
+ 55:     ST  3,-3(1)	Push left side 
+* TOFF dec: -4
+ 56:    LDC  3,0(6)	Load Boolean constant 
+* TOFF inc: -3
+ 57:     LD  4,-3(1)	Pop left into ac1 
+ 58:    AND  3,4,3	Op AND 
+ 59:     ST  3,-2(1)	Store variable x
+* EXPRESSION
 * CALL outputb
- 60:     ST  1,-3(1)	Store fp in ghost frame for outputb 
- 61:     LD  3,-2(1)	Load variable x into accumulator 
- 62:     ST  3,-5(1)	Push parameter onto new frame 
-* Begin call
- 63:    LDA  1,-3(1)	Move the fp to the new frame 
- 64:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 65:    JMP  7,-49(7)	Call function 
- 66:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 60:     ST  1,-3(1)	Store fp in ghost frame for outputb
+* TOFF dec: -4
+* TOFF dec: -5
+* Param 1
+ 61:     LD  3,-2(1)	Load variable x
+ 62:     ST  3,-5(1)	Push parameter 
+* TOFF dec: -6
+* Param end outputb
+ 63:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 64:    LDA  3,1(7)	Return address in ac 
+ 65:    JMP  7,-49(7)	CALL outputb
+ 66:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -3
+* EXPRESSION
 * CALL cat
- 67:     ST  1,-3(1)	Store fp in ghost frame for cat 
-* Begin call
- 68:    LDA  1,-3(1)	Move the fp to the new frame 
- 69:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 70:    JMP  7,-32(7)	Call function 
- 71:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL cat
- 72:     ST  3,-3(1)	Push left side onto temp variable stack 
- 73:    LDC  3,0(6)	Load of type bool constant 
- 74:     LD  4,-3(1)	Pop left hand side into AC1 
- 75:     OR  3,4,3	OR operation store in AC 
- 76:     ST  3,-2(1)	Assigning variable x in Local 
+ 67:     ST  1,-3(1)	Store fp in ghost frame for cat
+* TOFF dec: -4
+* TOFF dec: -5
+* Param end cat
+ 68:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 69:    LDA  3,1(7)	Return address in ac 
+ 70:    JMP  7,-32(7)	CALL cat
+ 71:    LDA  3,0(2)	Save the result in ac 
+* Call end cat
+* TOFF set: -3
+ 72:     ST  3,-3(1)	Push left side 
+* TOFF dec: -4
+ 73:    LDC  3,0(6)	Load Boolean constant 
+* TOFF inc: -3
+ 74:     LD  4,-3(1)	Pop left into ac1 
+ 75:     OR  3,4,3	Op OR 
+ 76:     ST  3,-2(1)	Store variable x
+* EXPRESSION
 * CALL outputb
- 77:     ST  1,-3(1)	Store fp in ghost frame for outputb 
- 78:     LD  3,-2(1)	Load variable x into accumulator 
- 79:     ST  3,-5(1)	Push parameter onto new frame 
-* Begin call
- 80:    LDA  1,-3(1)	Move the fp to the new frame 
- 81:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 82:    JMP  7,-66(7)	Call function 
- 83:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 77:     ST  1,-3(1)	Store fp in ghost frame for outputb
+* TOFF dec: -4
+* TOFF dec: -5
+* Param 1
+ 78:     LD  3,-2(1)	Load variable x
+ 79:     ST  3,-5(1)	Push parameter 
+* TOFF dec: -6
+* Param end outputb
+ 80:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 81:    LDA  3,1(7)	Return address in ac 
+ 82:    JMP  7,-66(7)	CALL outputb
+ 83:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -3
+* EXPRESSION
 * CALL cat
- 84:     ST  1,-3(1)	Store fp in ghost frame for cat 
-* Begin call
- 85:    LDA  1,-3(1)	Move the fp to the new frame 
- 86:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 87:    JMP  7,-49(7)	Call function 
- 88:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL cat
- 89:    LDC  4,1(6)	Load 1 into AC1 for not operation 
- 90:    TNE  3,4,3	Not ! operation store in AC 
- 91:     ST  3,-2(1)	Assigning variable x in Local 
+ 84:     ST  1,-3(1)	Store fp in ghost frame for cat
+* TOFF dec: -4
+* TOFF dec: -5
+* Param end cat
+ 85:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 86:    LDA  3,1(7)	Return address in ac 
+ 87:    JMP  7,-49(7)	CALL cat
+ 88:    LDA  3,0(2)	Save the result in ac 
+* Call end cat
+* TOFF set: -3
+ 89:    LDC  4,1(6)	Load 1 
+ 90:    XOR  3,3,4	Op XOR to get logical not 
+ 91:     ST  3,-2(1)	Store variable x
+* EXPRESSION
 * CALL outputb
- 92:     ST  1,-3(1)	Store fp in ghost frame for outputb 
- 93:     LD  3,-2(1)	Load variable x into accumulator 
- 94:     ST  3,-5(1)	Push parameter onto new frame 
-* Begin call
- 95:    LDA  1,-3(1)	Move the fp to the new frame 
- 96:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 97:    JMP  7,-81(7)	Call function 
- 98:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 92:     ST  1,-3(1)	Store fp in ghost frame for outputb
+* TOFF dec: -4
+* TOFF dec: -5
+* Param 1
+ 93:     LD  3,-2(1)	Load variable x
+ 94:     ST  3,-5(1)	Push parameter 
+* TOFF dec: -6
+* Param end outputb
+ 95:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 96:    LDA  3,1(7)	Return address in ac 
+ 97:    JMP  7,-81(7)	CALL outputb
+ 98:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -3
+* EXPRESSION
 * CALL outnl
- 99:     ST  1,-3(1)	Store fp in ghost frame for outnl 
-* Begin call
-100:    LDA  1,-3(1)	Move the fp to the new frame 
-101:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-102:    JMP  7,-69(7)	Call function 
-103:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+ 99:     ST  1,-3(1)	Store fp in ghost frame for outnl
+* TOFF dec: -4
+* TOFF dec: -5
+* Param end outnl
+100:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+101:    LDA  3,1(7)	Return address in ac 
+102:    JMP  7,-69(7)	CALL outnl
+103:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -3
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
 104:    LDC  2,0(6)	Set return value to 0 
@@ -169,7 +219,6 @@
 106:     LD  1,0(1)	Adjust fp 
 107:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,107(7)	Jump to init [backpatch] 
 * INIT
 108:    LDA  1,0(0)	set first frame at end of globals 

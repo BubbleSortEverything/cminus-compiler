@@ -12,14 +12,14 @@ char *lastToken;
 extern int numErrors;
 extern int numWarnings;
 
-char *stringProcess(char *string, int *newLen) {
+char *stringProcess(char *string, int *newLen) 
+{
 	char *returnStr = (char *) calloc(strlen(string), sizeof(char));
-	int i;
 	int j = 0;
-	for (i = 1; i < strlen(string) - 1; i++) {
+	for (int i = 1; i < strlen(string) - 1; i++) {
 		if (string[i] == '\\') {
-			char escChar = string[i + 1];
-			switch (escChar) {
+			char escapeChar = string[i + 1];
+			switch (escapeChar) {
 				case '0':
 					returnStr[j++] = '\0';
 					break;
@@ -27,23 +27,24 @@ char *stringProcess(char *string, int *newLen) {
 					returnStr[j++] = '\n';
 					break;
 				default:
-					returnStr[j++] = escChar;
+					returnStr[j++] = escapeChar;
 					break;
 			}	
 			i++;
-		} else {
+		} 
+        else {
 			returnStr[j++] = string[i];
 		}
 	}
 	
-	if (newLen != NULL) {
-		*newLen = j;
-	} 	
+	if (newLen != NULL) *newLen = j;
 
 	return returnStr;
 }
 
-int setValue(int line, int tokenClass, char *svalue) {
+int setValue(int line, int tokenClass, char *svalue) 
+{
+    char *escapeChar;
 	lastToken = svalue;
 	yylval.tree = new TokenTree();
 	yylval.tree->setExprType(ExprType::UNDEFINED);
@@ -51,7 +52,6 @@ int setValue(int line, int tokenClass, char *svalue) {
 	yylval.tree->setLineNum(line);
     yylval.tree->setTokenString(svalue);
 	yylval.tree->setStringValue(svalue);
-    char *escSeq; // Storage for escaped sequence if needed
 
 	switch (tokenClass) {
 		case ID:
@@ -61,27 +61,23 @@ int setValue(int line, int tokenClass, char *svalue) {
 			yylval.tree->setNumValue(atoi(svalue));
 			break;
 		case CHARCONST:
-			escSeq = stringProcess(svalue, NULL);
-			if (strlen(escSeq) > 1) {
-				printf("WARNING(%d): character is %ld characters long and not a single character: '%s'.  The first char will be used.\n", lineNum, strlen(escSeq), svalue);
+			escapeChar = stringProcess(svalue, NULL);
+			if (strlen(escapeChar) > 1) {
+				printf("WARNING(%d): character is %ld characters long and not a single character: '%s'.  The first char will be used.\n", lineNum, strlen(escapeChar), svalue);
 				numWarnings++;
 			}
-			yylval.tree->setCharValue(escSeq[0]);
+			yylval.tree->setCharValue(escapeChar[0]);
 			yylval.tree->setNumValue(1);
-            free(escSeq);
+            free(escapeChar);
 			break;
 		case STRINGCONST:
             int newLen;
-			escSeq = stringProcess(svalue, &newLen);
-            yylval.tree->setStringValue(escSeq, false);
+			escapeChar = stringProcess(svalue, &newLen);
+            yylval.tree->setStringValue(escapeChar, false);
             yylval.tree->setNumValue(newLen); // Storing length of string in nvalue to avoid null values messing stuff up.
 			break;
 		case BOOLCONST:
-			if (strcmp("true", svalue) == 0) {
-				yylval.tree->setNumValue(1);
-			} else {
-				yylval.tree->setNumValue(0);
-			}
+            (strcmp("true", svalue) == 0) ? yylval.tree->setNumValue(1) : yylval.tree->setNumValue(0);
 			break;
 			
 	}

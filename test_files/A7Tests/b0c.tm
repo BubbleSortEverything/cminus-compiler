@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  b0c.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,300 +71,440 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
+* TOFF set: -2
+* Compound Body
+* EXPRESSION
 * CALL outputb
- 40:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 41:    LDC  3,1(6)	Load of type int constant 
- 42:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
- 43:     ST  3,-5(1)	Push left side onto temp variable stack 
- 44:    LDC  3,0(6)	Load of type int constant 
- 45:     LD  4,-5(1)	Pop left hand side into AC1 
- 46:    TEQ  3,4,3	== Equality Operation 
- 47:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 48:    LDA  1,-2(1)	Move the fp to the new frame 
- 49:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 50:    JMP  7,-34(7)	Call function 
- 51:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 40:     ST  1,-2(1)	Store fp in ghost frame for outputb
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 41:    LDC  3,1(6)	Load integer constant 
+ 42:    RND  3,3,6	Op ? 
+ 43:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 44:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -4
+ 45:     LD  4,-4(1)	Pop left into ac1 
+ 46:    TEQ  3,4,3	Op == 
+ 47:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end outputb
+ 48:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 49:    LDA  3,1(7)	Return address in ac 
+ 50:    JMP  7,-34(7)	CALL outputb
+ 51:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -2
+* EXPRESSION
 * CALL outnl
- 52:     ST  1,-2(1)	Store fp in ghost frame for outnl 
-* Begin call
- 53:    LDA  1,-2(1)	Move the fp to the new frame 
- 54:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 55:    JMP  7,-22(7)	Call function 
- 56:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+ 52:     ST  1,-2(1)	Store fp in ghost frame for outnl
+* TOFF dec: -3
+* TOFF dec: -4
+* Param end outnl
+ 53:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 54:    LDA  3,1(7)	Return address in ac 
+ 55:    JMP  7,-22(7)	CALL outnl
+ 56:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -2
+* EXPRESSION
 * CALL outputb
- 57:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 58:    LDC  3,100000(6)	Load of type int constant 
- 59:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
- 60:     ST  3,-5(1)	Push left side onto temp variable stack 
- 61:    LDC  3,0(6)	Load of type int constant 
- 62:     LD  4,-5(1)	Pop left hand side into AC1 
- 63:    TGT  3,4,3	Greather than > operation store in AC 
- 64:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
- 65:    LDA  1,-2(1)	Move the fp to the new frame 
- 66:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 67:    JMP  7,-51(7)	Call function 
- 68:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 57:     ST  1,-2(1)	Store fp in ghost frame for outputb
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 58:    LDC  3,100000(6)	Load integer constant 
+ 59:    RND  3,3,6	Op ? 
+ 60:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 61:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -4
+ 62:     LD  4,-4(1)	Pop left into ac1 
+ 63:    TGT  3,4,3	Op > 
+ 64:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end outputb
+ 65:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+ 66:    LDA  3,1(7)	Return address in ac 
+ 67:    JMP  7,-51(7)	CALL outputb
+ 68:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -2
+* EXPRESSION
 * CALL outputb
- 69:     ST  1,-2(1)	Store fp in ghost frame for outputb 
- 70:    LDC  3,3(6)	Load of type int constant 
- 71:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
- 72:     ST  3,-5(1)	Push left side onto temp variable stack 
- 73:    LDC  3,0(6)	Load of type int constant 
- 74:     LD  4,-5(1)	Pop left hand side into AC1 
- 75:    TGT  3,4,3	Greather than > operation store in AC 
- 76:     ST  3,-5(1)	Push left side onto temp variable stack 
- 77:    LDC  3,3(6)	Load of type int constant 
- 78:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
- 79:     ST  3,-6(1)	Push left side onto temp variable stack 
- 80:    LDC  3,0(6)	Load of type int constant 
- 81:     LD  4,-6(1)	Pop left hand side into AC1 
- 82:    TGT  3,4,3	Greather than > operation store in AC 
- 83:     LD  4,-5(1)	Pop left hand side into AC1 
- 84:    AND  3,4,3	AND operation store in AC 
- 85:     ST  3,-5(1)	Push left side onto temp variable stack 
- 86:    LDC  3,3(6)	Load of type int constant 
- 87:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
- 88:     ST  3,-6(1)	Push left side onto temp variable stack 
- 89:    LDC  3,0(6)	Load of type int constant 
- 90:     LD  4,-6(1)	Pop left hand side into AC1 
- 91:    TGT  3,4,3	Greather than > operation store in AC 
- 92:     LD  4,-5(1)	Pop left hand side into AC1 
- 93:    AND  3,4,3	AND operation store in AC 
- 94:     ST  3,-5(1)	Push left side onto temp variable stack 
- 95:    LDC  3,3(6)	Load of type int constant 
- 96:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
- 97:     ST  3,-6(1)	Push left side onto temp variable stack 
- 98:    LDC  3,0(6)	Load of type int constant 
- 99:     LD  4,-6(1)	Pop left hand side into AC1 
-100:    TGT  3,4,3	Greather than > operation store in AC 
-101:     LD  4,-5(1)	Pop left hand side into AC1 
-102:    AND  3,4,3	AND operation store in AC 
-103:     ST  3,-5(1)	Push left side onto temp variable stack 
-104:    LDC  3,3(6)	Load of type int constant 
-105:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-106:     ST  3,-6(1)	Push left side onto temp variable stack 
-107:    LDC  3,0(6)	Load of type int constant 
-108:     LD  4,-6(1)	Pop left hand side into AC1 
-109:    TGT  3,4,3	Greather than > operation store in AC 
-110:     LD  4,-5(1)	Pop left hand side into AC1 
-111:    AND  3,4,3	AND operation store in AC 
-112:     ST  3,-5(1)	Push left side onto temp variable stack 
-113:    LDC  3,3(6)	Load of type int constant 
-114:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-115:     ST  3,-6(1)	Push left side onto temp variable stack 
-116:    LDC  3,0(6)	Load of type int constant 
-117:     LD  4,-6(1)	Pop left hand side into AC1 
-118:    TGT  3,4,3	Greather than > operation store in AC 
-119:     LD  4,-5(1)	Pop left hand side into AC1 
-120:    AND  3,4,3	AND operation store in AC 
-121:     ST  3,-5(1)	Push left side onto temp variable stack 
-122:    LDC  3,3(6)	Load of type int constant 
-123:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-124:     ST  3,-6(1)	Push left side onto temp variable stack 
-125:    LDC  3,0(6)	Load of type int constant 
-126:     LD  4,-6(1)	Pop left hand side into AC1 
-127:    TGT  3,4,3	Greather than > operation store in AC 
-128:     LD  4,-5(1)	Pop left hand side into AC1 
-129:    AND  3,4,3	AND operation store in AC 
-130:     ST  3,-5(1)	Push left side onto temp variable stack 
-131:    LDC  3,3(6)	Load of type int constant 
-132:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-133:     ST  3,-6(1)	Push left side onto temp variable stack 
-134:    LDC  3,0(6)	Load of type int constant 
-135:     LD  4,-6(1)	Pop left hand side into AC1 
-136:    TGT  3,4,3	Greather than > operation store in AC 
-137:     LD  4,-5(1)	Pop left hand side into AC1 
-138:    AND  3,4,3	AND operation store in AC 
-139:     ST  3,-5(1)	Push left side onto temp variable stack 
-140:    LDC  3,3(6)	Load of type int constant 
-141:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-142:     ST  3,-6(1)	Push left side onto temp variable stack 
-143:    LDC  3,0(6)	Load of type int constant 
-144:     LD  4,-6(1)	Pop left hand side into AC1 
-145:    TGT  3,4,3	Greather than > operation store in AC 
-146:     LD  4,-5(1)	Pop left hand side into AC1 
-147:    AND  3,4,3	AND operation store in AC 
-148:     ST  3,-5(1)	Push left side onto temp variable stack 
-149:    LDC  3,3(6)	Load of type int constant 
-150:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-151:     ST  3,-6(1)	Push left side onto temp variable stack 
-152:    LDC  3,0(6)	Load of type int constant 
-153:     LD  4,-6(1)	Pop left hand side into AC1 
-154:    TGT  3,4,3	Greather than > operation store in AC 
-155:     LD  4,-5(1)	Pop left hand side into AC1 
-156:    AND  3,4,3	AND operation store in AC 
-157:     ST  3,-5(1)	Push left side onto temp variable stack 
-158:    LDC  3,3(6)	Load of type int constant 
-159:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-160:     ST  3,-6(1)	Push left side onto temp variable stack 
-161:    LDC  3,0(6)	Load of type int constant 
-162:     LD  4,-6(1)	Pop left hand side into AC1 
-163:    TGT  3,4,3	Greather than > operation store in AC 
-164:     LD  4,-5(1)	Pop left hand side into AC1 
-165:    AND  3,4,3	AND operation store in AC 
-166:     ST  3,-5(1)	Push left side onto temp variable stack 
-167:    LDC  3,3(6)	Load of type int constant 
-168:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-169:     ST  3,-6(1)	Push left side onto temp variable stack 
-170:    LDC  3,0(6)	Load of type int constant 
-171:     LD  4,-6(1)	Pop left hand side into AC1 
-172:    TGT  3,4,3	Greather than > operation store in AC 
-173:     LD  4,-5(1)	Pop left hand side into AC1 
-174:    AND  3,4,3	AND operation store in AC 
-175:     ST  3,-5(1)	Push left side onto temp variable stack 
-176:    LDC  3,3(6)	Load of type int constant 
-177:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-178:     ST  3,-6(1)	Push left side onto temp variable stack 
-179:    LDC  3,0(6)	Load of type int constant 
-180:     LD  4,-6(1)	Pop left hand side into AC1 
-181:    TGT  3,4,3	Greather than > operation store in AC 
-182:     LD  4,-5(1)	Pop left hand side into AC1 
-183:    AND  3,4,3	AND operation store in AC 
-184:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
-185:    LDA  1,-2(1)	Move the fp to the new frame 
-186:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-187:    JMP  7,-171(7)	Call function 
-188:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 69:     ST  1,-2(1)	Store fp in ghost frame for outputb
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+ 70:    LDC  3,3(6)	Load integer constant 
+ 71:    RND  3,3,6	Op ? 
+ 72:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 73:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -4
+ 74:     LD  4,-4(1)	Pop left into ac1 
+ 75:    TGT  3,4,3	Op > 
+ 76:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 77:    LDC  3,3(6)	Load integer constant 
+ 78:    RND  3,3,6	Op ? 
+ 79:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+ 80:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+ 81:     LD  4,-5(1)	Pop left into ac1 
+ 82:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+ 83:     LD  4,-4(1)	Pop left into ac1 
+ 84:    AND  3,4,3	Op AND 
+ 85:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 86:    LDC  3,3(6)	Load integer constant 
+ 87:    RND  3,3,6	Op ? 
+ 88:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+ 89:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+ 90:     LD  4,-5(1)	Pop left into ac1 
+ 91:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+ 92:     LD  4,-4(1)	Pop left into ac1 
+ 93:    AND  3,4,3	Op AND 
+ 94:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+ 95:    LDC  3,3(6)	Load integer constant 
+ 96:    RND  3,3,6	Op ? 
+ 97:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+ 98:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+ 99:     LD  4,-5(1)	Pop left into ac1 
+100:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+101:     LD  4,-4(1)	Pop left into ac1 
+102:    AND  3,4,3	Op AND 
+103:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+104:    LDC  3,3(6)	Load integer constant 
+105:    RND  3,3,6	Op ? 
+106:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+107:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+108:     LD  4,-5(1)	Pop left into ac1 
+109:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+110:     LD  4,-4(1)	Pop left into ac1 
+111:    AND  3,4,3	Op AND 
+112:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+113:    LDC  3,3(6)	Load integer constant 
+114:    RND  3,3,6	Op ? 
+115:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+116:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+117:     LD  4,-5(1)	Pop left into ac1 
+118:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+119:     LD  4,-4(1)	Pop left into ac1 
+120:    AND  3,4,3	Op AND 
+121:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+122:    LDC  3,3(6)	Load integer constant 
+123:    RND  3,3,6	Op ? 
+124:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+125:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+126:     LD  4,-5(1)	Pop left into ac1 
+127:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+128:     LD  4,-4(1)	Pop left into ac1 
+129:    AND  3,4,3	Op AND 
+130:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+131:    LDC  3,3(6)	Load integer constant 
+132:    RND  3,3,6	Op ? 
+133:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+134:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+135:     LD  4,-5(1)	Pop left into ac1 
+136:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+137:     LD  4,-4(1)	Pop left into ac1 
+138:    AND  3,4,3	Op AND 
+139:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+140:    LDC  3,3(6)	Load integer constant 
+141:    RND  3,3,6	Op ? 
+142:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+143:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+144:     LD  4,-5(1)	Pop left into ac1 
+145:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+146:     LD  4,-4(1)	Pop left into ac1 
+147:    AND  3,4,3	Op AND 
+148:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+149:    LDC  3,3(6)	Load integer constant 
+150:    RND  3,3,6	Op ? 
+151:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+152:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+153:     LD  4,-5(1)	Pop left into ac1 
+154:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+155:     LD  4,-4(1)	Pop left into ac1 
+156:    AND  3,4,3	Op AND 
+157:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+158:    LDC  3,3(6)	Load integer constant 
+159:    RND  3,3,6	Op ? 
+160:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+161:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+162:     LD  4,-5(1)	Pop left into ac1 
+163:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+164:     LD  4,-4(1)	Pop left into ac1 
+165:    AND  3,4,3	Op AND 
+166:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+167:    LDC  3,3(6)	Load integer constant 
+168:    RND  3,3,6	Op ? 
+169:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+170:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+171:     LD  4,-5(1)	Pop left into ac1 
+172:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+173:     LD  4,-4(1)	Pop left into ac1 
+174:    AND  3,4,3	Op AND 
+175:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+176:    LDC  3,3(6)	Load integer constant 
+177:    RND  3,3,6	Op ? 
+178:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+179:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+180:     LD  4,-5(1)	Pop left into ac1 
+181:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+182:     LD  4,-4(1)	Pop left into ac1 
+183:    AND  3,4,3	Op AND 
+184:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end outputb
+185:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+186:    LDA  3,1(7)	Return address in ac 
+187:    JMP  7,-171(7)	CALL outputb
+188:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -2
+* EXPRESSION
 * CALL outputb
-189:     ST  1,-2(1)	Store fp in ghost frame for outputb 
-190:    LDC  3,3(6)	Load of type int constant 
-191:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-192:     ST  3,-5(1)	Push left side onto temp variable stack 
-193:    LDC  3,0(6)	Load of type int constant 
-194:     LD  4,-5(1)	Pop left hand side into AC1 
-195:    TGT  3,4,3	Greather than > operation store in AC 
-196:     ST  3,-5(1)	Push left side onto temp variable stack 
-197:    LDC  3,3(6)	Load of type int constant 
-198:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-199:     ST  3,-6(1)	Push left side onto temp variable stack 
-200:    LDC  3,0(6)	Load of type int constant 
-201:     LD  4,-6(1)	Pop left hand side into AC1 
-202:    TGT  3,4,3	Greather than > operation store in AC 
-203:     LD  4,-5(1)	Pop left hand side into AC1 
-204:     OR  3,4,3	OR operation store in AC 
-205:     ST  3,-5(1)	Push left side onto temp variable stack 
-206:    LDC  3,3(6)	Load of type int constant 
-207:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-208:     ST  3,-6(1)	Push left side onto temp variable stack 
-209:    LDC  3,0(6)	Load of type int constant 
-210:     LD  4,-6(1)	Pop left hand side into AC1 
-211:    TGT  3,4,3	Greather than > operation store in AC 
-212:     LD  4,-5(1)	Pop left hand side into AC1 
-213:     OR  3,4,3	OR operation store in AC 
-214:     ST  3,-5(1)	Push left side onto temp variable stack 
-215:    LDC  3,3(6)	Load of type int constant 
-216:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-217:     ST  3,-6(1)	Push left side onto temp variable stack 
-218:    LDC  3,0(6)	Load of type int constant 
-219:     LD  4,-6(1)	Pop left hand side into AC1 
-220:    TGT  3,4,3	Greather than > operation store in AC 
-221:     LD  4,-5(1)	Pop left hand side into AC1 
-222:     OR  3,4,3	OR operation store in AC 
-223:     ST  3,-5(1)	Push left side onto temp variable stack 
-224:    LDC  3,3(6)	Load of type int constant 
-225:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-226:     ST  3,-6(1)	Push left side onto temp variable stack 
-227:    LDC  3,0(6)	Load of type int constant 
-228:     LD  4,-6(1)	Pop left hand side into AC1 
-229:    TGT  3,4,3	Greather than > operation store in AC 
-230:     LD  4,-5(1)	Pop left hand side into AC1 
-231:     OR  3,4,3	OR operation store in AC 
-232:     ST  3,-5(1)	Push left side onto temp variable stack 
-233:    LDC  3,3(6)	Load of type int constant 
-234:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-235:     ST  3,-6(1)	Push left side onto temp variable stack 
-236:    LDC  3,0(6)	Load of type int constant 
-237:     LD  4,-6(1)	Pop left hand side into AC1 
-238:    TGT  3,4,3	Greather than > operation store in AC 
-239:     LD  4,-5(1)	Pop left hand side into AC1 
-240:     OR  3,4,3	OR operation store in AC 
-241:     ST  3,-5(1)	Push left side onto temp variable stack 
-242:    LDC  3,3(6)	Load of type int constant 
-243:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-244:     ST  3,-6(1)	Push left side onto temp variable stack 
-245:    LDC  3,0(6)	Load of type int constant 
-246:     LD  4,-6(1)	Pop left hand side into AC1 
-247:    TGT  3,4,3	Greather than > operation store in AC 
-248:     LD  4,-5(1)	Pop left hand side into AC1 
-249:     OR  3,4,3	OR operation store in AC 
-250:     ST  3,-5(1)	Push left side onto temp variable stack 
-251:    LDC  3,3(6)	Load of type int constant 
-252:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-253:     ST  3,-6(1)	Push left side onto temp variable stack 
-254:    LDC  3,0(6)	Load of type int constant 
-255:     LD  4,-6(1)	Pop left hand side into AC1 
-256:    TGT  3,4,3	Greather than > operation store in AC 
-257:     LD  4,-5(1)	Pop left hand side into AC1 
-258:     OR  3,4,3	OR operation store in AC 
-259:     ST  3,-5(1)	Push left side onto temp variable stack 
-260:    LDC  3,3(6)	Load of type int constant 
-261:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-262:     ST  3,-6(1)	Push left side onto temp variable stack 
-263:    LDC  3,0(6)	Load of type int constant 
-264:     LD  4,-6(1)	Pop left hand side into AC1 
-265:    TGT  3,4,3	Greather than > operation store in AC 
-266:     LD  4,-5(1)	Pop left hand side into AC1 
-267:     OR  3,4,3	OR operation store in AC 
-268:     ST  3,-5(1)	Push left side onto temp variable stack 
-269:    LDC  3,3(6)	Load of type int constant 
-270:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-271:     ST  3,-6(1)	Push left side onto temp variable stack 
-272:    LDC  3,0(6)	Load of type int constant 
-273:     LD  4,-6(1)	Pop left hand side into AC1 
-274:    TGT  3,4,3	Greather than > operation store in AC 
-275:     LD  4,-5(1)	Pop left hand side into AC1 
-276:     OR  3,4,3	OR operation store in AC 
-277:     ST  3,-5(1)	Push left side onto temp variable stack 
-278:    LDC  3,3(6)	Load of type int constant 
-279:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-280:     ST  3,-6(1)	Push left side onto temp variable stack 
-281:    LDC  3,0(6)	Load of type int constant 
-282:     LD  4,-6(1)	Pop left hand side into AC1 
-283:    TGT  3,4,3	Greather than > operation store in AC 
-284:     LD  4,-5(1)	Pop left hand side into AC1 
-285:     OR  3,4,3	OR operation store in AC 
-286:     ST  3,-5(1)	Push left side onto temp variable stack 
-287:    LDC  3,3(6)	Load of type int constant 
-288:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-289:     ST  3,-6(1)	Push left side onto temp variable stack 
-290:    LDC  3,0(6)	Load of type int constant 
-291:     LD  4,-6(1)	Pop left hand side into AC1 
-292:    TGT  3,4,3	Greather than > operation store in AC 
-293:     LD  4,-5(1)	Pop left hand side into AC1 
-294:     OR  3,4,3	OR operation store in AC 
-295:     ST  3,-5(1)	Push left side onto temp variable stack 
-296:    LDC  3,3(6)	Load of type int constant 
-297:    RND  3,3,0	Gen rand between 0 and value of AC1 in AC 
-298:     ST  3,-6(1)	Push left side onto temp variable stack 
-299:    LDC  3,0(6)	Load of type int constant 
-300:     LD  4,-6(1)	Pop left hand side into AC1 
-301:    TGT  3,4,3	Greather than > operation store in AC 
-302:     LD  4,-5(1)	Pop left hand side into AC1 
-303:     OR  3,4,3	OR operation store in AC 
-304:     ST  3,-4(1)	Push parameter onto new frame 
-* Begin call
-305:    LDA  1,-2(1)	Move the fp to the new frame 
-306:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-307:    JMP  7,-291(7)	Call function 
-308:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+189:     ST  1,-2(1)	Store fp in ghost frame for outputb
+* TOFF dec: -3
+* TOFF dec: -4
+* Param 1
+190:    LDC  3,3(6)	Load integer constant 
+191:    RND  3,3,6	Op ? 
+192:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+193:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -4
+194:     LD  4,-4(1)	Pop left into ac1 
+195:    TGT  3,4,3	Op > 
+196:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+197:    LDC  3,3(6)	Load integer constant 
+198:    RND  3,3,6	Op ? 
+199:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+200:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+201:     LD  4,-5(1)	Pop left into ac1 
+202:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+203:     LD  4,-4(1)	Pop left into ac1 
+204:     OR  3,4,3	Op OR 
+205:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+206:    LDC  3,3(6)	Load integer constant 
+207:    RND  3,3,6	Op ? 
+208:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+209:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+210:     LD  4,-5(1)	Pop left into ac1 
+211:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+212:     LD  4,-4(1)	Pop left into ac1 
+213:     OR  3,4,3	Op OR 
+214:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+215:    LDC  3,3(6)	Load integer constant 
+216:    RND  3,3,6	Op ? 
+217:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+218:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+219:     LD  4,-5(1)	Pop left into ac1 
+220:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+221:     LD  4,-4(1)	Pop left into ac1 
+222:     OR  3,4,3	Op OR 
+223:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+224:    LDC  3,3(6)	Load integer constant 
+225:    RND  3,3,6	Op ? 
+226:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+227:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+228:     LD  4,-5(1)	Pop left into ac1 
+229:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+230:     LD  4,-4(1)	Pop left into ac1 
+231:     OR  3,4,3	Op OR 
+232:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+233:    LDC  3,3(6)	Load integer constant 
+234:    RND  3,3,6	Op ? 
+235:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+236:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+237:     LD  4,-5(1)	Pop left into ac1 
+238:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+239:     LD  4,-4(1)	Pop left into ac1 
+240:     OR  3,4,3	Op OR 
+241:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+242:    LDC  3,3(6)	Load integer constant 
+243:    RND  3,3,6	Op ? 
+244:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+245:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+246:     LD  4,-5(1)	Pop left into ac1 
+247:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+248:     LD  4,-4(1)	Pop left into ac1 
+249:     OR  3,4,3	Op OR 
+250:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+251:    LDC  3,3(6)	Load integer constant 
+252:    RND  3,3,6	Op ? 
+253:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+254:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+255:     LD  4,-5(1)	Pop left into ac1 
+256:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+257:     LD  4,-4(1)	Pop left into ac1 
+258:     OR  3,4,3	Op OR 
+259:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+260:    LDC  3,3(6)	Load integer constant 
+261:    RND  3,3,6	Op ? 
+262:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+263:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+264:     LD  4,-5(1)	Pop left into ac1 
+265:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+266:     LD  4,-4(1)	Pop left into ac1 
+267:     OR  3,4,3	Op OR 
+268:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+269:    LDC  3,3(6)	Load integer constant 
+270:    RND  3,3,6	Op ? 
+271:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+272:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+273:     LD  4,-5(1)	Pop left into ac1 
+274:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+275:     LD  4,-4(1)	Pop left into ac1 
+276:     OR  3,4,3	Op OR 
+277:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+278:    LDC  3,3(6)	Load integer constant 
+279:    RND  3,3,6	Op ? 
+280:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+281:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+282:     LD  4,-5(1)	Pop left into ac1 
+283:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+284:     LD  4,-4(1)	Pop left into ac1 
+285:     OR  3,4,3	Op OR 
+286:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+287:    LDC  3,3(6)	Load integer constant 
+288:    RND  3,3,6	Op ? 
+289:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+290:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+291:     LD  4,-5(1)	Pop left into ac1 
+292:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+293:     LD  4,-4(1)	Pop left into ac1 
+294:     OR  3,4,3	Op OR 
+295:     ST  3,-4(1)	Push left side 
+* TOFF dec: -5
+296:    LDC  3,3(6)	Load integer constant 
+297:    RND  3,3,6	Op ? 
+298:     ST  3,-5(1)	Push left side 
+* TOFF dec: -6
+299:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -5
+300:     LD  4,-5(1)	Pop left into ac1 
+301:    TGT  3,4,3	Op > 
+* TOFF inc: -4
+302:     LD  4,-4(1)	Pop left into ac1 
+303:     OR  3,4,3	Op OR 
+304:     ST  3,-4(1)	Push parameter 
+* TOFF dec: -5
+* Param end outputb
+305:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+306:    LDA  3,1(7)	Return address in ac 
+307:    JMP  7,-291(7)	CALL outputb
+308:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -2
+* EXPRESSION
 * CALL outnl
-309:     ST  1,-2(1)	Store fp in ghost frame for outnl 
-* Begin call
-310:    LDA  1,-2(1)	Move the fp to the new frame 
-311:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-312:    JMP  7,-279(7)	Call function 
-313:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+309:     ST  1,-2(1)	Store fp in ghost frame for outnl
+* TOFF dec: -3
+* TOFF dec: -4
+* Param end outnl
+310:    LDA  1,-2(1)	Ghost frame becomes new active frame 
+311:    LDA  3,1(7)	Return address in ac 
+312:    JMP  7,-279(7)	CALL outnl
+313:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -2
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
 314:    LDC  2,0(6)	Set return value to 0 
@@ -369,7 +512,6 @@
 316:     LD  1,0(1)	Adjust fp 
 317:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,317(7)	Jump to init [backpatch] 
 * INIT
 318:    LDA  1,0(0)	set first frame at end of globals 

@@ -1,7 +1,5 @@
 WARNING(120): character is 4 characters long and not a single character: '' by ''.  The first char will be used.
 WARNING(140): Variable 'JuliaVals' may be uninitialized when used here.
-Number of warnings: 2
-Number of errors: 0
 Loading file: fractal.tm
 . . . . . . . . .                               . . . . . . . . . . . .
 . . . . . . .                                         . . . . . . . . . .

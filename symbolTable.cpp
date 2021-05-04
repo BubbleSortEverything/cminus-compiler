@@ -1,26 +1,39 @@
 #include "symbolTable.h"
 
-// // // // // // // // // // // // // // // // // // // // 
+/// // // // // // // // // // // // // // // // // // // // 
 //
 // Introduction
 //
 // This symbol table library supplies basic insert and lookup for
-// symbols linked to void * pointers of data.  Plenty of room for
-// improvement inlcuding: better debugging setup, passing of refs
-// rather than values and purpose built char * routines, and C support.
-// Warning: lookup will return NULL pointer if key is not in table.
-//    This means the void * cannot have zero as a legal value.
+// symbols linked to void * pointers of data. The is expected to use
+// ONLY the SymbolTable class and NOT the Scope class. The Scope class
+// is used by SymbolTable in its implementation.
+//
+// Plenty of room for improvement inlcuding: better debugging setup,
+// passing of refs rather than values and purpose built char *
+// routines, and C support.
+//
+// WARNING: lookup will return NULL pointer if key is not in table.
+// This means the void * cannot have zero as a legal value! Attempting
+// to save a NULL pointer will get a error.
 //
 // A main() is commented out and has testing code in it.
 //
-// Robert Heckendorn   Oct 1, 2020
+// Robert Heckendorn   Feb 23, 2021
 //
 
    
 // // // // // // // // // // // // // // // // // // // // 
 //
 // Some sample void * printing routines.   User shoud supply their own.
+// The print routine will print the name of the symbol and then
+// use a user supplied function to print the pointer.
 //
+
+// print nothing about the pointer
+void pointerPrintNothing(void *data)
+{
+}
 
 void pointerPrintAddr(void *data)
 {

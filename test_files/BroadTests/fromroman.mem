@@ -184,5 +184,3 @@ Sibling: 4  Func: main returns of type void [line: 64]
 .   .   .   .   .   .   Sibling: 1  Id: s of array of type char [mem: Local loc: -3 size: 51] [line: 74]
 .   .   .   .   Sibling: 5  Call: outnl of type void [line: 75]
 Offset for end of global space: 0
-Number of warnings: 1
-Number of errors: 0

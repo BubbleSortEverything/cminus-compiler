@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  s03.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,51 +71,64 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,10(6)	Load size of cat into AC 
- 41:     ST  3,-2(1)	Store size of cat in data memory 
+* TOFF set: -13
+ 40:    LDC  3,10(6)	load size of array cat
+ 41:     ST  3,-2(1)	save size of array cat
+* Compound Body
+* EXPRESSION
 * CALL output
- 42:     ST  1,-13(1)	Store fp in ghost frame for output 
- 43:    LDA  3,-3(1)	Load base address of array cat 
- 44:    LDA  3,-3(1)	Load address of base array cat 
- 45:     LD  3,1(3)	Load array size 
- 46:     ST  3,-15(1)	Push parameter onto new frame 
-* Begin call
- 47:    LDA  1,-13(1)	Move the fp to the new frame 
- 48:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 49:    JMP  7,-44(7)	Call function 
- 50:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 42:     ST  1,-13(1)	Store fp in ghost frame for output
+* TOFF dec: -14
+* TOFF dec: -15
+* Param 1
+ 43:    LDA  3,-3(1)	Load address of base of array cat
+ 44:     LD  3,1(3)	Load array size 
+ 45:     ST  3,-15(1)	Push parameter 
+* TOFF dec: -16
+* Param end output
+ 46:    LDA  1,-13(1)	Ghost frame becomes new active frame 
+ 47:    LDA  3,1(7)	Return address in ac 
+ 48:    JMP  7,-43(7)	CALL output
+ 49:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -13
+* EXPRESSION
 * CALL output
- 51:     ST  1,-13(1)	Store fp in ghost frame for output 
- 52:    LDA  3,-1(0)	Load base address of array dog 
- 53:    LDA  3,-1(0)	Load address of base array dog 
- 54:     LD  3,1(3)	Load array size 
- 55:     ST  3,-15(1)	Push parameter onto new frame 
-* Begin call
- 56:    LDA  1,-13(1)	Move the fp to the new frame 
- 57:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 58:    JMP  7,-53(7)	Call function 
- 59:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL output
+ 50:     ST  1,-13(1)	Store fp in ghost frame for output
+* TOFF dec: -14
+* TOFF dec: -15
+* Param 1
+ 51:    LDA  3,-1(0)	Load address of base of array dog
+ 52:     LD  3,1(3)	Load array size 
+ 53:     ST  3,-15(1)	Push parameter 
+* TOFF dec: -16
+* Param end output
+ 54:    LDA  1,-13(1)	Ghost frame becomes new active frame 
+ 55:    LDA  3,1(7)	Return address in ac 
+ 56:    JMP  7,-51(7)	CALL output
+ 57:    LDA  3,0(2)	Save the result in ac 
+* Call end output
+* TOFF set: -13
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
- 60:    LDC  2,0(6)	Set return value to 0 
- 61:     LD  3,-1(1)	Load return address 
- 62:     LD  1,0(1)	Adjust fp 
- 63:    JMP  7,0(3)	Return 
+ 58:    LDC  2,0(6)	Set return value to 0 
+ 59:     LD  3,-1(1)	Load return address 
+ 60:     LD  1,0(1)	Adjust fp 
+ 61:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
-  0:    JMP  7,63(7)	Jump to init [backpatch] 
+  0:    JMP  7,61(7)	Jump to init [backpatch] 
 * INIT
- 64:    LDA  1,-11(0)	set first frame at end of globals 
- 65:     ST  1,0(1)	store old fp (point to self) 
+ 62:    LDA  1,-11(0)	set first frame at end of globals 
+ 63:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
- 66:    LDC  3,10(6)	Load size of dog into AC 
- 67:     ST  3,0(0)	Store size of dog in data memory 
+ 64:    LDC  3,10(6)	load size of array dog
+ 65:     ST  3,0(0)	save size of array dog
 * END INIT GLOBALS AND STATICS
- 68:    LDA  3,1(7)	Return address in ac 
- 69:    JMP  7,-31(7)	Jump to main 
- 70:   HALT  0,0,0	DONE! 
+ 66:    LDA  3,1(7)	Return address in ac 
+ 67:    JMP  7,-29(7)	Jump to main 
+ 68:   HALT  0,0,0	DONE! 
 * END INIT

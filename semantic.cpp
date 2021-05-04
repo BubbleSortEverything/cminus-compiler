@@ -34,11 +34,11 @@ void handleBooleanComparison(TokenTree *tree) {
     TokenTree *rhs = tree->children[1];
     if (!lhs->isExprTypeUndefined() and lhs->getExprType() != ExprType::BOOL) {
         err(tree);
-        printf("'%s' requires operands of %s but lhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+        printf("'%s' requires operands %s but lhs is %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
     }
     if (!rhs->isExprTypeUndefined() and rhs->getExprType() != ExprType::BOOL) {
         err(tree);
-        printf("'%s' requires operands of %s but rhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
+        printf("'%s' requires operands %s but rhs is %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
     }
     
     if (lhs->isArray() or rhs->isArray()) {
@@ -66,11 +66,11 @@ void handleMath(TokenTree *tree) {
     TokenTree *rhs = tree->children[1];
     if (!lhs->isExprTypeUndefined() and lhs->getExprType() != ExprType::INT) {
         err(tree);
-        printf("'%s' requires operands of %s but lhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+        printf("'%s' requires operands %s but lhs is %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
     }
     if (!rhs->isExprTypeUndefined() and rhs->getExprType() != ExprType::INT) {
         err(tree);
-        printf("'%s' requires operands of %s but rhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
+        printf("'%s' requires operands %s but rhs is %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
     }
     if (lhs->isArray() or rhs->isArray()) {
         err(tree);
@@ -328,7 +328,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
                     TokenTree *res = (TokenTree *) symbolTable->lookup(tree->getStringValue());
                     if (res == NULL or (res->getDeclKind() == DeclKind::VarK and tree->hasParent(res, true))) {
                         err(tree);
-                        printf("Variable '%s' is not declared.\n", tree->getStringValue());
+                        printf("Symbol '%s' is not declared.\n", tree->getStringValue());
                     } else if (res->getDeclKind() != DeclKind::FuncK) {
                         res->setIsUsed(true);
                         tree->copyMemoryInfo(res);
@@ -481,7 +481,7 @@ void afterChildren(TokenTree *tree) {
                     }
                     if (child != NULL and !child->isExprTypeUndefined() and !sameType(tree, child)) {
                         err(tree);
-                        printf("Variable '%s' is of %s but is being initialized with an expression of %s.\n", tree->getStringValue(), tree->getTypeString(), child->getTypeString());
+                        printf("Variable '%s' is %s but is being initialized with an expression of %s.\n", tree->getStringValue(), tree->getTypeString(), child->getTypeString());
                     }
                     break;
                 }
@@ -529,11 +529,11 @@ void afterChildren(TokenTree *tree) {
                             tree->setExprType(ExprType::INT);
                             if (!lhs->isExprTypeUndefined() and lhs->getExprType() != ExprType::INT) {
                                 err(tree);
-                                printf("'%s' requires operands of %s but lhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+                                printf("'%s' requires operands %s but lhs is %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
                             }
                             if (!rhs->isExprTypeUndefined() and rhs->getExprType() != ExprType::INT) {
                                 err(tree);
-                                printf("'%s' requires operands of %s but rhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
+                                printf("'%s' requires operands %s but rhs is %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
                             }
                             if (lhs->isArray() or rhs->isArray()) {
                                 err(tree);

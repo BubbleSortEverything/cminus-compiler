@@ -75,5 +75,3 @@ Sibling: 1  Func: main returns of type void [line: 18]
 .   .   .   .   .   .   Sibling: 3  Assign: ++ of type int [line: 32]
 .   .   .   .   .   .   .   Child: 0  Id: a of type int [mem: Local loc: -2 size: 1] [line: 32]
 Offset for end of global space: 0
-Number of warnings: 0
-Number of errors: 0

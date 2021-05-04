@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  a002.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,27 +71,30 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDA  2,0(3)	Copy accumulator to return register 
- 41:     LD  3,-1(1)	Load return address 
- 42:     LD  1,0(1)	Adjust fp 
- 43:    JMP  7,0(3)	Return 
+* TOFF set: -2
+* Compound Body
+* RETURN
+ 40:     LD  3,-1(1)	Load return address 
+ 41:     LD  1,0(1)	Adjust fp 
+ 42:    JMP  7,0(3)	Return 
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
- 44:    LDC  2,0(6)	Set return value to 0 
- 45:     LD  3,-1(1)	Load return address 
- 46:     LD  1,0(1)	Adjust fp 
- 47:    JMP  7,0(3)	Return 
+ 43:    LDC  2,0(6)	Set return value to 0 
+ 44:     LD  3,-1(1)	Load return address 
+ 45:     LD  1,0(1)	Adjust fp 
+ 46:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
-  0:    JMP  7,47(7)	Jump to init [backpatch] 
+  0:    JMP  7,46(7)	Jump to init [backpatch] 
 * INIT
- 48:    LDA  1,0(0)	set first frame at end of globals 
- 49:     ST  1,0(1)	store old fp (point to self) 
+ 47:    LDA  1,0(0)	set first frame at end of globals 
+ 48:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
 * END INIT GLOBALS AND STATICS
- 50:    LDA  3,1(7)	Return address in ac 
- 51:    JMP  7,-13(7)	Jump to main 
- 52:   HALT  0,0,0	DONE! 
+ 49:    LDA  3,1(7)	Return address in ac 
+ 50:    JMP  7,-12(7)	Jump to main 
+ 51:   HALT  0,0,0	DONE! 
 * END INIT

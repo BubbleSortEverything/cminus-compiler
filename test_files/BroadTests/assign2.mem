@@ -130,5 +130,3 @@ Sibling: 4  Func: main returns of type void [line: 4]
 .   .   Sibling: 27  Call: outnl of type void [line: 39]
 .   .   Sibling: 28  Return [line: 41]
 Offset for end of global space: -26
-Number of warnings: 0
-Number of errors: 0

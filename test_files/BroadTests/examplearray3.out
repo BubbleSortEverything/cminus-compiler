@@ -1,8 +1,6 @@
 WARNING(2): The variable 'q' seems not to be used.
 WARNING(7): The variable 'q' seems not to be used.
 WARNING(12): The variable 'q' seems not to be used.
-Number of warnings: 3
-Number of errors: 0
 Loading file: examplearray3.tm
 777
 Bye.

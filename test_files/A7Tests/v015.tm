@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  v015.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,302 +71,491 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
- 40:    LDC  3,0(6)	Load of type char constant 
- 41:    LDC  3,4(6)	Load size of a into AC 
- 42:     ST  3,-2(1)	Store size of a in data memory 
- 43:     ST  3,-3(1)	Assigning variable a in Local 
- 44:    LDC  3,3(6)	Load size of c into AC 
- 45:     ST  3,-7(1)	Store size of c in data memory 
- 46:    LDC  3,0(6)	Load of type char constant 
- 47:    LDC  3,4(6)	Load size of b into AC 
- 48:     ST  3,-11(1)	Store size of b in data memory 
- 49:     ST  3,-12(1)	Assigning variable b in Local 
+* TOFF set: -16
+ 40:    LDC  3,4(6)	load size of array a
+ 41:     ST  3,-2(1)	save size of array a
+  1:    LIT  "acid"
+ 42:    LDA  3,-1(0)	Load address of char array 
+ 43:    LDA  4,-3(1)	address of lhs 
+ 44:     LD  5,1(3)	size of rhs 
+ 45:     LD  6,1(4)	size of lhs 
+ 46:    SWP  5,6,6	pick smallest size 
+ 47:    MOV  4,3,5	array op = 
+ 48:    LDC  3,3(6)	load size of array c
+ 49:     ST  3,-7(1)	save size of array c
+ 50:    LDC  3,4(6)	load size of array b
+ 51:     ST  3,-11(1)	save size of array b
+  6:    LIT  "zulu"
+ 52:    LDA  3,-6(0)	Load address of char array 
+ 53:    LDA  4,-12(1)	address of lhs 
+ 54:     LD  5,1(3)	size of rhs 
+ 55:     LD  6,1(4)	size of lhs 
+ 56:    SWP  5,6,6	pick smallest size 
+ 57:    MOV  4,3,5	array op = 
+* Compound Body
+* EXPRESSION
 * CALL outputc
- 50:     ST  1,-16(1)	Store fp in ghost frame for outputc 
- 51:    LDA  3,-3(1)	Load base address of array a 
- 52:    LDC  3,0(6)	Load of type int constant 
- 53:    LDA  5,-3(1)	Load base address of array a into AC2 
- 54:    SUB  5,5,3	Compute offset for array 
- 55:     LD  3,0(5)	Load array element a from AC into loc from AC2 
- 56:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
- 57:    LDA  1,-16(1)	Move the fp to the new frame 
- 58:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 59:    JMP  7,-32(7)	Call function 
- 60:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+ 58:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+ 59:    LDA  3,-3(1)	Load address of base of array a
+ 60:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+ 61:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -18
+ 62:     LD  4,-18(1)	Pop left into ac1 
+ 63:    SUB  3,4,3	compute location from index 
+ 64:     LD  3,0(3)	Load array element 
+ 65:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+ 66:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+ 67:    LDA  3,1(7)	Return address in ac 
+ 68:    JMP  7,-41(7)	CALL outputc
+ 69:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
- 61:     ST  1,-16(1)	Store fp in ghost frame for outputc 
- 62:    LDA  3,-3(1)	Load base address of array a 
- 63:    LDC  3,1(6)	Load of type int constant 
- 64:    LDA  5,-3(1)	Load base address of array a into AC2 
- 65:    SUB  5,5,3	Compute offset for array 
- 66:     LD  3,0(5)	Load array element a from AC into loc from AC2 
- 67:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
- 68:    LDA  1,-16(1)	Move the fp to the new frame 
- 69:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 70:    JMP  7,-43(7)	Call function 
- 71:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+ 70:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+ 71:    LDA  3,-3(1)	Load address of base of array a
+ 72:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+ 73:    LDC  3,1(6)	Load integer constant 
+* TOFF inc: -18
+ 74:     LD  4,-18(1)	Pop left into ac1 
+ 75:    SUB  3,4,3	compute location from index 
+ 76:     LD  3,0(3)	Load array element 
+ 77:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+ 78:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+ 79:    LDA  3,1(7)	Return address in ac 
+ 80:    JMP  7,-53(7)	CALL outputc
+ 81:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
- 72:     ST  1,-16(1)	Store fp in ghost frame for outputc 
- 73:    LDA  3,-3(1)	Load base address of array a 
- 74:    LDC  3,2(6)	Load of type int constant 
- 75:    LDA  5,-3(1)	Load base address of array a into AC2 
- 76:    SUB  5,5,3	Compute offset for array 
- 77:     LD  3,0(5)	Load array element a from AC into loc from AC2 
- 78:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
- 79:    LDA  1,-16(1)	Move the fp to the new frame 
- 80:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 81:    JMP  7,-54(7)	Call function 
- 82:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+ 82:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+ 83:    LDA  3,-3(1)	Load address of base of array a
+ 84:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+ 85:    LDC  3,2(6)	Load integer constant 
+* TOFF inc: -18
+ 86:     LD  4,-18(1)	Pop left into ac1 
+ 87:    SUB  3,4,3	compute location from index 
+ 88:     LD  3,0(3)	Load array element 
+ 89:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+ 90:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+ 91:    LDA  3,1(7)	Return address in ac 
+ 92:    JMP  7,-65(7)	CALL outputc
+ 93:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
- 83:     ST  1,-16(1)	Store fp in ghost frame for outputc 
- 84:    LDA  3,-3(1)	Load base address of array a 
- 85:    LDC  3,3(6)	Load of type int constant 
- 86:    LDA  5,-3(1)	Load base address of array a into AC2 
- 87:    SUB  5,5,3	Compute offset for array 
- 88:     LD  3,0(5)	Load array element a from AC into loc from AC2 
- 89:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
- 90:    LDA  1,-16(1)	Move the fp to the new frame 
- 91:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 92:    JMP  7,-65(7)	Call function 
- 93:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+ 94:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+ 95:    LDA  3,-3(1)	Load address of base of array a
+ 96:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+ 97:    LDC  3,3(6)	Load integer constant 
+* TOFF inc: -18
+ 98:     LD  4,-18(1)	Pop left into ac1 
+ 99:    SUB  3,4,3	compute location from index 
+100:     LD  3,0(3)	Load array element 
+101:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+102:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+103:    LDA  3,1(7)	Return address in ac 
+104:    JMP  7,-77(7)	CALL outputc
+105:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
- 94:     ST  1,-16(1)	Store fp in ghost frame for outputc 
- 95:    LDC  3,32(6)	Load of type char constant 
- 96:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
- 97:    LDA  1,-16(1)	Move the fp to the new frame 
- 98:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 99:    JMP  7,-72(7)	Call function 
-100:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+106:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+107:    LDC  3,32(6)	Load char constant 
+108:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+109:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+110:    LDA  3,1(7)	Return address in ac 
+111:    JMP  7,-84(7)	CALL outputc
+112:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-101:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-102:    LDA  3,-12(1)	Load base address of array b 
-103:    LDC  3,0(6)	Load of type int constant 
-104:    LDA  5,-12(1)	Load base address of array b into AC2 
-105:    SUB  5,5,3	Compute offset for array 
-106:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-107:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-108:    LDA  1,-16(1)	Move the fp to the new frame 
-109:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-110:    JMP  7,-83(7)	Call function 
-111:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+113:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+114:    LDA  3,-12(1)	Load address of base of array b
+115:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+116:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -18
+117:     LD  4,-18(1)	Pop left into ac1 
+118:    SUB  3,4,3	compute location from index 
+119:     LD  3,0(3)	Load array element 
+120:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+121:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+122:    LDA  3,1(7)	Return address in ac 
+123:    JMP  7,-96(7)	CALL outputc
+124:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-112:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-113:    LDA  3,-12(1)	Load base address of array b 
-114:    LDC  3,1(6)	Load of type int constant 
-115:    LDA  5,-12(1)	Load base address of array b into AC2 
-116:    SUB  5,5,3	Compute offset for array 
-117:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-118:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-119:    LDA  1,-16(1)	Move the fp to the new frame 
-120:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-121:    JMP  7,-94(7)	Call function 
-122:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+125:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+126:    LDA  3,-12(1)	Load address of base of array b
+127:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+128:    LDC  3,1(6)	Load integer constant 
+* TOFF inc: -18
+129:     LD  4,-18(1)	Pop left into ac1 
+130:    SUB  3,4,3	compute location from index 
+131:     LD  3,0(3)	Load array element 
+132:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+133:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+134:    LDA  3,1(7)	Return address in ac 
+135:    JMP  7,-108(7)	CALL outputc
+136:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-123:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-124:    LDA  3,-12(1)	Load base address of array b 
-125:    LDC  3,2(6)	Load of type int constant 
-126:    LDA  5,-12(1)	Load base address of array b into AC2 
-127:    SUB  5,5,3	Compute offset for array 
-128:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-129:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-130:    LDA  1,-16(1)	Move the fp to the new frame 
-131:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-132:    JMP  7,-105(7)	Call function 
-133:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+137:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+138:    LDA  3,-12(1)	Load address of base of array b
+139:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+140:    LDC  3,2(6)	Load integer constant 
+* TOFF inc: -18
+141:     LD  4,-18(1)	Pop left into ac1 
+142:    SUB  3,4,3	compute location from index 
+143:     LD  3,0(3)	Load array element 
+144:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+145:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+146:    LDA  3,1(7)	Return address in ac 
+147:    JMP  7,-120(7)	CALL outputc
+148:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-134:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-135:    LDA  3,-12(1)	Load base address of array b 
-136:    LDC  3,3(6)	Load of type int constant 
-137:    LDA  5,-12(1)	Load base address of array b into AC2 
-138:    SUB  5,5,3	Compute offset for array 
-139:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-140:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-141:    LDA  1,-16(1)	Move the fp to the new frame 
-142:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-143:    JMP  7,-116(7)	Call function 
-144:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+149:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+150:    LDA  3,-12(1)	Load address of base of array b
+151:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+152:    LDC  3,3(6)	Load integer constant 
+* TOFF inc: -18
+153:     LD  4,-18(1)	Pop left into ac1 
+154:    SUB  3,4,3	compute location from index 
+155:     LD  3,0(3)	Load array element 
+156:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+157:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+158:    LDA  3,1(7)	Return address in ac 
+159:    JMP  7,-132(7)	CALL outputc
+160:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outnl
-145:     ST  1,-16(1)	Store fp in ghost frame for outnl 
-* Begin call
-146:    LDA  1,-16(1)	Move the fp to the new frame 
-147:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-148:    JMP  7,-115(7)	Call function 
-149:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
-150:    LDA  3,-8(1)	Load base address of array c 
-151:    LDA  3,-3(1)	Load base address of array a 
-152:     ST  3,-8(1)	Assigning variable c in Local 
-153:    LDA  3,-3(1)	Load base address of array a 
-154:    LDA  3,-12(1)	Load base address of array b 
-155:     ST  3,-3(1)	Assigning variable a in Local 
-156:    LDA  3,-12(1)	Load base address of array b 
-157:    LDA  3,-8(1)	Load base address of array c 
-158:     ST  3,-12(1)	Assigning variable b in Local 
+161:     ST  1,-16(1)	Store fp in ghost frame for outnl
+* TOFF dec: -17
+* TOFF dec: -18
+* Param end outnl
+162:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+163:    LDA  3,1(7)	Return address in ac 
+164:    JMP  7,-131(7)	CALL outnl
+165:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -16
+* EXPRESSION
+166:    LDA  3,-3(1)	Load address of base of array a
+167:    LDA  4,-8(1)	address of lhs 
+168:     LD  5,1(3)	size of rhs 
+169:     LD  6,1(4)	size of lhs 
+170:    SWP  5,6,6	pick smallest size 
+171:    MOV  4,3,5	array op = 
+* EXPRESSION
+172:    LDA  3,-12(1)	Load address of base of array b
+173:    LDA  4,-3(1)	address of lhs 
+174:     LD  5,1(3)	size of rhs 
+175:     LD  6,1(4)	size of lhs 
+176:    SWP  5,6,6	pick smallest size 
+177:    MOV  4,3,5	array op = 
+* EXPRESSION
+178:    LDA  3,-8(1)	Load address of base of array c
+179:    LDA  4,-12(1)	address of lhs 
+180:     LD  5,1(3)	size of rhs 
+181:     LD  6,1(4)	size of lhs 
+182:    SWP  5,6,6	pick smallest size 
+183:    MOV  4,3,5	array op = 
+* EXPRESSION
 * CALL outputc
-159:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-160:    LDA  3,-3(1)	Load base address of array a 
-161:    LDC  3,0(6)	Load of type int constant 
-162:    LDA  5,-3(1)	Load base address of array a into AC2 
-163:    SUB  5,5,3	Compute offset for array 
-164:     LD  3,0(5)	Load array element a from AC into loc from AC2 
-165:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-166:    LDA  1,-16(1)	Move the fp to the new frame 
-167:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-168:    JMP  7,-141(7)	Call function 
-169:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+184:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+185:    LDA  3,-3(1)	Load address of base of array a
+186:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+187:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -18
+188:     LD  4,-18(1)	Pop left into ac1 
+189:    SUB  3,4,3	compute location from index 
+190:     LD  3,0(3)	Load array element 
+191:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+192:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+193:    LDA  3,1(7)	Return address in ac 
+194:    JMP  7,-167(7)	CALL outputc
+195:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-170:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-171:    LDA  3,-3(1)	Load base address of array a 
-172:    LDC  3,1(6)	Load of type int constant 
-173:    LDA  5,-3(1)	Load base address of array a into AC2 
-174:    SUB  5,5,3	Compute offset for array 
-175:     LD  3,0(5)	Load array element a from AC into loc from AC2 
-176:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-177:    LDA  1,-16(1)	Move the fp to the new frame 
-178:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-179:    JMP  7,-152(7)	Call function 
-180:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+196:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+197:    LDA  3,-3(1)	Load address of base of array a
+198:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+199:    LDC  3,1(6)	Load integer constant 
+* TOFF inc: -18
+200:     LD  4,-18(1)	Pop left into ac1 
+201:    SUB  3,4,3	compute location from index 
+202:     LD  3,0(3)	Load array element 
+203:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+204:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+205:    LDA  3,1(7)	Return address in ac 
+206:    JMP  7,-179(7)	CALL outputc
+207:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-181:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-182:    LDA  3,-3(1)	Load base address of array a 
-183:    LDC  3,2(6)	Load of type int constant 
-184:    LDA  5,-3(1)	Load base address of array a into AC2 
-185:    SUB  5,5,3	Compute offset for array 
-186:     LD  3,0(5)	Load array element a from AC into loc from AC2 
-187:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-188:    LDA  1,-16(1)	Move the fp to the new frame 
-189:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-190:    JMP  7,-163(7)	Call function 
-191:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+208:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+209:    LDA  3,-3(1)	Load address of base of array a
+210:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+211:    LDC  3,2(6)	Load integer constant 
+* TOFF inc: -18
+212:     LD  4,-18(1)	Pop left into ac1 
+213:    SUB  3,4,3	compute location from index 
+214:     LD  3,0(3)	Load array element 
+215:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+216:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+217:    LDA  3,1(7)	Return address in ac 
+218:    JMP  7,-191(7)	CALL outputc
+219:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-192:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-193:    LDA  3,-3(1)	Load base address of array a 
-194:    LDC  3,3(6)	Load of type int constant 
-195:    LDA  5,-3(1)	Load base address of array a into AC2 
-196:    SUB  5,5,3	Compute offset for array 
-197:     LD  3,0(5)	Load array element a from AC into loc from AC2 
-198:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-199:    LDA  1,-16(1)	Move the fp to the new frame 
-200:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-201:    JMP  7,-174(7)	Call function 
-202:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+220:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+221:    LDA  3,-3(1)	Load address of base of array a
+222:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+223:    LDC  3,3(6)	Load integer constant 
+* TOFF inc: -18
+224:     LD  4,-18(1)	Pop left into ac1 
+225:    SUB  3,4,3	compute location from index 
+226:     LD  3,0(3)	Load array element 
+227:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+228:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+229:    LDA  3,1(7)	Return address in ac 
+230:    JMP  7,-203(7)	CALL outputc
+231:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-203:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-204:    LDC  3,32(6)	Load of type char constant 
-205:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-206:    LDA  1,-16(1)	Move the fp to the new frame 
-207:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-208:    JMP  7,-181(7)	Call function 
-209:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+232:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+233:    LDC  3,32(6)	Load char constant 
+234:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+235:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+236:    LDA  3,1(7)	Return address in ac 
+237:    JMP  7,-210(7)	CALL outputc
+238:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-210:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-211:    LDA  3,-12(1)	Load base address of array b 
-212:    LDC  3,0(6)	Load of type int constant 
-213:    LDA  5,-12(1)	Load base address of array b into AC2 
-214:    SUB  5,5,3	Compute offset for array 
-215:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-216:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-217:    LDA  1,-16(1)	Move the fp to the new frame 
-218:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-219:    JMP  7,-192(7)	Call function 
-220:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+239:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+240:    LDA  3,-12(1)	Load address of base of array b
+241:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+242:    LDC  3,0(6)	Load integer constant 
+* TOFF inc: -18
+243:     LD  4,-18(1)	Pop left into ac1 
+244:    SUB  3,4,3	compute location from index 
+245:     LD  3,0(3)	Load array element 
+246:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+247:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+248:    LDA  3,1(7)	Return address in ac 
+249:    JMP  7,-222(7)	CALL outputc
+250:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-221:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-222:    LDA  3,-12(1)	Load base address of array b 
-223:    LDC  3,1(6)	Load of type int constant 
-224:    LDA  5,-12(1)	Load base address of array b into AC2 
-225:    SUB  5,5,3	Compute offset for array 
-226:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-227:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-228:    LDA  1,-16(1)	Move the fp to the new frame 
-229:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-230:    JMP  7,-203(7)	Call function 
-231:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+251:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+252:    LDA  3,-12(1)	Load address of base of array b
+253:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+254:    LDC  3,1(6)	Load integer constant 
+* TOFF inc: -18
+255:     LD  4,-18(1)	Pop left into ac1 
+256:    SUB  3,4,3	compute location from index 
+257:     LD  3,0(3)	Load array element 
+258:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+259:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+260:    LDA  3,1(7)	Return address in ac 
+261:    JMP  7,-234(7)	CALL outputc
+262:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-232:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-233:    LDA  3,-12(1)	Load base address of array b 
-234:    LDC  3,2(6)	Load of type int constant 
-235:    LDA  5,-12(1)	Load base address of array b into AC2 
-236:    SUB  5,5,3	Compute offset for array 
-237:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-238:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-239:    LDA  1,-16(1)	Move the fp to the new frame 
-240:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-241:    JMP  7,-214(7)	Call function 
-242:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+263:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+264:    LDA  3,-12(1)	Load address of base of array b
+265:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+266:    LDC  3,2(6)	Load integer constant 
+* TOFF inc: -18
+267:     LD  4,-18(1)	Pop left into ac1 
+268:    SUB  3,4,3	compute location from index 
+269:     LD  3,0(3)	Load array element 
+270:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+271:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+272:    LDA  3,1(7)	Return address in ac 
+273:    JMP  7,-246(7)	CALL outputc
+274:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outputc
-243:     ST  1,-16(1)	Store fp in ghost frame for outputc 
-244:    LDA  3,-12(1)	Load base address of array b 
-245:    LDC  3,3(6)	Load of type int constant 
-246:    LDA  5,-12(1)	Load base address of array b into AC2 
-247:    SUB  5,5,3	Compute offset for array 
-248:     LD  3,0(5)	Load array element b from AC into loc from AC2 
-249:     ST  3,-18(1)	Push parameter onto new frame 
-* Begin call
-250:    LDA  1,-16(1)	Move the fp to the new frame 
-251:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-252:    JMP  7,-225(7)	Call function 
-253:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputc
+275:     ST  1,-16(1)	Store fp in ghost frame for outputc
+* TOFF dec: -17
+* TOFF dec: -18
+* Param 1
+276:    LDA  3,-12(1)	Load address of base of array b
+277:     ST  3,-18(1)	Push left side 
+* TOFF dec: -19
+278:    LDC  3,3(6)	Load integer constant 
+* TOFF inc: -18
+279:     LD  4,-18(1)	Pop left into ac1 
+280:    SUB  3,4,3	compute location from index 
+281:     LD  3,0(3)	Load array element 
+282:     ST  3,-18(1)	Push parameter 
+* TOFF dec: -19
+* Param end outputc
+283:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+284:    LDA  3,1(7)	Return address in ac 
+285:    JMP  7,-258(7)	CALL outputc
+286:    LDA  3,0(2)	Save the result in ac 
+* Call end outputc
+* TOFF set: -16
+* EXPRESSION
 * CALL outnl
-254:     ST  1,-16(1)	Store fp in ghost frame for outnl 
-* Begin call
-255:    LDA  1,-16(1)	Move the fp to the new frame 
-256:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
-257:    JMP  7,-224(7)	Call function 
-258:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outnl
+287:     ST  1,-16(1)	Store fp in ghost frame for outnl
+* TOFF dec: -17
+* TOFF dec: -18
+* Param end outnl
+288:    LDA  1,-16(1)	Ghost frame becomes new active frame 
+289:    LDA  3,1(7)	Return address in ac 
+290:    JMP  7,-257(7)	CALL outnl
+291:    LDA  3,0(2)	Save the result in ac 
+* Call end outnl
+* TOFF set: -16
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
-259:    LDC  2,0(6)	Set return value to 0 
-260:     LD  3,-1(1)	Load return address 
-261:     LD  1,0(1)	Adjust fp 
-262:    JMP  7,0(3)	Return 
+292:    LDC  2,0(6)	Set return value to 0 
+293:     LD  3,-1(1)	Load return address 
+294:     LD  1,0(1)	Adjust fp 
+295:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
-  0:    JMP  7,262(7)	Jump to init [backpatch] 
+  0:    JMP  7,295(7)	Jump to init [backpatch] 
 * INIT
-263:    LDA  1,-10(0)	set first frame at end of globals 
-264:     ST  1,0(1)	store old fp (point to self) 
+296:    LDA  1,-10(0)	set first frame at end of globals 
+297:     ST  1,0(1)	store old fp (point to self) 
 * INIT GLOBALS AND STATICS
 * END INIT GLOBALS AND STATICS
-265:    LDA  3,1(7)	Return address in ac 
-266:    JMP  7,-228(7)	Jump to main 
-267:   HALT  0,0,0	DONE! 
+298:    LDA  3,1(7)	Return address in ac 
+299:    JMP  7,-261(7)	Jump to main 
+300:   HALT  0,0,0	DONE! 
 * END INIT

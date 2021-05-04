@@ -1,7 +1,5 @@
 WARNING(31): Variable 'x' may be uninitialized when used here.
 WARNING(46): Variable 'y' may be uninitialized when used here.
-Number of warnings: 2
-Number of errors: 0
 Loading file: initbig.tm
 111
 T

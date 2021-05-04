@@ -1,5 +1,8 @@
-* C- Generated Code
-* Author: Oshan Karki
+* C- compiler version C-S21
+* Built: Apr 18, 2021 (toffset telemetry)
+* Author: Robert B. Heckendorn
+* File compiled:  i0c.c-
+* 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION input
   1:     ST  3,-1(1)	Store return address 
@@ -68,24 +71,37 @@
 * 
 * ** ** ** ** ** ** ** ** ** ** ** **
 * FUNCTION main
+* TOFF set: -2
  39:     ST  3,-1(1)	Store return address 
 * COMPOUND
+* TOFF set: -2
+* Compound Body
 * COMPOUND
- 40:    LDC  3,1(6)	Load of type bool constant 
- 41:    LDC  4,1(6)	Load 1 into AC1 for not operation 
- 42:    TNE  3,4,3	Not ! operation store in AC 
- 43:     ST  3,-2(1)	Assigning variable ss in Local 
+* TOFF set: -3
+ 40:    LDC  3,1(6)	Load Boolean constant 
+ 41:    LDC  4,1(6)	Load 1 
+ 42:    XOR  3,3,4	Op XOR to get logical not 
+ 43:     ST  3,-2(1)	Store variable ss
+* Compound Body
+* EXPRESSION
 * CALL outputb
- 44:     ST  1,-3(1)	Store fp in ghost frame for outputb 
- 45:     LD  3,-2(1)	Load variable ss into accumulator 
- 46:     ST  3,-5(1)	Push parameter onto new frame 
-* Begin call
- 47:    LDA  1,-3(1)	Move the fp to the new frame 
- 48:    LDA  3,1(7)	Store the return address in ac (skip 1 ahead) 
- 49:    JMP  7,-33(7)	Call function 
- 50:    LDA  3,0(2)	Save return result in accumulator 
-* END CALL outputb
+ 44:     ST  1,-3(1)	Store fp in ghost frame for outputb
+* TOFF dec: -4
+* TOFF dec: -5
+* Param 1
+ 45:     LD  3,-2(1)	Load variable ss
+ 46:     ST  3,-5(1)	Push parameter 
+* TOFF dec: -6
+* Param end outputb
+ 47:    LDA  1,-3(1)	Ghost frame becomes new active frame 
+ 48:    LDA  3,1(7)	Return address in ac 
+ 49:    JMP  7,-33(7)	CALL outputb
+ 50:    LDA  3,0(2)	Save the result in ac 
+* Call end outputb
+* TOFF set: -3
+* TOFF set: -2
 * END COMPOUND
+* TOFF set: -2
 * END COMPOUND
 * Add standard closing in case there is no return statement
  51:    LDC  2,0(6)	Set return value to 0 
@@ -93,7 +109,6 @@
  53:     LD  1,0(1)	Adjust fp 
  54:    JMP  7,0(3)	Return 
 * END FUNCTION main
-* 
   0:    JMP  7,54(7)	Jump to init [backpatch] 
 * INIT
  55:    LDA  1,0(0)	set first frame at end of globals 
