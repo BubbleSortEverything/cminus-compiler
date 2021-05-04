@@ -690,29 +690,41 @@ void childGenerator(TokenTree *tree)
 }
 
 void afterChildCodeGen(TokenTree *tree, int i) {
-    switch (tree->getNodeKind()) {
-        case 1: {
-            switch (tree->getExprKind()) {
-                case 4: {
-                    if (tree->getNumChildren() > 1 and i == 0) {
-                        if (tree->getTokenString()[0] == '[') return;
-                        emitRM((char *) "ST", AC, totalOffset, 1, (char *) "Push left side onto temp variable stack");
-                        totalOffset--;
-                    }
-                    break;
-                }
+    // switch (tree->getNodeKind()) {
+    //     case 1: {
+    //         switch (tree->getExprKind()) {
+    //             case 4: {
+    //                 if (tree->getNumChildren() > 1 and i == 0) {
+    //                     if (tree->getTokenString()[0] == '[') return;
+    //                     emitRM((char *) "ST", AC, totalOffset, 1, (char *) "Push left side onto temp variable stack");
+    //                     totalOffset--;
+    //                 }
+    //                 break;
+    //             }
+    //         }
+    //         break;
+    //     }
+    //     case 2: {
+    //         break;
+    //     }
+    // }
+    if (tree->getNodeKind() == NodeKind::ExpK) {
+        if (tree->getExprKind() == ExprKind::OpK) {
+            if (tree->getNumChildren() > 1 and i == 0) {
+                if (tree->getTokenString()[0] == '[') return;
+                emitRM((char *) "ST", AC, totalOffset, 1, (char *) "Push left side onto temp variable stack");
+                totalOffset--;
             }
-            break;
         }
-        case 2: {
-            break;
+        else if (tree->getNodeKind() == NodeKind::StmtK) {
+            //  for future work
         }
     }
 }
 
 void emitCode(TokenTree *tree) 
 {
-    if (tree == NULL or tree->wasGenerated()) { // Skip already generated code
+    if (tree == NULL or tree->wasGenerated()) {
         return;
     }
     tree->setGenerated();

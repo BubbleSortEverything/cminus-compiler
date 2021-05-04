@@ -164,15 +164,15 @@ ExprType TokenTree::getExprType() {
 
 const char *TokenTree::getTypeString() {
     switch (getExprType()) {
-        case 0:
+        case ExprType::0:
             return "of type int";
-        case 1:
+        case ExprType::1:
             return "of type bool";
-        case 2:
+        case ExprType::2:
             return "of type char";
-        case 3:
+        case ExprType::3:
             return "of type void";
-        case 4:
+        case ExprType::4:
             return "of undefined type";
     }
     return "error";
