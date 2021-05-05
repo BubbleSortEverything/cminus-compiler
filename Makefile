@@ -1,6 +1,6 @@
 BIN  = c-
 CC   = g++
-CFLAGS = -std=c++14 -DCPLUSPLUS -g -O1    # for use with C++ if file ext is .c
+CFLAGS = -std=c++11 -DCPLUSPLUS -g -O1    # for use with C++ if file ext is .c
 
 SRCS = $(BIN).y $(BIN).l main.cpp ourgetopt.c TokenTree.cpp symbolTable.cpp semantic.cpp yyerror.cpp emitcode_latest.cpp codegen.cpp
 HDRS = ourgetopt.h TokenTree.h symbolTable.h semantic.h yyerror.h emitcode_latest.h codegen.h

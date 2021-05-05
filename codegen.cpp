@@ -204,34 +204,35 @@ void handleUnimplemented(TokenTree *tree)
     throw std::runtime_error(line);
 }
 
-void handleArrayAccessCG(TokenTree *tree) 
-{
+
+/*  array access handler
+ */
+void handleArray(TokenTree *tree) 
+{   
     if (tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::AssignK and tree->parent->children[0] == tree) {
         emitRM((char *) "ST", 3, totalOffset, FP, (char *) "Push array index onto temp stack");
         totalOffset--;
     } 
     else {
         TokenTree *arr = tree->children[0];
-        char *line;
-        asprintf(&line, "Load base address of array %s into AC2", arr->getStringValue());
+        char *buffer;
+        asprintf(&buffer, "Load base address of array %s into AC2", arr->getStringValue());
 
-        if (arr->isInGlobalMemory()) {
-            emitRM((char *) "LDA", AC2, arr->getMemoryOffset(), GP, line);
-        } 
+        if (arr->isInGlobalMemory()) { emitRM((char *) "LDA", AC2, arr->getMemoryOffset(), GP, buffer); } 
         else {
             if (arr->getMemoryType() == MemoryType::PARAM) {
-                emitRM((char *) "LD", AC2, arr->getMemoryOffset(), FP, line);
+                emitRM((char *) "LD", AC2, arr->getMemoryOffset(), FP, buffer);
             } 
             else {
-                emitRM((char *) "LDA", AC2, arr->getMemoryOffset(), FP, line);
+                emitRM((char *) "LDA", AC2, arr->getMemoryOffset(), FP, buffer);
             }
         }
+        free(buffer);
 
-        free(line);
         emitRO((char *) "SUB", AC2, AC2, AC, (char *) "Compute offset for array");
-        asprintf(&line, "Load array element %s from AC into loc from AC2", arr->getStringValue());
-        emitRM((char *) "LD", AC, 0, AC2, line);
-        free(line);
+        asprintf(&buffer, "Load array element %s from AC into loc from AC2", arr->getStringValue());
+        emitRM((char *) "LD", AC, 0, AC2, buffer);
+        free(buffer);
     }
 }
 
@@ -274,7 +275,7 @@ void (*functionPointersCodeGen[NUM_OPS])(TokenTree *) = {
     handleRand, // RANDOM ?
     handleEquality, // EQUALS
     handleNotEquality, // NOT EQUALS
-    handleArrayAccessCG, // ARRAY ACCESSOR []
+    handleArray, // ARRAY ACCESSOR []
 };
 
 int opCodeIndex(TokenTree *tree) 
@@ -425,9 +426,9 @@ void generateIOLibrary()
 
 void beforeChildrenCodeGen(TokenTree *tree) 
 {
-    switch (tree->getNodeKind()) {
+    switch (static_cast<int>(tree->getNodeKind()) ){
         case 0: {   // declaration
-            switch (tree->getDeclKind()) {
+            switch (static_cast<int>(tree->getDeclKind()) ){
                 case 1: {   // function
                     funcHeader(tree->getStringValue());
                     totalOffset = -tree->getMemorySize();
@@ -438,7 +439,7 @@ void beforeChildrenCodeGen(TokenTree *tree)
             break;
         }
         case 1: {   // expression
-            switch (tree->getExprKind()) {
+            switch (static_cast<int>(tree->getExprKind()) ){
                 case 1: {   // call
                     TokenTree *func = (TokenTree *) symbolTable->lookup(tree->getStringValue());
                     char *line;
@@ -481,7 +482,7 @@ void beforeChildrenCodeGen(TokenTree *tree)
             break;
         }
         case 2: {
-            switch (tree->getStmtKind()) {
+            switch (static_cast<int>(tree->getStmtKind()) ){
                 case 1: {
                     emitComment((char *) "COMPOUND");
                     break;
@@ -532,9 +533,9 @@ void beforeChildrenCodeGen(TokenTree *tree)
 
 void childGenerator(TokenTree *tree) 
 {
-    switch (tree->getNodeKind()) {
+    switch (static_cast<int>(tree->getNodeKind()) ){
         case 0: {
-            switch (tree->getDeclKind()) {
+            switch (static_cast<int>(tree->getDeclKind()) ){
                 case 1: {
                     funcFooter(tree->getStringValue(), true);
                     totalOffset = -tree->getMemorySize();
@@ -571,7 +572,7 @@ void childGenerator(TokenTree *tree)
             break;
         }
         case 1: {
-            switch (tree->getExprKind()) {
+            switch (static_cast<int>(tree->getExprKind()) ){
                 case 1: {
                     // Handled in before children
                     break;
@@ -667,7 +668,7 @@ void childGenerator(TokenTree *tree)
             break;
         }
         case 2: {
-            switch (tree->getStmtKind()) {
+            switch (static_cast<int>(tree->getStmtKind()) ){
                 case 1: {
                     emitComment((char *) "END COMPOUND");
                     break;
@@ -690,9 +691,9 @@ void childGenerator(TokenTree *tree)
 }
 
 void afterChildCodeGen(TokenTree *tree, int i) {
-    // switch (tree->getNodeKind()) {
+    // switch (static_cast<int>(tree->getNodeKind()) ){
     //     case 1: {
-    //         switch (tree->getExprKind()) {
+    //         switch (static_cast<int>(tree->getExprKind()) ){
     //             case 4: {
     //                 if (tree->getNumChildren() > 1 and i == 0) {
     //                     if (tree->getTokenString()[0] == '[') return;

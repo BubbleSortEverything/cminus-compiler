@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "emitcode.h"
+#include "emitcode_latest.h"
 
 extern FILE *code;
 

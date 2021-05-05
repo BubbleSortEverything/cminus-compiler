@@ -264,7 +264,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
             }
         }
     }
-    switch (tree->getNodeKind()) {
+    switch (static_cast<int>(tree->getNodeKind())) {
         case 0: {
             if (tree->getDeclKind() != DeclKind::VarK) {
                 bool defined = !symbolTable->insert(tree->getStringValue(), tree);
@@ -297,7 +297,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
             break;
         }
         case 1: {
-            switch (tree->getExprKind()) {
+            switch (static_cast<int>(tree->getExprKind())) {
                 case 0: {
 
                     break;
@@ -351,7 +351,7 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
             break;
         }
         case 2: {
-            switch (tree->getStmtKind()) {
+            switch ( static_cast<int>(tree->getStmtKind()) ) {
                 case 1: {
                     if (compoundShouldEnterScope(tree->parent)) {
                         *enteredScope = true;
@@ -399,9 +399,9 @@ void beforeChildren(TokenTree *tree, bool *enteredScope, int &previousLocalOffse
 }
 
 void afterChild(TokenTree *tree, int childNo) {
-    switch (tree->getNodeKind()) {
+    switch ( static_cast<int>(tree->getNodeKind()) ) {
         case 2: {
-            switch (tree->getStmtKind()) {
+            switch ( static_cast<int>(tree->getStmtKind()) ) {
                 case 2: {
                     if (childNo == 1) {
                         TokenTree *array = tree->children[1];
@@ -455,9 +455,9 @@ void afterChild(TokenTree *tree, int childNo) {
 }
 
 void afterChildren(TokenTree *tree) {
-    switch (tree->getNodeKind()) {
+    switch ( static_cast<int>(tree->getNodeKind()) ) {
         case 0: {
-            switch (tree->getDeclKind()) {
+            switch ( static_cast<int>(tree->getDeclKind()) ) {
                 case 1: {
                     if (tree->getExprType() != ExprType::VOID and !tree->hasReturn()) {
                         warn(tree);
@@ -489,7 +489,7 @@ void afterChildren(TokenTree *tree) {
             break;
         }
         case 1: {
-            switch (tree->getExprKind()) {
+            switch ( static_cast<int>(tree->getExprKind()) ){
                 case 0: {
                     TokenTree *lhs = tree->children[0];
                     TokenTree *rhs = tree->children[1];
@@ -583,7 +583,7 @@ void afterChildren(TokenTree *tree) {
             break;
         }
         case 2: {
-            switch (tree->getStmtKind()) {
+            switch ( static_cast<int>(tree->getStmtKind()) ) {
                 case 4: {
                     tree->function->setHasReturn(true);
                     TokenTree *returnValue = tree->children[0];

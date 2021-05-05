@@ -163,31 +163,31 @@ ExprType TokenTree::getExprType() {
 }
 
 const char *TokenTree::getTypeString() {
-    switch (getExprType()) {
-        case 0:
-            return "of type int";
-        case 1:
-            return "of type bool";
-        case 2:
-            return "of type char";
-        case 3:
-            return "of type void";
-        case 4:
-            return "of undefined type";
-    }
-    return "error";
-    // if (getExprType() == ExprType::BOOL) 
-    //     return "type bool";
-    // else if (getExprType() == ExprType::CHAR)
-    //     return "type char";
-    // else if (getExprType() == ExprType::INT)
-    //     return "type int";
-    // else if (getExprType() == ExprType::VOID)
-    //     return "type void";
-    // else if (getExprType() == ExprType::UNDEFINED)
-    //     return "undefined type";
-
+    // switch (getExprType()) {
+    //     case 0:
+    //         return "of type int";
+    //     case 1:
+    //         return "of type bool";
+    //     case 2:
+    //         return "of type char";
+    //     case 3:
+    //         return "of type void";
+    //     case 4:
+    //         return "of undefined type";
+    // }
     // return "error";
+    if (getExprType() == ExprType::BOOL) 
+        return "type bool";
+    else if (getExprType() == ExprType::CHAR)
+        return "type char";
+    else if (getExprType() == ExprType::INT)
+        return "type int";
+    else if (getExprType() == ExprType::VOID)
+        return "type void";
+    else if (getExprType() == ExprType::UNDEFINED)
+        return "undefined type";
+
+    return "error";
 }
 
 bool TokenTree::isExprTypeUndefined() {
@@ -254,28 +254,34 @@ bool TokenTree::isUsed() {
     return _isUsed;
 }
 
-void TokenTree::setIsInitialized(bool b) {
+void TokenTree::setIsInitialized(bool b) 
+{
     if (this->getNodeKind() != NodeKind::DeclK) {
         throw std::runtime_error("Cannot set isInitialized on node that is not declaration.");
     }
+
     if (this->getDeclKind() == DeclKind::FuncK) {
         throw std::runtime_error("Cannot set isInitialized on node that is a function.");
     }
+
     _isInitialized = b;
 }
 
-bool TokenTree::isInitialized() {
+bool TokenTree::isInitialized() 
+{
     return _isInitialized;
 }
 
-void TokenTree::setHasReturn(bool b) {
+void TokenTree::setHasReturn(bool b) 
+{
     if (this->getNodeKind() != NodeKind::DeclK or this->getDeclKind() != DeclKind::FuncK) {
         throw std::runtime_error("Can only set 'hasReturn' on function declaration.");
     }
     _hasReturn = b;
 }
 
-bool TokenTree::hasReturn() {
+bool TokenTree::hasReturn() 
+{
     
     if (this->getNodeKind() != NodeKind::DeclK or this->getDeclKind() != DeclKind::FuncK) {
         throw std::runtime_error("Value of 'hasReturn' is only valid on function declaration.");
@@ -283,15 +289,18 @@ bool TokenTree::hasReturn() {
     return _hasReturn;
 }
 
-bool TokenTree::isConstantExpression() {
+bool TokenTree::isConstantExpression() 
+{
     if (this->getNodeKind() != NodeKind::ExpK) {
         throw std::runtime_error("Cannot only call 'isConstantExpression' on an expression.");
     }
     if (this->getExprKind() == ExprKind::ConstantK) {
         return true;
-    } else if (this->getExprKind() == ExprKind::IdK or this->getExprKind() == ExprKind::CallK or this->getExprKind() == ExprKind::AssignK) {
+    } 
+    else if (this->getExprKind() == ExprKind::IdK or this->getExprKind() == ExprKind::CallK or this->getExprKind() == ExprKind::AssignK) {
         return false;
-    } else { // ExprKind::OpK
+    } 
+    else { // ExprKind::OpK
         bool allChildrenAreConst = true;
         for (int i = 0; i < MAX_CHILDREN; i++) {
             TokenTree *child = this->children[i];
@@ -300,21 +309,25 @@ bool TokenTree::isConstantExpression() {
                 break;
             }
         }
+    
         return allChildrenAreConst;
     }
     
 }
 
-void TokenTree::addSibling(TokenTree *sibl) {
+void TokenTree::addSibling(TokenTree *sibl) 
+{
     if (sibl == NULL) return;
     TokenTree *visitor = this;
     while (visitor->sibling != NULL) {
         visitor = visitor->sibling;
     }
+
     visitor->sibling = sibl;
 }
 
-void TokenTree::typeSiblings(ExprType type) {
+void TokenTree::typeSiblings(ExprType type) 
+{
     TokenTree *node = this;
     while (node != NULL) {
         node->setExprType(type);
@@ -322,7 +335,8 @@ void TokenTree::typeSiblings(ExprType type) {
     }
 }
 
-void TokenTree::staticSiblings() {
+void TokenTree::staticSiblings() 
+{
     TokenTree *node = this;
     while (node != NULL) {
         node->setIsStatic(true);
@@ -368,10 +382,10 @@ void TokenTree::printTree() {
 }
 
 void TokenTree::printNode() {
-    // Welcome to switch city...
-    switch (nodeKind) {
+    // switching between different nodes
+    switch (static_cast<int>(nodeKind)) {
         case 0:
-            switch (getDeclKind()) {
+            switch (static_cast<int>(getDeclKind())) {
                 case 0:
                     printf("Var: %s ", getStringValue());
                     if (isStatic()) printf("of static ");
@@ -390,8 +404,25 @@ void TokenTree::printNode() {
                     break;
             }
             break;
+
+            // if (getDeclKind() == DeclKind::VarK) {
+            //     printf("Var: %s ", getStringValue());
+            //     if (isStatic()) printf("of static ");
+            //     if (isArray() and not isStatic()) printf("of array ");
+            //     if (isArray() and isStatic()) printf("array ");
+            //     printf("%s ", getTypeString());
+            // }
+            // else if (getDeclKind() == DeclKind::FuncK) {
+            //     printf("Func: %s returns %s ", getStringValue(), getTypeString());
+            // }
+            // else if (getDeclKind() == DeclKind::ParamK) {
+            //     printf("Parm: %s ", getStringValue());
+            //     if (isArray()) printf("array of ");
+            //     printf("%s ", getTypeString());
+            // }
+
         case 1:
-            switch (getExprKind()) {
+            switch (static_cast<int>(getExprKind())) {
                 case 0: {
                     char *arrayStr = (char *) "";
                     if (isArray()) arrayStr = (char *) "array of ";
@@ -440,7 +471,7 @@ void TokenTree::printNode() {
             }
             break;
         case 2:
-            switch (getStmtKind()) {
+            switch (static_cast<int>( getStmtKind()) ) {
                 case 0:
                     printf("Break ");
                     break;
@@ -500,7 +531,7 @@ MemoryType TokenTree::getMemoryType() {
 }
 
 char *TokenTree::getMemoryTypeString() {
-    switch (this->getMemoryType()) {
+    switch (static_cast<int>(this->getMemoryType())) {
         case 0:
             return (char *) "Global";
         case 1:
