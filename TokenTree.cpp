@@ -7,35 +7,31 @@ extern int globalOffset;
 extern int localOffset;
 extern bool printMem;
 
+// mini functions to help with token properties
 TokenTree::TokenTree() {}   // initializer
-
-int TokenTree   ::  getTokenClass() { return this->tokenClass; }
-int TokenTree   ::  getLineNum() { return this->lineNum; }
-int TokenTree   ::  getNumValue() { return this->nvalue; }
-void TokenTree  ::  setTokenClass(int tc) { this->tokenClass = tc; }
-void TokenTree  ::  setLineNum(int line) { this->lineNum = line; }
-void TokenTree  ::  setTokenString(char *str) { this->tokenStr = strdup(str); }
-void TokenTree  ::  setStrValue(char *str) { this->svalue = strdup(str); }
-void TokenTree  ::  setCharValue(char c) { this->cvalue = c; }
-void TokenTree  ::  setNumValue(int n) { this->nvalue = n; }
-void TokenTree  ::  setStringValue(char *str) { setStringValue(str, true); }
-char TokenTree  ::  getCharValue() { return this->cvalue; }
-char *TokenTree ::  getTokenString() { return this->tokenStr; }
+int TokenTree   ::  getTokenClass()             { return this->tokenClass; }
+int TokenTree   ::  getLineNum()                { return this->lineNum; }
+int TokenTree   ::  getNumValue()               { return this->nvalue; }
+char TokenTree  ::  getCharValue()              { return this->cvalue; }
+char *TokenTree ::  getTokenString()            { return this->tokenStr; }
+void TokenTree  ::  setNumValue(int n)          { this->nvalue = n; }
+void TokenTree  ::  setLineNum(int line)        { this->lineNum = line; }
+void TokenTree  ::  setCharValue(char c)        { this->cvalue = c; }
+void TokenTree  ::  setTokenClass(int tc)       { this->tokenClass = tc; }
+void TokenTree  ::  setStrValue(char *str)      { this->svalue = strdup(str); }
+void TokenTree  ::  setTokenString(char *str)   { this->tokenStr = strdup(str); }
+void TokenTree  ::  setStringValue(char *str)   { setStringValue(str, true); }
+void TokenTree  ::  setStringValue(char *str, bool duplicate) { this->svalue = duplicate ? strdup(str) : str; }
 
 char *TokenTree ::  getStringValue() { 
-    if (strcmp(this->svalue, "*")==0 and this->svalue=="sizeof") return "sizeof";
-    if (strcmp(this->svalue, "-")==0 and this->svalue=="chsign") return "chsign";
+    // if (strcmp(this->svalue, "*")==0 and this->svalue=="sizeof") return "sizeof";
+    // if (strcmp(this->svalue, "-")==0 and this->svalue=="chsign") return "chsign";
+    if (strcmp(this->tokenStr, "!")==0) return "not";
+
+    // if (strcmp(this->svalue, "and")==0) printf("and found!\n");
+    
     return this->svalue; 
 }
-
-void TokenTree::setStringValue(char *str, bool duplicate) {
-    if (duplicate) {
-        this->svalue = strdup(str);
-    } else {
-        this->svalue = str;
-    }
-}
-
 
 void TokenTree::makeParent() {
     for (int i = 0; i < MAX_CHILDREN; i++) {
@@ -543,6 +539,7 @@ void TokenTree::copyMemoryInfo(TokenTree *tree)
     if (this == tree) {
         throw std::runtime_error("Invalid pointer. Copy memory info called on self.");
     }
+    
     this->setMemoryType(tree->getMemoryType());
     this->setMemorySize(tree->getMemorySize());
     this->setMemoryOffset(tree->getMemoryOffset());

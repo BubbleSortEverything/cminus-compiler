@@ -169,7 +169,6 @@ paramId
     | ID '[' ']'                                { $$ = $1; $$->setDeclKind(DeclKind::ParamK); $$->setIsArray(true); }
     ;
 
-/* ---------- */
 stmt
     : matched                                 { $$ = $1; }
     | unmatched                               { $$ = $1; }
@@ -196,24 +195,6 @@ unmatched
     | IF error THEN matched ELSE unmatched      { $$ = NULL; yyerrok; }
     ;
 
-/* ---------- */
-
-
-//stmt            : openStmt { $$ = $1; }
-//                | closedStmt { $$ = $1; }
-//                ;
-//simpleStmt      : expStmt { $$ = $1; }
-//                | compoundStmt { $$ = $1; }
-//                | returnStmt { $$ = $1; }
-//                | breakStmt { $$ = $1; }
-//                ;
-//openStmt        : selectStmt { $$ = $1; }
-//                | openIterStmt { $$ = $1; }
-//                ;
-//closedStmt      : simpleStmt { $$ = $1; }
-//                | closedSelStmt { $$ = $1; }
-//                | closedIterStmt { $$ = $1; }
-//                ;
 expStmt         : exp ';'   { $$ = $1; }
                 | ';'       { $$ = NULL; }
                 | error ';' { $$ = NULL; yyerrok; }
@@ -262,59 +243,6 @@ selectStmt
                                                         $$->children[2] = $6;
                                                     }                                                 
     ;
-
-//closedSelStmt   : IF '(' simpleExp ')' closedStmt ELSE closedStmt   {
-//                                                                        $$ = $1;
-//                                                                        $$->setStmtKind(StmtKind::IfK);
-//                                                                        $$->children[0] = $3;
-//                                                                        $$->children[1] = $5;
-//                                                                        $$->children[2] = $7;
-//                                                                    }
-//                | IF error  { $$ = NULL; }
-//                | IF error ELSE closedStmt  { $$ = NULL; yyerrok; }
-//                | IF error ')' closedStmt ELSE closedStmt   { $$ = NULL; yyerrok; }
-//                ;
-//openIterStmt    : WHILE '(' simpleExp ')' openStmt  {
-//                                                        $$ = $1;
-//                                                        $$->setStmtKind(StmtKind::WhileK);
-//                                                        $$->children[0] = $3;
-//                                                        $$->children[1] = $5;
-//                                                    }
-//                | FOR '(' ID TO ID ')' openStmt {
-//                                                    $$ = $1;
-//                                                    $3->setExprType(ExprType::UNDEFINED);
-//                                                    $3->setDeclKind(DeclKind::VarK);
-//                                                    $5->setExprKind(ExprKind::IdK);
-//                                                    $$->setStmtKind(StmtKind::ForK);
-//                                                    $$->children[0] = $3;
-//                                                    $$->children[1] = $5;
-//                                                    $$->children[2] = $7;                                                
-//                                                }
-//                ;
-//closedIterStmt  
-//    : WHILE simpleExp DO stmt                   {
-//                                                    $$ = $1;
-//                                                    $$->setStmtKind(StmtKind::WhileK);
-//                                                    $$->children[0] = $2;
-//                                                    $$->children[1] = $4;
-//                                                }
-//    | FOR '(' ID TO ID ')' closedStmt           {
-//                                                    $$ = $1;
-//                                                    $3->setExprType(ExprType::UNDEFINED);
-//                                                    $3->setDeclKind(DeclKind::VarK);
-//                                                    $5->setExprKind(ExprKind::IdK);
-//                                                    $$->setStmtKind(StmtKind::ForK);
-//                                                    $$->children[0] = $3;
-//                                                    $$->children[1] = $5;
-//                                                    $$->children[2] = $7;                                                
-//                                                }
-//    | WHILE error ')' closedStmt                { $$ = NULL; yyerrok; }
-//    | WHILE error                               { $$ = NULL; }
-//    | FOR error ')' closedStmt                  { $$ = NULL; yyerrok; }
-//    | FOR error                                 { $$ = NULL; }
-//    ;
-
-/* ---- */
 
 iterStmt
     : WHILE simpleExp DO stmt                   { 

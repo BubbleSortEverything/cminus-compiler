@@ -14,7 +14,7 @@ extern int globalOffset;
 extern TokenTree *syntaxTree;
 extern SymbolTable *symbolTable;
 
-void err(TokenTree *node) 
+void incermentError(TokenTree *node) 
 {
     printf("ERROR(%d): ", node->getLineNum());
     numErrors++;
@@ -35,18 +35,18 @@ void handleBooleanComparison(TokenTree *tree)
     TokenTree *rhs = tree->children[1];
 
     if (!lhs->isExprTypeUndefined() and lhs->getExprType() != ExprType::BOOL) {
-        err(tree);
-        printf("'%s' requires operands %s but lhs is %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+        incermentError(tree);
+        printf("'%s' requires operands of %s but lhs is of %s.\n", tree->getStringValue(), tree->getTypeString(), lhs->getTypeString());
     }
 
     if (!rhs->isExprTypeUndefined() and rhs->getExprType() != ExprType::BOOL) {
-        err(tree);
-        printf("'%s' requires operands %s but rhs is %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
+        incermentError(tree);
+        printf("'%s' requires operands of %s but rhs is of %s.\n", tree->getStringValue(), tree->getTypeString(), rhs->getTypeString());
     }
     
     if (lhs->isArray() or rhs->isArray()) {
-        err(tree);
-        printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
+        incermentError(tree);
+        printf("The operation '%s' does not work with arrays.\n", tree->getStringValue());
     }
 }
 
@@ -56,13 +56,13 @@ void handleNot(TokenTree *tree)
     TokenTree *lhs = tree->children[0];
     
     if (tree->cascadingError() and lhs->getExprType() != ExprType::BOOL) {
-        err(tree);
-        printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+        incermentError(tree);
+        printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getStringValue(), tree->getTypeString(), lhs->getTypeString());
     }
 
     if (lhs->isArray()) {
-        err(tree);
-        printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
+        incermentError(tree);
+        printf("The operation '%s' does not work with arrays.\n", tree->getStringValue());
     }
 }
 
@@ -73,17 +73,17 @@ void handleMath(TokenTree *tree)
     TokenTree *rhs = tree->children[1];
     
     if (!lhs->isExprTypeUndefined() and lhs->getExprType() != ExprType::INT) {
-        err(tree);
-        printf("'%s' requires operands %s but lhs is %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+        incermentError(tree);
+        printf("'%s' requires operands of %s but lhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
     }
     
     if (!rhs->isExprTypeUndefined() and rhs->getExprType() != ExprType::INT) {
-        err(tree);
-        printf("'%s' requires operands %s but rhs is %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
+        incermentError(tree);
+        printf("'%s' requires operands of %s but rhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
     }
     
     if (lhs->isArray() or rhs->isArray()) {
-        err(tree);
+        incermentError(tree);
         printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
     }
 }
@@ -96,12 +96,12 @@ void handleChsignOpK(TokenTree *tree)
         TokenTree *lhs = tree->children[0];
         
         if (tree->cascadingError() and lhs->getExprType() != ExprType::INT) {
-            err(tree);
+            incermentError(tree);
             printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
         }
         
         if (lhs->isArray()) {
-            err(tree);
+            incermentError(tree);
             printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
         }
     }
@@ -117,8 +117,8 @@ void handleSizeofOpK(TokenTree *tree)
         tree->setExprType(ExprType::INT);
         if (tree->cascadingError()) {
             if (!lhs->isArray()) {
-                err(tree);
-                printf("The operation '%s' only works with arrays.\n", tree->getTokenString());
+                incermentError(tree);
+                printf("The operation '%s' only works with arrays.\n", tree->getStringValue());
             }
         }
     }
@@ -129,12 +129,12 @@ void handleUnaryOpK(TokenTree *tree)
     tree->setExprType(ExprType::INT);
     TokenTree *lhs = tree->children[0];
     if (lhs->getExprType() != ExprType::INT) {
-        err(tree);
-        printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+        incermentError(tree);
+        printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getStringValue(), tree->getTypeString(), lhs->getTypeString());
     }
     if (lhs->isArray()) {
-        err(tree);
-        printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
+        incermentError(tree);
+        printf("The operation '%s' does not work with arrays.\n", tree->getStringValue());
     }
 }
 
@@ -143,12 +143,12 @@ void handleRandom(TokenTree *tree)
     TokenTree *lhs = tree->children[0];
     tree->setExprType(lhs->getExprType());
     if (lhs->getExprType() != ExprType::INT) {
-        err(tree);
+        incermentError(tree);
         printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getTokenString(), "type int", lhs->getTypeString());
     }
     
     if (lhs->isArray()) {
-        err(tree);
+        incermentError(tree);
         printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
     }
 }
@@ -160,7 +160,7 @@ void handleComparison(TokenTree *tree)
     TokenTree *rhs = tree->children[1];
     if (tree->cascadingError()) {
         if (!sameType(lhs, rhs)) {
-            err(tree);
+            incermentError(tree);
             printf("'%s' requires operands of the same type but lhs is %s and rhs is %s.\n", tree->getTokenString(), lhs->getTypeString(), rhs->getTypeString());
         }
     }
@@ -171,7 +171,7 @@ void handleComparison(TokenTree *tree)
         if (!lhs->isArray()) lhsStr = (char*) " not";
         if (!rhs->isArray()) rhsStr = (char*) " not";
         
-        err(tree);
+        incermentError(tree);
         printf("'%s' requires both operands be arrays or not but lhs is%s an array and rhs is%s an array.\n", tree->getTokenString(), lhsStr, rhsStr);
     }
 }
@@ -182,23 +182,23 @@ void handleArrayAccess(TokenTree *tree)
     tree->setExprType(array->getExprType());
     TokenTree *index = tree->children[1];
     if (array == NULL) {
-        err(tree);
+        incermentError(tree);
         printf("Cannot index nonarray.\n");
         return;
     }
     
     if (!array->isArray()) {
-        err(tree);
+        incermentError(tree);
         printf("Cannot index nonarray '%s'.\n", array->getStringValue());
     }
     
     if (!index->isExprTypeUndefined() and index->getExprType() != ExprType::INT) {
-        err(tree);
+        incermentError(tree);
         printf("Array '%s' should be indexed by type int but got %s.\n", array->getStringValue(), index->getTypeString());
     }
     
     if (index->isArray()) {
-        err(tree);
+        incermentError(tree);
         printf("Array index is the unindexed array '%s'.\n", index->getStringValue());
     }
 }
@@ -238,7 +238,7 @@ bool compoundShouldEnterScope(TokenTree *parent)
     return true;
 }
 
-// traverse child and check for scoping and errors
+// traverse child and check for scoping and incermentErrorors
 void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset) 
 {
     if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
@@ -254,7 +254,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
             }
             
             if (param == NULL and input == tree) {
-                err(tree);
+                incermentError(tree);
                 printf("Too many parameters passed for function '%s' declared on line %d.\n", res->getStringValue(), res->getLineNum());
             }
         }
@@ -276,7 +276,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
 
                 if (defined) {
                     TokenTree *res = (TokenTree *) symbolTable->lookup(tree->getStringValue());
-                    err(tree);
+                    incermentError(tree);
                     printf("Symbol '%s' is already declared at line %d.\n", res->getStringValue(), res->getLineNum());
                 }
             } 
@@ -305,13 +305,13 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
                 case 1: {
                     TokenTree *res = (TokenTree *) symbolTable->lookup(tree->getStringValue());
                     if (res == NULL) {
-                        err(tree);
+                        incermentError(tree);
                         printf("Function '%s' is not declared.\n", tree->getStringValue());
                     } 
                     else {
                         tree->setExprType(res->getExprType());
                         if (res->getDeclKind() != DeclKind::FuncK) {
-                            err(tree);
+                            incermentError(tree);
                             printf("'%s' is a simple variable and cannot be called.\n", tree->getStringValue());
                             tree->setExprType(ExprType::UNDEFINED);
                         }
@@ -328,7 +328,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
                 case 3: {
                     TokenTree *res = (TokenTree *) symbolTable->lookup(tree->getStringValue());
                     if (res == NULL or (res->getDeclKind() == DeclKind::VarK and tree->hasParent(res, true))) {
-                        err(tree);
+                        incermentError(tree);
                         printf("Symbol '%s' is not declared.\n", tree->getStringValue());
                     } 
                     else if (res->getDeclKind() != DeclKind::FuncK) {
@@ -346,7 +346,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
                         }
                     } 
                     else {
-                        err(tree);
+                        incermentError(tree);
                         printf("Cannot use function '%s' as a variable.\n", tree->getStringValue());
                     }
                     break;
@@ -389,7 +389,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
                     }
 
                     if (!foundLoop) {
-                        err(tree);
+                        incermentError(tree);
                         printf("Cannot have a break statement outside of loop.\n");
                     }
                     break;
@@ -412,7 +412,7 @@ void afterChild(TokenTree *tree, int childNo)
                         if (res != NULL) { res->setIsInitialized(true); }
                         
                         if (res == NULL or !res->isArray()) {
-                            // err(tree);
+                            // incermentError(tree);
                             // printf("For statement requires that symbol '%s' be an array to loop through.\n", array->getStringValue());
                         }
                     }
@@ -423,12 +423,12 @@ void afterChild(TokenTree *tree, int childNo)
                         TokenTree *condition = tree->children[0];
                         if (!condition->isExprTypeUndefined()) {
                             if (condition->getExprType() != ExprType::BOOL) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("Expecting Boolean test condition in %s statement but got %s.\n", tree->getTokenString(), condition->getTypeString());
                             }
 
                             if (condition->isArray()) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("Cannot use array as test condition in %s statement.\n", tree->getTokenString());
                             }
                         }
@@ -440,11 +440,11 @@ void afterChild(TokenTree *tree, int childNo)
                         TokenTree *condition = tree->children[0];
                         if (!condition->isExprTypeUndefined()) {
                             if (condition->getExprType() != ExprType::BOOL) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("Expecting Boolean test condition in %s statement but got %s.\n", tree->getTokenString(), condition->getTypeString());
                             }
                             if (condition->isArray()) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("Cannot use array as test condition in %s statement.\n", tree->getTokenString());
                             }
                         }
@@ -475,16 +475,16 @@ void afterChildren(TokenTree *tree)
                     tree->calculateMemoryOffset();
                     TokenTree *child = tree->children[0];
                     if (tree->children[0] != NULL and !tree->children[0]->isConstantExpression()) {
-                        err(tree);
+                        incermentError(tree);
                         printf("Initializer for variable '%s' is not a constant expression.\n", tree->getStringValue());
                     }
                     if (defined) {
                         TokenTree *res = (TokenTree *) symbolTable->lookup(tree->getStringValue());
-                        err(tree);
+                        incermentError(tree);
                         printf("Symbol '%s' is already declared at line %d.\n", res->getStringValue(), res->getLineNum());
                     }
                     if (child != NULL and !child->isExprTypeUndefined() and !sameType(tree, child)) {
-                        err(tree);
+                        incermentError(tree);
                         printf("Variable '%s' is %s but is being initialized with an expression of %s.\n", tree->getStringValue(), tree->getTypeString(), child->getTypeString());
                     }
                     break;
@@ -503,13 +503,13 @@ void afterChildren(TokenTree *tree)
                         tree->setExprType(ExprType::INT);
                         if (tree->cascadingError()) {
                             if (lhs->getExprType() != ExprType::INT) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("Unary '%s' requires an operand of %s but was given %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
                             }
                         }
                         
                         if (lhs->isArray()) {
-                            err(tree);
+                            incermentError(tree);
                             printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
                         }
                     } 
@@ -521,7 +521,7 @@ void afterChildren(TokenTree *tree)
                             tree->setIsArray(lhs->isArray());
                             if (tree->cascadingError()) {
                                 if (!sameType(lhs, rhs)) {
-                                    err(tree);
+                                    incermentError(tree);
                                     printf("'%s' requires operands of the same type but lhs is %s and rhs is %s.\n", tree->getTokenString(), lhs->getTypeString(), rhs->getTypeString());
                                 }
                             }
@@ -530,21 +530,21 @@ void afterChildren(TokenTree *tree)
                                 char *rhsStr = (char*) "";
                                 if (!lhs->isArray()) lhsStr = (char*) " not";
                                 if (!rhs->isArray()) rhsStr = (char*) " not";
-                                err(tree);
+                                incermentError(tree);
                                 printf("'%s' requires both operands be arrays or not but lhs is%s an array and rhs is%s an array.\n", tree->getTokenString(), lhsStr, rhsStr);
                             }
                         } else {
                             tree->setExprType(ExprType::INT);
                             if (!lhs->isExprTypeUndefined() and lhs->getExprType() != ExprType::INT) {
-                                err(tree);
-                                printf("'%s' requires operands %s but lhs is %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
+                                incermentError(tree);
+                                printf("'%s' requires operands of %s but lhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), lhs->getTypeString());
                             }
                             if (!rhs->isExprTypeUndefined() and rhs->getExprType() != ExprType::INT) {
-                                err(tree);
-                                printf("'%s' requires operands %s but rhs is %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
+                                incermentError(tree);
+                                printf("'%s' requires operands of %s but rhs is of %s.\n", tree->getTokenString(), tree->getTypeString(), rhs->getTypeString());
                             }
                             if (lhs->isArray() or rhs->isArray()) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("The operation '%s' does not work with arrays.\n", tree->getTokenString());
                             }
                         }
@@ -572,7 +572,7 @@ void afterChildren(TokenTree *tree)
                         // Reasoning is described there
                         // We only check for too few parameters here
                         if (numParams > numInputs) {
-                            err(tree);
+                            incermentError(tree);
                             printf("Too few parameters passed for function '%s' declared on line %d.\n", res->getStringValue(), res->getLineNum());
                         }
                         
@@ -600,20 +600,20 @@ void afterChildren(TokenTree *tree)
                     if (returnNodeExists) {
                         if (expectingReturn) {
                             if (!returnValue->isExprTypeUndefined() and returnValue->getExprType() != tree->function->getExprType()) {
-                                err(tree);
+                                incermentError(tree);
                                 printf("Function '%s' at line %d is expecting to return %s but got %s.\n", tree->function->getStringValue(), tree->function->getLineNum(), tree->function->getTypeString(), returnValue->getTypeString());
                             }
                         } else { // Function does not expect return
-                            err(tree);
+                            incermentError(tree);
                             printf("Function '%s' at line %d is expecting no return value, but return has return value.\n", tree->function->getStringValue(), tree->function->getLineNum());
                         }
                         if (returnValue->isArray()) {
-                            err(tree);
+                            incermentError(tree);
                             printf("Cannot return an array.\n");
                         }
                     } else { // No return node exists
                         if (expectingReturn) {
-                            err(tree);
+                            incermentError(tree);
                             printf("Function '%s' at line %d is expecting to return %s but return has no return value.\n", tree->function->getStringValue(), tree->function->getLineNum(), tree->function->getTypeString());
                         }
                     }
@@ -623,14 +623,7 @@ void afterChildren(TokenTree *tree)
             break;
         }
     }
-    /**
-     * It appears that type checking calls occurs in a counterintuitive way.
-     * Rather than checking all inputs to the call after they have all been
-     * processed, the test system seems to check inputs as soon as they have
-     * been typed.
-     * This requires us to catch each input to a call before moving on to
-     * siblings if we want to output errors in the correct order.
-     */
+    
     if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
         TokenTree *res = (TokenTree *) symbolTable->lookup(tree->parent->getStringValue());
         if (res != NULL) {
@@ -644,14 +637,14 @@ void afterChildren(TokenTree *tree)
             }
             if (param != NULL) { // If param is null, then we had more inputs than function allowed
                 if (!input->isExprTypeUndefined() and param->getExprType() != input->getExprType()) {
-                    err(tree);
+                    incermentError(tree);
                     printf("Expecting %s in parameter %i of call to '%s' declared on line %d but got %s.\n", param->getTypeString(), counter, res->getStringValue(), res->getLineNum(), input->getTypeString());
                 }
                 if (param->isArray() and !input->isArray()) {
-                    err(tree);
+                    incermentError(tree);
                     printf("Expecting array in parameter %i of call to '%s' declared on line %d.\n", counter, res->getStringValue(), res->getLineNum());
                 } else if (!param->isArray() and input->isArray()) {
-                    err(tree);
+                    incermentError(tree);
                     printf("Not expecting array in parameter %i of call to '%s' declared on line %d.\n", counter, res->getStringValue(), res->getLineNum());
                 }
             }
@@ -665,23 +658,20 @@ void checkUsage(std::string, void *node) {
     if (nk == NodeKind::DeclK and tree->getDeclKind() != DeclKind::FuncK) {
         if (!tree->isUsed()) {
             incermentWarn(tree);
-            printf("The variable '%s' seems not to be used.\n", tree->getStringValue());
+            if (tree->getDeclKind() == DeclKind::ParamK) {
+                printf("The parameter '%s' seems not to be used.\n", tree->getStringValue());
+            }
+            else {
+                printf("The variable '%s' seems not to be used.\n", tree->getStringValue());
+            }
         }
     }
 }
 
-/**
- * 
- */
 void buildSymbolTable(TokenTree *tree) {
     bool enteredScope = false;
     int previousLocalOffset = -2;
 
-    /**
-     * Recursing into tree
-     * Building symbol table
-     * Typing and scoping variables
-     */
     traverseChild(tree, &enteredScope, previousLocalOffset);
     
 
@@ -693,11 +683,6 @@ void buildSymbolTable(TokenTree *tree) {
         afterChild(tree, i);
     }
 
-    /**
-     * Recursing out of tree.
-     * Children and siblings are all typed and scoped
-     * Perform semantic analysis
-     */
     afterChildren(tree);
 
     if (enteredScope) {
@@ -708,11 +693,11 @@ void buildSymbolTable(TokenTree *tree) {
 
     if (tree->sibling != NULL) {
         buildSymbolTable(tree->sibling);
-    }
-    
+    }    
 }
 
-void buildIORoutines() {
+void buildIORoutines() 
+{
     TokenTree *outnl = new TokenTree();
     outnl->setDeclKind(DeclKind::FuncK);
     outnl->setLineNum(-1);
@@ -804,10 +789,12 @@ void buildIORoutines() {
     buildSymbolTable(output);
 }
 
-void buildSymbolTable() {
+void buildSymbolTable() 
+{
     buildIORoutines();
     buildSymbolTable(syntaxTree);
     TokenTree *main = (TokenTree *) symbolTable->lookupGlobal("main");
+
     if (main == NULL || main->getDeclKind() != DeclKind::FuncK) {
         printf("ERROR(LINKER): Procedure main is not declared.\n");
         numErrors++;
