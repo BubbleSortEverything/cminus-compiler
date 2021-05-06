@@ -423,40 +423,40 @@ exp
 
 simpleExp       
     : simpleExp OR andExpr                      {
-                                                    $2->setTokenString("|");
-                                                    $2->setStrValue("or");
+                                                    $2->setTokenString((char *) "|");
+                                                    $2->setStrValue((char *) "or");
                                                     $$ = $2;
                                                     $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
     | andExpr                                   { $$ = $1; }
-    | simpleExp OR error                        { $2->setTokenString("|"); $$ = NULL; }
+    | simpleExp OR error                        { $2->setTokenString((char *) "|"); $$ = NULL; }
     ;
 
 andExpr         
     : andExpr AND unaryRelExp                   {
-                                                    $2->setTokenString("&");
-                                                    $2->setStrValue("and");
+                                                    $2->setTokenString((char *) "&");
+                                                    $2->setStrValue((char *) "and");
                                                     $$ = $2;
                                                     $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $1;
                                                     $$->children[1] = $3;
                                                 }
     | unaryRelExp                               { $$ = $1; }
-    | andExpr AND error                         { $2->setTokenString("&"); $$ = NULL; }
+    | andExpr AND error                         { $2->setTokenString((char *) "&"); $$ = NULL; }
     ;           
 
 unaryRelExp     
     : NOT unaryRelExp                           {
-                                                    $1->setTokenString("!");
-                                                    $1->setStrValue("not");
+                                                    $1->setTokenString((char *) "!");
+                                                    $1->setStrValue((char *) "not");
                                                     $$ = $1;
                                                     $$->setExprKind(ExprKind::OpK);
                                                     $$->children[0] = $2;
                                                 }
     | relExp                                    { $$ = $1; }
-    | NOT error                                 { $1->setTokenString("!"); $$ = NULL; }
+    | NOT error                                 { $1->setTokenString((char *) "!"); $$ = NULL; }
     ;
 
 relExp          

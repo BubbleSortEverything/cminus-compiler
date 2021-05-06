@@ -194,7 +194,8 @@ bool TokenTree::isExprTypeUndefined() {
     return exprType == ExprType::UNDEFINED;
 }
 
-bool TokenTree::checkCascade() {
+bool TokenTree::cascadingError() 
+{
     bool b = true;
     for (int i = 0; i < MAX_CHILDREN; i++) {
         TokenTree *child = children[i];
@@ -202,32 +203,16 @@ bool TokenTree::checkCascade() {
             b = false;
         }
     }
+
     return b;
 }
 
-void TokenTree::setExprName(char *name) {
-    this->exprName = strdup(name);
-}
-
-char *TokenTree::getExprName() {
-    return this->exprName;
-}
-
-void TokenTree::setIsArray(bool b) {
-    this->_isArray = b;
-}
-
-bool TokenTree::isArray() {
-    return this->_isArray;
-}
-
-void TokenTree::setIsStatic(bool b) {
-    this->_isStatic = b;
-}
-
-bool TokenTree::isStatic() {
-    return this->_isStatic;
-}
+char *TokenTree::getExprName() { return this->exprName; }
+bool TokenTree::isArray() { return this->_isArray; }
+bool TokenTree::isStatic() { return this->_isStatic; }
+void TokenTree::setExprName(char *name) { this->exprName = strdup(name); }
+void TokenTree::setIsArray(bool b) { this->_isArray = b; }
+void TokenTree::setIsStatic(bool b) { this->_isStatic = b; }
 
 void TokenTree::cancelCheckInit(bool applyToChildren) {
     this->checkInitialized = false;
@@ -239,9 +224,7 @@ void TokenTree::cancelCheckInit(bool applyToChildren) {
     }
 }
 
-bool TokenTree::shouldCheckInit() {
-    return !_isStatic and this->checkInitialized;
-}
+bool TokenTree::shouldCheckInit() { return !_isStatic and this->checkInitialized; }
 
 void TokenTree::setIsUsed(bool b) {
     if (this->getNodeKind() != NodeKind::DeclK) {
@@ -250,9 +233,7 @@ void TokenTree::setIsUsed(bool b) {
     _isUsed = b;
 }
 
-bool TokenTree::isUsed() {
-    return _isUsed;
-}
+bool TokenTree::isUsed() {  return _isUsed; }
 
 void TokenTree::setIsInitialized(bool b) 
 {
@@ -267,10 +248,7 @@ void TokenTree::setIsInitialized(bool b)
     _isInitialized = b;
 }
 
-bool TokenTree::isInitialized() 
-{
-    return _isInitialized;
-}
+bool TokenTree::isInitialized() { return _isInitialized; }
 
 void TokenTree::setHasReturn(bool b) 
 {
@@ -344,8 +322,8 @@ void TokenTree::staticSiblings()
     }
 }
 
-void TokenTree::_printTree(int level, bool isChild, bool isSibling, int num) {
-    // Print self
+void TokenTree::_printTree(int level, bool isChild, bool isSibling, int num) 
+{
     for (int i = 0; i < level; i++) {
         printf(".   ");
     }
@@ -359,7 +337,6 @@ void TokenTree::_printTree(int level, bool isChild, bool isSibling, int num) {
     }
     printNode();
 
-    // Print children
     for (int i = 0; i < MAX_CHILDREN; i++) {
         TokenTree *child = children[i];
         if (child != NULL) {
@@ -367,7 +344,6 @@ void TokenTree::_printTree(int level, bool isChild, bool isSibling, int num) {
         }
     }
 
-    // Print sibling
     if (sibling != NULL) {
         if (isChild) {
             sibling->_printTree(level, false, true, 1);
@@ -381,8 +357,8 @@ void TokenTree::printTree() {
     this->_printTree(0, false, false, 0);
 }
 
-void TokenTree::printNode() {
-    // switching between different nodes
+void TokenTree::printNode() 
+{
     switch (static_cast<int>(nodeKind)) {
         case 0:
             switch (static_cast<int>(getDeclKind())) {
@@ -501,36 +477,26 @@ void TokenTree::printNode() {
     printf("\n");
 }
 
-void TokenTree::printLine() {
-    printf("[line: %d]", getLineNum());
-}
+void TokenTree::printLine() { printf("[line: %d]", getLineNum()); }
 
 void TokenTree::printMemory() {
     if (this->getMemoryType() == MemoryType::UNDEFINED) return;
+    
     printf("[mem: %s ", getMemoryTypeString());
     printf("loc: %d ", getMemoryOffset());
+    
     if (!(this->getNodeKind() == NodeKind::DeclK and this->getDeclKind() == DeclKind::FuncK)) {
         printf("size: %d] ", getMemorySize());
     }
 }
 
-void TokenTree::setMemorySize(unsigned int i) {
-    this->memorySize = i;
-}
+void TokenTree::setMemorySize(unsigned int i) { this->memorySize = i; }
+unsigned int TokenTree::getMemorySize() { return this->memorySize; }
+void TokenTree::setMemoryType(MemoryType mt) { this->memoryType = mt; }
+MemoryType TokenTree::getMemoryType() { return this->memoryType; }
 
-unsigned int TokenTree::getMemorySize() {
-    return this->memorySize;
-}
-
-void TokenTree::setMemoryType(MemoryType mt) {
-    this->memoryType = mt;
-}
-
-MemoryType TokenTree::getMemoryType() {
-    return this->memoryType;
-}
-
-char *TokenTree::getMemoryTypeString() {
+char *TokenTree::getMemoryTypeString() 
+{
     switch (static_cast<int>(this->getMemoryType())) {
         case 0:
             return (char *) "Global";
@@ -547,25 +513,24 @@ char *TokenTree::getMemoryTypeString() {
     }
 }
 
-bool TokenTree::isInGlobalMemory() {
+bool TokenTree::isInGlobalMemory() 
+{
     if (this->getMemoryType() == MemoryType::UNDEFINED) {
         throw std::runtime_error("isInGlobalMemory called on node with undefined memory type!");
     }
+    
     if (this->getMemoryType() == MemoryType::GLOBAL or this->getMemoryType() == MemoryType::LOCAL_STATIC) {
         return true;
     }
+
     return false;
 }
 
-void TokenTree::setMemoryOffset(int i) {
-    this->memoryOffset = i;
-}
+void TokenTree::setMemoryOffset(int i) { this->memoryOffset = i; }
+int TokenTree::getMemoryOffset() { return this->memoryOffset; }
 
-int TokenTree::getMemoryOffset() {
-    return this->memoryOffset;
-}
-
-void TokenTree::calculateMemoryOffset() {
+void TokenTree::calculateMemoryOffset() 
+{
     int *offset = this->isInGlobalMemory() ? &globalOffset : &localOffset; // Pick between local and global offset
     int location = *offset; // Copy offset
     if (this->isArray() and this->getMemoryType() != MemoryType::PARAM) location --; // Decrement offset if using an array
@@ -573,7 +538,8 @@ void TokenTree::calculateMemoryOffset() {
     (*offset) -= this->getMemorySize(); // Reduce offset by size of array
 }
 
-void TokenTree::copyMemoryInfo(TokenTree *tree) {
+void TokenTree::copyMemoryInfo(TokenTree *tree) 
+{
     if (this == tree) {
         throw std::runtime_error("Invalid pointer. Copy memory info called on self.");
     }
@@ -602,7 +568,8 @@ int TokenTree::_calculateMemoryOfChildren() {
     return sum;
 }
 
-void TokenTree::calculateMemoryOfChildren() {
+void TokenTree::calculateMemoryOfChildren() 
+{
     int sum = 0;
     for (int i = 0; i < MAX_CHILDREN; i++) {
         TokenTree *child = this->children[i];
@@ -614,24 +581,18 @@ void TokenTree::calculateMemoryOfChildren() {
     this->setMemorySize(2 + sum);
 }
 
-bool TokenTree::wasGenerated() {
-    return _wasGenerated;
-}
+bool TokenTree::wasGenerated() { return _wasGenerated; }
+void TokenTree::setGenerated() { this->setGenerated(true, false); }
+void TokenTree::setGenerated(bool b) { setGenerated(true, false);}
 
-void TokenTree::setGenerated() {
-    this->setGenerated(true, false);
-}
-
-void TokenTree::setGenerated(bool b) {
-    setGenerated(true, false);
-}
-
-void TokenTree::setGenerated(bool b, bool applyToChildren) {
+void TokenTree::setGenerated(bool b, bool applyToChildren) 
+{
     this->_wasGenerated = b;
 
     if (!applyToChildren) {
         return;
     }
+
     for (int i = 0; i < MAX_CHILDREN; i++) {
         TokenTree *child = this->children[i];
         if (child != NULL) {
@@ -640,18 +601,7 @@ void TokenTree::setGenerated(bool b, bool applyToChildren) {
     }
 }
 
-bool TokenTree::hasLastLine() {
-    return _hasLastLine;
-}
-
-void TokenTree::setHasLastLine(bool b) {
-    this->_hasLastLine = b;
-}
-
-int TokenTree::getLastLine() {
-    return this->lastLine;
-}
-
-void TokenTree::setLastLine(int line) {
-    this->lastLine = line;
-}
+bool TokenTree::hasLastLine() { return _hasLastLine; }
+void TokenTree::setHasLastLine(bool b) { this->_hasLastLine = b; }
+int TokenTree::getLastLine() { return this->lastLine;}
+void TokenTree::setLastLine(int line) { this->lastLine = line; }

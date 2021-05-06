@@ -117,7 +117,7 @@ class TokenTree {
         const char *getTypeString();
         bool isExprTypeUndefined();
 
-        bool checkCascade();
+        bool cascadingError();
         void setExprName(char *name);
         char *getExprName();
         void setIsArray(bool b);
