@@ -18,25 +18,19 @@
 
 %code requires { #include "TokenTree.h" }
 
-%union {
-    TokenTree *tree;
-}
+%union { TokenTree *tree; }
 
 // non terminals
-%type <tree> program declList decl varDecl scopedVarDecl varDeclList varDeclInit varDeclId typeSpec funDecl
-%type <tree> params paramList paramTypeList paramIdList paramId stmt expStmt compoundStmt localDecls
-%type <tree> stmtList selectStmt returnStmt breakStmt exp simpleExp andExpr unaryRelExp relExp relop sumExp sumop mulExp mulOp unaryExp
-%type <tree> unaryop factor mutable immutable call args argList constant minmaxop minmaxExp iterStmt iterRange matched unmatched
+%type <tree> program declList decl varDecl scopedVarDecl varDeclList varDeclInit varDeclId typeSpec funDecl selectStmt
+%type <tree> params paramList paramTypeList paramIdList paramId stmt expStmt compoundStmt localDecls stmtList unaryExp
+%type <tree> args breakStmt exp simpleExp andExpr unaryRelExp relExp relop sumExp sumop mulExp mulOp matched returnStmt 
+%type <tree> unaryop factor mutable immutable call argList constant minmaxop minmaxExp iterStmt iterRange unmatched
 
-%token <tree> ADDASS DEC DIVASS INC MULASS SUBASS
-%token <tree> EQ GEQ LEQ NEQ NOT AND OR MIN MAX
+// terminals
+%token <tree> ADDASS DEC DIVASS INC MULASS SUBASS NUMCONST CHARCONST STRINGCONST
+%token <tree> EQ GEQ LEQ NEQ NOT AND OR MIN MAX ID BOOLCONST WHILE DO
+%token <tree> BOOL BREAK CHAR ELSE FOR TO BY IF THEN INT RETURN STATIC 
 %token <tree> '+' '-' '=' '|' '&' '!' '<' '>' '*' '/' '%' '?'
-%token <tree> BOOL BREAK CHAR ELSE FOR TO BY IF THEN INT RETURN STATIC WHILE DO
-%token <tree> ID
-%token <tree> BOOLCONST
-%token <tree> NUMCONST
-%token <tree> CHARCONST
-%token <tree> STRINGCONST
 %token <tree> ',' ':' '(' ')' ';' '[' ']' '{' '}'
 
 %%

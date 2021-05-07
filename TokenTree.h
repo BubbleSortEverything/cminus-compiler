@@ -115,6 +115,7 @@ class TokenTree {
         void setExprType(ExprType et);
         ExprType getExprType();
         const char *getTypeString();
+        const char *getType();
         bool isExprTypeUndefined();
 
         bool cascadingError();

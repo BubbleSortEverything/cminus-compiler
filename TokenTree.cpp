@@ -26,7 +26,7 @@ void TokenTree  ::  setStringValue(char *str, bool duplicate) { this->svalue = d
 char *TokenTree ::  getStringValue() { 
     // if (strcmp(this->svalue, "*")==0 and this->svalue=="sizeof") return "sizeof";
     // if (strcmp(this->svalue, "-")==0 and this->svalue=="chsign") return "chsign";
-    if (strcmp(this->tokenStr, "!")==0) return "not";
+    // if (strcmp(this->tokenStr, "!")==0) return "not";
 
     // if (strcmp(this->svalue, "and")==0) printf("and found!\n");
     
@@ -78,31 +78,37 @@ TokenTree *TokenTree::getTopParent() {
     return visitor;
 }
 
-int TokenTree::getNumSiblings(bool includeSelf) {
+int TokenTree::getNumSiblings(bool includeSelf) 
+{
     int count = includeSelf ? 1 : 0;
     TokenTree *visitor = this;
     while (visitor->sibling != NULL) {
         visitor = visitor->sibling;
         count++;
     }
+    
     return count;
 }
 
-int TokenTree::getNumChildren() {
+int TokenTree::getNumChildren() 
+{
     int counter = 0;
     for (int i = 0; i < MAX_CHILDREN; i++) {
         if (children[i] != NULL) counter++;
     }
+    
     return counter;
 }
 
-bool TokenTree::hasParent(TokenTree *possibleParent, bool checkAllParents) {
+bool TokenTree::hasParent(TokenTree *possibleParent, bool checkAllParents) 
+{
     if (possibleParent == NULL) return false;
     TokenTree *visitor = this->parent;
     while (visitor != NULL) {
         if (visitor == possibleParent) return true;
         visitor = visitor->parent;
     }
+    
     return false;
 }
 
@@ -150,45 +156,46 @@ StmtKind TokenTree::getStmtKind() {
     return subKind.stmtKind;
 }
 
-void TokenTree::setExprType(ExprType et) {
-    this->exprType = et;
-}
+void TokenTree::setExprType(ExprType et) { this->exprType = et; }
+ExprType TokenTree::getExprType() { return this->exprType; }
 
-ExprType TokenTree::getExprType() {
-    return this->exprType;
-}
-
-const char *TokenTree::getTypeString() {
-    // switch (getExprType()) {
-    //     case 0:
-    //         return "of type int";
-    //     case 1:
-    //         return "of type bool";
-    //     case 2:
-    //         return "of type char";
-    //     case 3:
-    //         return "of type void";
-    //     case 4:
-    //         return "of undefined type";
-    // }
-    // return "error";
-    if (getExprType() == ExprType::BOOL) 
-        return "type bool";
-    else if (getExprType() == ExprType::CHAR)
-        return "type char";
-    else if (getExprType() == ExprType::INT)
-        return "type int";
-    else if (getExprType() == ExprType::VOID)
-        return "type void";
-    else if (getExprType() == ExprType::UNDEFINED)
-        return "undefined type";
+const char *TokenTree::getTypeString() 
+{
+    switch (static_cast<int>(getExprType())) {
+        case 0:
+            return (isStatic() and !isArray()) ? "type int" : "of type int";
+        case 1:
+            return (isStatic() and !isArray()) ? "type bool" : "of type bool";
+        case 2:
+            return (isStatic() and !isArray()) ? "type char" : "of type char";
+        case 3:
+            return (isStatic() and !isArray()) ? "type void" : "of type void";
+        case 4:
+            return (isStatic() and !isArray()) ? "type undefined" : "of undefined type";
+    }
 
     return "error";
 }
 
-bool TokenTree::isExprTypeUndefined() {
-    return exprType == ExprType::UNDEFINED;
+const char *TokenTree::getType() 
+{
+    switch (static_cast<int>(getExprType())) {
+        case 0:
+            return "type int";
+        case 1:
+            return "type bool";
+        case 2:
+            return "type char";
+        case 3:
+            return "type void";
+        case 4:
+            return "type undefined";
+    }
+
+    return "error";
 }
+
+bool TokenTree::isExprTypeUndefined() { return exprType == ExprType::UNDEFINED; }
 
 bool TokenTree::cascadingError() 
 {
@@ -370,7 +377,7 @@ void TokenTree::printNode()
                     break;
                 case 2:
                     printf("Parm: %s ", getStringValue());
-                    if (isArray()) printf("array of ");
+                    if (isArray()) printf("of array ");
                     printf("%s ", getTypeString());
                 default:
                     break;
@@ -411,15 +418,17 @@ void TokenTree::printNode()
                             printf(" \"");
                             fwrite(getStringValue(), sizeof(char), getNumValue(), stdout);
                             printf("\"");
-                        } else {
-                            printf(" \'%c\'", getCharValue());
+                        } 
+                        else {
+                            printf(" \'%c\' ", getCharValue());
                         }
-                        printf(" : ");
-                    } else {
+                        // printf(" : ");
+                    } 
+                    else {
                         printf(" %s ", getStringValue());
                     }
                     char *arrayStr = (char *) "";
-                    if (isArray()) arrayStr = (char *) "array of ";
+                    if (isArray()) arrayStr = (char *) " of array ";
                     printf("%s%s ", arrayStr, getTypeString());
                     break;
                 }
@@ -461,6 +470,9 @@ void TokenTree::printNode()
                     break;
                 case 5:
                     printf("If ");
+                    break;
+                case 6:
+                    printf("Range ");
                     break;
             }
             break;
