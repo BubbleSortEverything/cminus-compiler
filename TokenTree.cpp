@@ -162,16 +162,11 @@ ExprType TokenTree::getExprType() { return this->exprType; }
 const char *TokenTree::getTypeString() 
 {
     switch (static_cast<int>(getExprType())) {
-        case 0:
-            return (isStatic() and !isArray()) ? "type int" : "of type int";
-        case 1:
-            return (isStatic() and !isArray()) ? "type bool" : "of type bool";
-        case 2:
-            return (isStatic() and !isArray()) ? "type char" : "of type char";
-        case 3:
-            return (isStatic() and !isArray()) ? "type void" : "of type void";
-        case 4:
-            return (isStatic() and !isArray()) ? "type undefined" : "of undefined type";
+        case 0: return (isStatic() and !isArray()) ? "type int" : "of type int";
+        case 1: return (isStatic() and !isArray()) ? "type bool" : "of type bool";
+        case 2: return (isStatic() and !isArray()) ? "type char" : "of type char";
+        case 3: return (isStatic() and !isArray()) ? "type void" : "of type void";
+        case 4: return (isStatic() and !isArray()) ? "type undefined" : "of undefined type";
     }
 
     return "error";
@@ -180,16 +175,11 @@ const char *TokenTree::getTypeString()
 const char *TokenTree::getType() 
 {
     switch (static_cast<int>(getExprType())) {
-        case 0:
-            return "type int";
-        case 1:
-            return "type bool";
-        case 2:
-            return "type char";
-        case 3:
-            return "type void";
-        case 4:
-            return "type undefined";
+        case 0: return "type int";
+        case 1: return "type bool";
+        case 2: return "type char";
+        case 3: return "type void";
+        case 4: return "type undefined";
     }
 
     return "error";

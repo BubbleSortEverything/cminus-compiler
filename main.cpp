@@ -106,6 +106,8 @@ int main(int argc, char **argv)
                 int outLength = strlen(fileName) + 1;
                 outputFile = (char *) malloc(sizeof(char) * outLength);
                 bstrcpy(outputFile, outLength, fileName);
+
+                // tm extension
                 outputFile[outLength - 3] = 't';
                 outputFile[outLength - 2] = 'm';
             }

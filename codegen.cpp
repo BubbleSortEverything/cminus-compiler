@@ -459,12 +459,12 @@ void beforeChildrenCodeGen(TokenTree *tree)
                     }
 
                     emitComment((char *) "Begin call");
-                    emitRM((char *) "LDA", 1, previousTOffset, 1, (char *) "Move the fp to the new frame");
-                    emitRM((char *) "LDA", AC, 1, 7, (char *) "Store the return address in ac (skip 1 ahead)");
-                    emitGotoAbs(func->getMemoryOffset(), (char *) "Call function");
+                    emitRM((char *) "LDA", 1, previousTOffset, 1, (char *) "Ghost frame becomes new active frame");
+                    emitRM((char *) "LDA", AC, 1, 7, (char *) "Return address in ac");
+                    emitGotoAbs(func->getMemoryOffset(), (char *) "Call func");
                     totalOffset += func->getMemorySize();
                     fOffset = previousFoffset;
-                    emitRM((char *) "LDA", AC, 0, RT, (char *) "Save return result in accumulator");
+                    emitRM((char *) "LDA", AC, 0, RT, (char *) "Save the result in ac");
                     asprintf(&line, "END CALL %s", tree->getStringValue());
                     emitComment(line);
                     free(line);
@@ -662,7 +662,7 @@ void childGenerator(TokenTree *tree)
                 }
             }
             if (tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
-                emitRM((char *) "ST", AC, fOffset, 1, (char *) "Push parameter onto new frame");
+                emitRM((char *) "ST", AC, fOffset, 1, (char *) "Push parameter");
                 fOffset--;
             }
             break;
