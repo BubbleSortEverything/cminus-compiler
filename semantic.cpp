@@ -239,7 +239,7 @@ bool compoundShouldEnterScope(TokenTree *parent)
 }
 
 // traverse child and check for scoping and incermentErrorors
-void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset) 
+void traverseChild(TokenTree *tree, bool *scopeEntered, int &previousLocalOffset) 
 {
     if (tree->parent != NULL and tree->parent->getNodeKind() == NodeKind::ExpK and tree->parent->getExprKind() == ExprKind::CallK) {
         TokenTree *res = (TokenTree *) symbolTable->lookup(tree->parent->getStringValue());
@@ -265,7 +265,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
                 bool defined = !symbolTable->insert(tree->getStringValue(), tree);
                 if (tree->getDeclKind() == DeclKind::FuncK) {
                     symbolTable->enter("Function: " + std::string(tree->getStringValue()));
-                    *enteredScope = true;
+                    *scopeEntered = true;
                     localOffset = -2;
                 } 
                 else { // Must be param
@@ -358,7 +358,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
             switch ( static_cast<int>(tree->getStmtKind()) ) {
                 case 1: {
                     if (compoundShouldEnterScope(tree->parent)) {
-                        *enteredScope = true;
+                        *scopeEntered = true;
                         symbolTable->enter("Compound Statement");
                         previousLocalOffset = localOffset;
                         break;
@@ -366,7 +366,7 @@ void traverseChild(TokenTree *tree, bool *enteredScope, int &previousLocalOffset
                     break;
                 }
                 case 2: {
-                    *enteredScope = true;
+                    *scopeEntered = true;
                     symbolTable->enter("For Statement");
                     previousLocalOffset = localOffset;
                     TokenTree *child = tree->children[0];
@@ -668,11 +668,12 @@ void checkUsage(std::string, void *node) {
     }
 }
 
-void buildSymbolTable(TokenTree *tree) {
-    bool enteredScope = false;
+void buildSymbolTable(TokenTree *tree) 
+{
+    bool scopeEntered = false;
     int previousLocalOffset = -2;
 
-    traverseChild(tree, &enteredScope, previousLocalOffset);
+    traverseChild(tree, &scopeEntered, previousLocalOffset);
     
 
     for (int i = 0; i < MAX_CHILDREN; i++) {
@@ -685,7 +686,7 @@ void buildSymbolTable(TokenTree *tree) {
 
     afterChildren(tree);
 
-    if (enteredScope) {
+    if (scopeEntered) {
         symbolTable->applyToAll(checkUsage);
         symbolTable->leave();
         localOffset = previousLocalOffset;
