@@ -5,7 +5,7 @@
 
 #include "c-.tab.h"
 
-#include "TokenTree.h"
+#include "globals.h"
 
 int lineNum = 1;
 char *lastToken;

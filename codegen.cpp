@@ -1,8 +1,8 @@
 #define NUM_OPS 18
+#include "globals.h"
 #include "codegen.h"
 #include "emitcode.h"
 #include "symbolTable.h"
-#include "TokenTree.h"
 #include <stack>
 #include "string.h"
 

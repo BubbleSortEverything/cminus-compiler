@@ -11,7 +11,7 @@
 
 /*  imported libs
  */
-#include "TokenTree.h"
+#include "globals.h"
 #include "ourgetopt.h"
 #include "symbolTable.h"
 #include "yyerror.h"

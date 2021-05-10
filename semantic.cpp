@@ -1,9 +1,7 @@
 #include "string.h"
-
 #include "symbolTable.h"
-
 #include "semantic.h"
-#include "TokenTree.h"
+#include "globals.h"
 
 #define NUM_OPS 18
 

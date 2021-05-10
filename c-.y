@@ -6,7 +6,7 @@
 
     #include "yyerror.h"
 
-    #include "TokenTree.h"
+    #include "globals.h"
 
     // GLOBALS
     extern TokenTree *syntaxTree;
@@ -16,7 +16,7 @@
     
 %}
 
-%code requires { #include "TokenTree.h" }
+%code requires { #include "globals.h" }
 
 %union { TokenTree *tree; }
 
