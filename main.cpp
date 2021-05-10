@@ -49,7 +49,7 @@ extern FILE *yyin;
 int main(int argc, char **argv) 
 {
     extern int optind;
-    bool printAST = false;
+    bool printTree = false;
     char *fileName = NULL;
     char *outputFile = NULL;
     int c;
@@ -65,10 +65,10 @@ int main(int argc, char **argv)
                 useageMessage();
                 return 0;
             case 'P':
-                printAST = true;
+                printTree = true;
                 break;
             case 'M':
-                printAST = true;
+                printTree = true;
                 printMem = true;
                 break;
             case 'D':
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         symbolTable->debug(symtabDebug);
         buildSymbolTable();
 
-        if (printAST and numErrors==0) {
+        if (printTree and numErrors==0) {
             syntaxTree->printTree();
             printf("Offset for end of global space: %d\n", globalOffset);
         }
