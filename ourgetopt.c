@@ -29,7 +29,7 @@
 // 		int c,	aset = 0,  bset = 0;				
 // 		char *oarg = NULL;					
 // 									
-// 		while (( c == ourGetopt( argc, argv, (char *)"abo:" ) != -1 ) {
+// 		while (( c = ourGetopt( argc, argv, (char *)"abo:" ) != -1 ) {
 // 		switch ( c )						
 // 		{	case 'a':                                     
 // 				++aset; 	break;		
@@ -75,7 +75,7 @@ static int sp = 1;		/* offset within option word    */
 static int badopt(char *name, char *text)
 {
     if (opterr)			/* show error message if not 0      */
-	   fprintf(stderr, "%s: %s -- %c\n", name, text, optopt);
+	fprintf(stderr, "%s: %s -- %c\n", name, text, optopt);
 
     return (int) '?';		/* ?: result for invalid option */
 }
@@ -87,48 +87,49 @@ int ourGetopt(int argc, char **argv, char *opts)
     char *cp, ch;
 
     if (sp == 1) {
-    	if (argc <= optind || argv[optind][1] == '\0')
-    	    return EOF;		/* no more words or single '-'  */
+	if (argc <= optind || argv[optind][1] == '\0')
+	    return EOF;		/* no more words or single '-'  */
 
-    	if ((ch = argv[optind][0]) != '-' && ch != SWITCH)
-    	    return EOF;		/* options must start with '-'  */
 
-    	if (!strcmp(argv[optind], "--")) {
-    	    ++optind;		/* to next word */
-    	    return EOF;		/* -- marks end */
-    	}
+	if ((ch = argv[optind][0]) != '-' && ch != SWITCH)
+	    return EOF;		/* options must start with '-'  */
+
+	if (!strcmp(argv[optind], "--")) {
+	    ++optind;		/* to next word */
+	    return EOF;		/* -- marks end */
+	}
     }
 
     optopt = (int) (ch = argv[optind][sp]);	/* flag option  */
 
     if (ch == ':' || (cp = strchr(opts, ch)) == NULL) {
-    	if (argv[optind][++sp] == '\0') {
-    	    ++optind;
-    	    sp = 1;		/* to next word */
-    	}
+	if (argv[optind][++sp] == '\0') {
+	    ++optind;
+	    sp = 1;		/* to next word */
+	}
 
-	   return badopt(argv[0], (char *)"illegal option");
+	return badopt(argv[0], (char *)"illegal option");
     }
 
     if (*++cp == ':') {		/* ':' option requires argument */
-    	optarg = &argv[optind][sp + 1];	/* if same word */
-    	++optind;
-    	sp = 1;			/* to next word */
+	optarg = &argv[optind][sp + 1];	/* if same word */
+	++optind;
+	sp = 1;			/* to next word */
 
-    	if (*optarg == '\0') {	/* in next word */
-    	    if (argc <= optind)	/* no more word */
-    		return badopt(argv[0], (char *)"option requires an argument");
+	if (*optarg == '\0') {	/* in next word */
+	    if (argc <= optind)	/* no more word */
+		return badopt(argv[0], (char *)"option requires an argument");
 
-    	    optarg = argv[optind++];	/* to next word */
-    	}
+	    optarg = argv[optind++];	/* to next word */
+	}
     }
     else {			/* flag option without argument */
-    	optarg = NULL;
+	optarg = NULL;
 
-    	if (argv[optind][++sp] == '\0') {
-    	    optind++;
-    	    sp = 1;		/* to next word */
-    	}
+	if (argv[optind][++sp] == '\0') {
+	    optind++;
+	    sp = 1;		/* to next word */
+	}
     }
 
     return optopt;

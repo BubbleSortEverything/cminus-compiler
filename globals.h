@@ -1,96 +1,171 @@
+#ifndef TOKEN_TREE_H
+#define TOKEN_TREE_H
 
-#ifndef _GLOBALS_H_
-#define _GLOBALS_H_
+#define MAX_CHILDREN 3
+#include <stddef.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-#include "scanType.h"
-
-
-#define ENDFILE 0
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-
-#define MAXRESERVED 8
-
-typedef int TokenType; 
-
-extern FILE* source; 
-extern FILE* listing; 
-extern FILE* code; 
-
-extern int lineno; 
-
-//*******************************************************************
-
-// Kinds of Operators
-// these are the token numbers for the operators same as in flex
-typedef int OpKind;  
+/*  token classification
+ *  node kinds, exp kinds, exp types, and variable kinds
+ */
 
 // Kinds of Statements
 //typedef enum {DeclK, StmtK, ExpK} NodeKind;
-enum NodeKind {DeclK, StmtK, ExpK};
+enum class NodeKind { DeclK=0, ExpK=1, StmtK=2 };
 
 // Subkinds of Declarations
-enum DeclKind {VarK, FuncK, ParamK};
+enum class DeclKind { VarK=0, FuncK=1, ParamK=2 };
 
 // Subkinds of Statements
-enum  StmtKind {NullK, IfK, WhileK, ForK, CompoundK, ReturnK, BreakK, RangeK};
+enum class StmtKind { BreakK=0, CompoundK=1, ForK=2, WhileK=3, ReturnK=4, IfK=5, RangeK=6 };
 
 // Subkinds of Expressions
-enum ExpKind {OpK, ConstantK, IdK, AssignK, InitK, CallK};
+enum class ExprKind { AssignK=0, CallK=1, ConstantK=2, IdK=3, OpK=4 };
 
 // ExpType is used for type checking (Void means no type or value, UndefinedType means undefined)
-enum ExpType {Void, Integer, Boolean, Char, CharInt, Equal, UndefinedType};
+enum class ExprType { INT=0, BOOL=1, CHAR=2, VOID=3, UNDEFINED=4 };
 
-// string representation of ExpType
-// What kind of scoping is used?  (decided during typing)
-enum VarKind {None, Local, Global, Parameter, LocalStatic};
+// MemoryType is used for checking type of memeory during memory management
+enum class MemoryType { GLOBAL=0, LOCAL=1, LOCAL_STATIC=2, PARAM=3, UNDEFINED=4 };
+
+/*  tree node structure
+ */
+class TokenTree {
+
+    private:
+        // Token Information
+        int tokenClass;
+        int lineNum;
+        char *tokenStr;         
+        char cvalue;            
+        int  nvalue;            
+        char *svalue;           
+
+        // Expression Information
+        NodeKind nodeKind;
+        union {
+            DeclKind declKind;
+            ExprKind exprKind;
+            StmtKind stmtKind;
+        } subKind;
+        ExprType exprType = ExprType::UNDEFINED;
+        char *exprName;
+        bool _isArray = false;
+        bool _isStatic = false;
+
+        // Semantic information
+        bool checkInitialized = true;
+        bool _isUsed = false;       
+        bool _isInitialized = false; 
+        bool _hasReturn = false; 
+
+        // Memory/Code Gen Information
+        unsigned int memorySize = 1;
+        MemoryType memoryType = MemoryType::UNDEFINED;
+        int memoryOffset;
+        bool _wasGenerated = false;
+        bool _hasLastLine = false;
+        int lastLine;
+
+        void _printTree(int level, bool isChild, bool isSibling, int num);
+        void makeParent();
+        void _setFunction();
+        int _calculateMemoryOfChildren();
 
 
-#define MAXCHILDREN 3
+    public:
+        TokenTree();
+        void setTokenClass(int tc);
+        int getTokenClass();
+        void setLineNum(int line);
+        int getLineNum();
+        void setTokenString(char *str);
+        void setStrValue(char *str);
+        char *getTokenString();
+        void setCharValue(char c);
+        char getCharValue();
+        void setNumValue(int n);
+        int getNumValue();
 
-typedef struct treeNode {
-    // connectivity in the tree
-    struct treeNode *child[MAXCHILDREN];   // children of the node
-    struct treeNode *sibling;              // siblings for the node
+        
+        void setStringValue(char *str);
+        void setStringValue(char *str, bool duplicate);
+        char *getStringValue();
+        
+        TokenTree *children[3] = {NULL};
+        TokenTree *parent = NULL;
+        TokenTree *sibling = NULL;
+        TokenTree *function = NULL;
+        void setParentAndFunction();
+        TokenTree *getTopParent();
 
-    // what kind of node
-    int lineno;                            // linenum relevant to this node
-    NodeKind nodekind;                     // type of this node
-    union {                                  // subtype of type
-        DeclKind decl;                     // used when DeclK
-        StmtKind stmt;                     // used when StmtK
-        ExpKind exp;                      // used when ExpK
-    } subkind;
-    
-    // extra properties about the node depending on type of the node
-    union {                                  // relevant data to type -> attr
-        OpKind op;                         // type of token (same as in bison)
-        int value;                         // used when an integer constant or boolean
-        unsigned char cvalue;               // used when a character
-        char *string;                      // used when a string constant
-        char *name;                        // used when IdK
-    } attr;                                 
-    ExpType expType;                   // used when ExpK for type checking
-    
-    bool isUsed;                       // true if the variable is used.
-    bool isArray;                          // is this an array
-    bool isStatic;                         // is staticly allocated?
-    bool hasReturn;
-    bool changedToInt;                        // is sizeof an array
-    bool isInitialized;
+        int getNumSiblings(bool includeSelf);
+        int getNumChildren();
 
-    TokenData* token;           // for tokens
+        bool hasParent(TokenTree *possibleParent, bool checkAllParents);
 
-    // even more semantic stuff will go here in later assignments.
-} TreeNode;
+        // ExpKind Information
+        void setNodeKind(NodeKind nk);
+        NodeKind getNodeKind();
+        void setDeclKind(DeclKind dk);
+        DeclKind getDeclKind();
+        void setExprKind(ExprKind ek);
+        ExprKind getExprKind();
+        void setStmtKind(StmtKind sk);
+        StmtKind getStmtKind();
+        void setExprType(ExprType et);
+        ExprType getExprType();
+        const char *getTypeString();
+        const char *getType();
+        bool isExprTypeUndefined();
+
+        bool cascadingError();
+        void setExprName(char *name);
+        char *getExprName();
+        void setIsArray(bool b);
+        bool isArray();
+        void setIsStatic(bool b);
+        bool isStatic();
+
+        // Semantic information
+        void cancelCheckInit(bool applyToChildren);
+
+        bool shouldCheckInit();
+        void setIsUsed(bool b);
+        bool isUsed();
+        void setIsInitialized(bool b);
+        bool isInitialized();
+        void setHasReturn(bool b);
+        bool hasReturn();
+        bool isConstantExpression();
+
+        void addSibling(TokenTree *sibl);
+        void typeSiblings(ExprType type);
+        void staticSiblings();
+        void printTree();
+        void printNode();
+        void printLine();
+        void printMemory();
+
+        void setMemorySize(unsigned int i);
+        unsigned int getMemorySize();
+        void setMemoryType(MemoryType mt);
+        MemoryType getMemoryType();
+        char *getMemoryTypeString();
+        bool isInGlobalMemory();
+        void setMemoryOffset(int i);
+        int getMemoryOffset();
+        void calculateMemoryOffset();
+        void copyMemoryInfo(TokenTree *tree);
+        void calculateMemoryOfChildren();
+
+        bool wasGenerated();
+        void setGenerated();
+        void setGenerated(bool b);
+        void setGenerated(bool b, bool applyToChildren);
+        bool hasLastLine();
+        void setHasLastLine(bool b);
+        int getLastLine();
+        void setLastLine(int line);
+};
+
 #endif

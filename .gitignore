@@ -8,7 +8,12 @@
 
 .DS_Store
 output.out
+c-.tar
 c-
+quicksort.c-
+quicksort.tm
 
 # ignoring dir
 /bin
+/test_files
+/original_test

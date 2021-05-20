@@ -1,6 +1,6 @@
 #include "symbolTable.h"
 
-// // // // // // // // // // // // // // // // // // // // 
+/// // // // // // // // // // // // // // // // // // // // 
 //
 // Introduction
 //
@@ -34,20 +34,17 @@
 void pointerPrintNothing(void *data)
 {
 }
-   
-// print the pointer as a hex address
+
 void pointerPrintAddr(void *data)
 {
     printf("0x%016llx ", (unsigned long long int)(data));
 }
    
-// print the pointer as a long long int
 void pointerPrintLongInteger(void *data)
 {
     printf("%18lld ", (unsigned long long int)(data));
 }
    
-// print the pointer as a char * string
 void pointerPrintStr(void *data)
 {
     printf("%s ", (char *)(data));
@@ -89,10 +86,6 @@ void Scope::print(void (*printData)(void *)) {
     
 }
 
-std::map<std::string, void *> Scope::getSymbols() {
-    return symbols;
-}
-
 
 // apply the function to each symbol in this scope
 void Scope::applyToAll(void (*action)(std::string , void *)) {
@@ -103,15 +96,9 @@ void Scope::applyToAll(void (*action)(std::string , void *)) {
 
 
 // returns true if insert was successful and false if symbol already in this scope
-bool Scope:: insert(std::string sym, void *ptr) {
+bool Scope::insert(std::string sym, void *ptr) {
     if (symbols.find(sym) == symbols.end()) {
-        if (debugFlg) printf("DEBUG(Scope): insert in \"%s\" the symbol \"%s\".\n",
-                             name.c_str(),
-                             sym.c_str());
-        if (ptr==NULL) {
-            printf("ERROR(SymbolTable): Attempting to save a NULL pointer for the symbol '%s'.\n",
-                   sym.c_str());
-        }
+        if (debugFlg) printf("DEBUG(Scope): insert in \"%s\" the symbol \"%s\".\n", name.c_str(), sym.c_str());
         symbols[sym] = ptr;
         return true;
     }
@@ -163,8 +150,6 @@ int SymbolTable::depth()
     return stack.size();
 }
 
-// Returns true if there is only one symbol implying it as global
-bool SymbolTable::isGlobal() { return stack.size() == 1; }
 
 // print all scopes using data printing func
 void SymbolTable::print(void (*printData)(void *))
@@ -206,28 +191,11 @@ void * SymbolTable::lookup(std::string sym)
     void *data;
     std::string name;
 
-    data = NULL;  // set even though the scope stack should never be empty
     for (std::vector<Scope *>::reverse_iterator it=stack.rbegin(); it!=stack.rend(); it++) {
         data = (*it)->lookup(sym);
         name = (*it)->scopeName();
         if (data!=NULL) break;
     }
-
-    if (debugFlg) {
-        printf("DEBUG(SymbolTable): lookup the symbol \"%s\" and ", sym.c_str());
-        if (data) printf("found it in the scope named \"%s\".\n", name.c_str());
-        else printf("did NOT find it!\n");
-    }
-
-    return data;
-}
-
-void* SymbolTable::lookupLocal(std::string sym) {
-    void* data;
-    std::string name;
-
-    data = stack.back()->lookup(sym);
-    name = stack.back()->scopeName();
 
     if (debugFlg) {
         printf("DEBUG(SymbolTable): lookup the symbol \"%s\" and ", sym.c_str());
@@ -257,13 +225,7 @@ void * SymbolTable::lookupGlobal(std::string sym)
 // Returns true if insert was successful and false if symbol already in the most recent scope
 bool SymbolTable::insert(std::string sym, void *ptr)
 {
-    if (debugFlg) {
-        printf("DEBUG(symbolTable): insert in scope \"%s\" the symbol \"%s\"",
-               (stack.back()->scopeName()).c_str(), sym.c_str());
-        if(ptr==NULL) printf(" WARNING: The inserted pointer is NULL!!");
-        printf("\n");
-    }
-
+    if (debugFlg) printf("DEBUG(SymbolTable): insert the symbol \"%s\".\n", sym.c_str());
     return (stack.back())->insert(sym, ptr);
 }
 
@@ -272,12 +234,7 @@ bool SymbolTable::insert(std::string sym, void *ptr)
 // Returns true is insert was successful and false if symbol already in the global scope
 bool SymbolTable::insertGlobal(std::string sym, void *ptr)
 {
-    if (debugFlg) {
-        printf("DEBUG(Scope): insert the global symbol \"%s\"", sym.c_str());
-        if(ptr==NULL) printf(" WARNING: The inserted pointer is NULL!!");
-        printf("\n");
-    }
-
+    if (debugFlg) printf("DEBUG(SymbolTable): insert the global symbol \"%s\".\n", sym.c_str());
     return stack[0]->insert(sym, ptr);
 }
 
@@ -296,111 +253,6 @@ void SymbolTable::applyToAllGlobal(void (*action)(std::string , void *))
 {
     stack[0]->applyToAll(action);
 }
-
-void SymbolTable::addSymbolToCurrentScope(TreeNode* node) {
-    /*  Mark node as 'not used' and push it to the symbolList of current stack
-     */
-    // printf("%s added to symbollist\n", node->token->tokenstr);
-    node->isUsed = false;
-    (stack.back())->symbolList.push_back(node);
-}
-
-void SymbolTable::addSymbolToGlobalScope(TreeNode* node) {
-    node->isUsed = false;
-    (stack[0])->symbolList.push_back(node);
-}
-
-void SymbolTable::markSymbolAsUsed(TreeNode* node) {
-    /* loop thru the list of symbols in scope sitting at top of the scope stack
-
-        []-> |x|x|x|x|x|x|x| { symbol list in each scope (string `symName`, bool `isUsed`) }
-        []
-        []
-        []
-        ___
-    scope stack
-    */
-    std::vector<TreeNode*> curScope = stack.back()->symbolList;
-    for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
-        if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
-            node->isUsed = true;
-            (*it)->isUsed = true;
-        }
-        else {
-            std::vector<TreeNode*> gScope = stack.front()->symbolList;
-            for (std::vector<TreeNode*>::iterator it = gScope.begin(); it != gScope.end(); it++) {
-                if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
-                    node->isUsed = true;
-                    (*it)->isUsed = true;
-                }
-            }
-        }
-    }
-}
-
-void SymbolTable::markFunctionAsUsed(TreeNode* node) {
-    /* loop thru the list of symbols in scope sitting at top of the scope stack
-
-        []-> |x|x|x|x|x|x|x| { symbol list in each scope (string `symName`, bool `isUsed`) }
-        []
-        []
-        []
-        ___
-    scope stack
-    */
-    std::vector<TreeNode*> curScope = stack[0]->symbolList;
-    for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
-        if((std::string)node->token->tokenstr == (std::string)(*it)->token->tokenstr) {
-            node->isUsed = true;
-            (*it)->isUsed = true;
-        }
-    }
-}
-
-int SymbolTable::checkUnusedVariable() {
-    /*  Loop through symbol list from the current scope and if any variable is not used print Warning.
-     */
-    int numWarning = 0;
-    std::vector<TreeNode*> curScope = stack.back()->symbolList;
-    for (std::vector<TreeNode*>::iterator it = curScope.begin(); it != curScope.end(); it++) {
-        if(!(*it)->isUsed) {
-            if ((*it)->subkind.decl == FuncK and ( strcmp((*it)->token->tokenstr, "main") != 0) ) {
-                printf("WARNING(%d): The function '%s' seems not to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
-                numWarning++;
-            }
-
-            if ((*it)->subkind.decl == ParamK) {
-                printf("WARNING(%d): The Parameter '%s' seems not to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
-                numWarning++;
-            }
-
-            if ((*it)->subkind.decl == VarK) {
-                printf("WARNING(%d): The variable '%s' seems not to be used.\n", (*it)->lineno, (*it)->token->tokenstr);
-                numWarning++;
-            }
-        }
-    }
-
-    return numWarning;
-}
-
-std::vector<std::string> SymbolTable::getGlobalVariables() {
-    std::vector<std::string> globalVariables;
-    std::map<std::string , void *> curScope = stack.back()->getSymbols();
-
-    for (std::map<std::string , void *>::iterator it=curScope.begin(); it!=curScope.end(); it++) {
-        globalVariables.push_back(it->first);
-    }
-
-    return globalVariables;
-}
-
-std::string SymbolTable::currentScopeName() { return stack.back()->scopeName(); }
-void SymbolTable::reverseScopeStack() { std::reverse(stack.begin(), stack.end()); }
-
-// void * SymbolTable::getCurrentScopeNode() {
-//     return stack.back();
-// }
 
 
 

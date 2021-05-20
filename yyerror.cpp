@@ -68,31 +68,26 @@ static std::map<std::string , char *> niceTokenNameMap;    // use an ordered map
 void initErrorProcessing() {
 
     niceTokenNameMap["ADDASS"] = (char *)"\"+=\"";
-    niceTokenNameMap["AND"] = (char *)"\"and\"";
     niceTokenNameMap["BOOL"] = (char *)"\"bool\"";
     niceTokenNameMap["BOOLCONST"] = (char *)"Boolean constant";
     niceTokenNameMap["BREAK"] = (char *)"\"break\"";
-    niceTokenNameMap["BY"] = (char *)"\"by\"";
     niceTokenNameMap["CHAR"] = (char *)"\"char\"";
     niceTokenNameMap["CHARCONST"] = (char *)"character constant";
     niceTokenNameMap["CHSIGN"] = (char *)"-";
     niceTokenNameMap["DEC"] = (char *)"\"--\"";
     niceTokenNameMap["DIVASS"] = (char *)"\"/=\"";
-    niceTokenNameMap["DO"] = (char *)"\"do\"";
     niceTokenNameMap["ELSE"] = (char *)"\"else\"";
     niceTokenNameMap["EQ"] = (char *)"\"==\"";
-    niceTokenNameMap["FOR"] = (char *)"\"for\"";
+    niceTokenNameMap["FOR"] = (char *)"\"forever\"";
     niceTokenNameMap["GEQ"] = (char *)"\">=\"";
     niceTokenNameMap["ID"] = (char *)"identifier";
     niceTokenNameMap["IF"] = (char *)"\"if\"";
+    niceTokenNameMap["IN"] = (char *)"\"in\"";
     niceTokenNameMap["INC"] = (char *)"\"++\"";
     niceTokenNameMap["INT"] = (char *)"\"int\"";
     niceTokenNameMap["LEQ"] = (char *)"\"<=\"";
-    niceTokenNameMap["MAX"] = (char *)":>:";
-    niceTokenNameMap["MIN"] = (char *)":<:";
     niceTokenNameMap["MULASS"] = (char *)"\"*=\"";
     niceTokenNameMap["NEQ"] = (char *)"\"!=\"";
-    niceTokenNameMap["NOT"] = (char *)"\"not\"";
     niceTokenNameMap["NUMCONST"] = (char *)"numeric constant";
     niceTokenNameMap["OR"] = (char *)"\"or\"";
     niceTokenNameMap["RETURN"] = (char *)"\"return\"";
@@ -100,8 +95,6 @@ void initErrorProcessing() {
     niceTokenNameMap["STATIC"] = (char *)"\"static\"";
     niceTokenNameMap["STRINGCONST"] = (char *)"string constant";
     niceTokenNameMap["SUBASS"] = (char *)"\"-=\"";
-    niceTokenNameMap["THEN"] = (char *)"\"then\"";
-    niceTokenNameMap["TO"] = (char *)"\"to\"";
     niceTokenNameMap["WHILE"] = (char *)"\"while\"";
     niceTokenNameMap["$end"] = (char *)"end of input";
 }
@@ -172,7 +165,7 @@ void yyerror(const char *msg)
     }
 
     // print components
-    printf("ERROR(%d): Syntax error, unexpected %s", yylineno, strs[3]);
+    printf("ERROR(%d): Syntax error, unexpected %s", lineNum, strs[3]);
     if (elaborate(strs[3])) {
         if (lastToken[0]=='\'' || lastToken[0]=='"') printf(" %s", lastToken); 
         else printf(" \"%s\"", lastToken);
@@ -188,7 +181,7 @@ void yyerror(const char *msg)
     printf(".\n");
     fflush(stdout);   // force a dump of the error
 
-    numErrors++;      // count the number of errors
+    numErrors++;
 
     free(space);
 }

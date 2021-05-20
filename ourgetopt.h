@@ -1,6 +1,6 @@
 #ifndef _OURGETOPT_H_
 #define _OURGETOPT_H_
-// do not include in outGetopt.cpp
+// do not include in ourGetopt.cpp
 int ourGetopt( int, char **, char*);
 extern char *optarg;                   /* option argument if : in opts */
 //extern int optind = 1;                 /* next argv index              */
