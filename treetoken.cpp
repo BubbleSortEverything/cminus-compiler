@@ -24,7 +24,6 @@ void TokenTree  ::  setTokenString(char *str)   { this->tokenStr = strdup(str); 
 void TokenTree  ::  setStringValue(char *str)   { setStringValue(str, true); }
 void TokenTree  ::  setStringValue(char *str, bool duplicate) { this->svalue = duplicate ? strdup(str) : str; }
 
-
 void TokenTree::makeParent() 
 {
     for (int i = 0; i < MAX_CHILDREN; i++) {

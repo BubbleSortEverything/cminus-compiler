@@ -111,7 +111,7 @@ int main(int argc, char **argv)
                 outputFile[outLength - 3] = 't';
                 outputFile[outLength - 2] = 'm';
             }
-            code = fopen(outputFile, "w");
+            code = fopen("quicksort.tm", "w");
             generateCode();
         }
     }
